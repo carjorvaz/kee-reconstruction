@@ -2,9 +2,11 @@
 (load (merge-pathnames "../src/core.lisp" *load-truename*))
 (load (merge-pathnames "../src/worlds.lisp" *load-truename*))
 (load (merge-pathnames "../src/rules.lisp" *load-truename*))
+(load (merge-pathnames "../src/inspect.lisp" *load-truename*))
 
 (in-package #:cl-user)
 
+(defvar *run-hamburg-puzzle-demo* t)
 (defparameter *people* '(tom dick harriet))
 
 (defun define-rule (name form)
@@ -133,4 +135,5 @@
   (show-contradiction-demo)
   (run-search-demo))
 
-(run)
+(when *run-hamburg-puzzle-demo*
+  (run))

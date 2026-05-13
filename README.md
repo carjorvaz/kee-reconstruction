@@ -33,6 +33,9 @@ The first implementation target is `kee-core`:
 - a tiny KEEworlds subset with world overlays and `BELIEVE FALSE`
 - small world-search helpers: `cant.find`, `find.any`, `run.world.agenda`, and
   effective-fact deduplication for generated worlds
+- structured inspector helpers and a compact terminal browser, including
+  `list.kbs`, `list.units`, `inspect.unit`, `inspect.slot`, `inspect.world`,
+  `inspect.world.tree`, and `print.browser`
 
 Later phases broaden RuleSystem/TellAndAsk, grow the KEEworlds/ATMS model, and
 add the Common Windows / KEEpictures / ActiveImages GUI layer.
@@ -50,6 +53,11 @@ for a wavelength unit using `forward.chain`.
 constraints and hypothesis search. It marks impossible worlds inconsistent,
 prints a nogood reason, branches missing sports/phobias with `IN.NEW.WORLD`,
 and lists complete consistent candidate worlds.
+
+`examples/kee-browser.lisp` prints a small terminal browser view over the
+Hamburg puzzle KB: selected units, slot/facet summaries, generated worlds, and
+contradiction reasons. This is the first foundation for reconstructing the
+KEE browser/GUI layer.
 
 ## Running Tests
 

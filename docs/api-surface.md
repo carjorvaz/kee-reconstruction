@@ -223,6 +223,26 @@ This is not yet a real ATMS. It records justification-shaped evidence for
 contradictions, but it does not yet model ATMS environments, nondeletion
 assumptions, deletion nogoods, or dependency-directed propagation.
 
+## Inspector and Browser
+
+Current reconstruction:
+
+- `list.kbs` returns known knowledge-base names.
+- `list.units` returns unit objects in a KB.
+- `inspect.slot` returns a plist with local, inherited, combined, and facet
+  values for a slot.
+- `inspect.unit` returns a plist with parent links, child links, and inspected
+  slots.
+- `inspect.world` returns a plist with parent, consistency, local facts, and
+  nogood summaries for a world.
+- `inspect.world.tree` returns inspected worlds sorted by name.
+- `print.browser` prints a compact terminal browser view over KBs, units,
+  slots, worlds, and contradiction reasons.
+
+This is a reconstruction support layer rather than a recovered KEE API. It is
+intended to keep display logic separate from the object/rule/world core, so a
+future McCLIM or browser-canvas UI can reuse the same structured reports.
+
 ## GUI Layer
 
 Recovered layers:

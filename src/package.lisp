@@ -80,5 +80,12 @@
    #:run.world.agenda
    #:cant.find
    #:find.any
+   #:list.kbs
+   #:list.units
+   #:inspect.unit
+   #:inspect.slot
+   #:inspect.world
+   #:inspect.world.tree
+   #:print.browser
    #:unitmsg
    #:unitmsg*))

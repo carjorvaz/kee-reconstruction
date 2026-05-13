@@ -2,6 +2,7 @@
 (load (merge-pathnames "../src/core.lisp" *load-truename*))
 (load (merge-pathnames "../src/worlds.lisp" *load-truename*))
 (load (merge-pathnames "../src/rules.lisp" *load-truename*))
+(load (merge-pathnames "../src/inspect.lisp" *load-truename*))
 
 (in-package #:cl-user)
 
@@ -169,6 +170,23 @@
           (lambda ()
             (kee:put.value 'tom 'sport 'tennis))))
   (kee:create.unit 'constraint.rules 'veg 'entities 'classes)
+  (check (equal (kee:list.kbs) '(veg)))
+  (check (member 'tom (names (kee:list.units 'veg))))
+  (let ((tom-report (kee:inspect.unit 'tom))
+        (sport-report (kee:inspect.slot 'tom 'sport))
+        (browser-text (with-output-to-string (stream)
+                        (kee:print.browser :stream stream
+                                           :units '(tom)
+                                           :worlds nil))))
+    (check (eq (getf tom-report :name) 'tom))
+    (check (member 'people (getf tom-report :member-parents)))
+    (check (equal (getf sport-report :facets)
+                  '((kee:max.cardinality 1)
+                    (kee:min.cardinality 1)
+                    (kee:value.class
+                     (kee:one.of golf basketball sailing)))))
+    (check (search "TOM" browser-text))
+    (check (search "SPORT" browser-text)))
   (kee:create.unit 'heights.golf 'veg nil 'constraint.rules)
   (kee:put.value 'heights.golf 'kee:external.form
                  '(while (the sport of ?person is golf)
@@ -196,6 +214,16 @@
       (kee:put.value 'tom 'phobia 'cats)
       (kee:forward.chain 'constraint.rules)
       (check (not (kee:world.inconsistent.p good-world))))
+    (let ((bad-report (kee:inspect.world bad-world))
+          (browser-text (with-output-to-string (stream)
+                          (kee:print.browser :stream stream
+                                             :units '(tom)
+                                             :worlds (kee:inspect.world.tree)))))
+      (check (eq (getf bad-report :name) 'tom-golf-heights))
+      (check (getf bad-report :inconsistent-p))
+      (check (= (length (getf bad-report :nogoods)) 1))
+      (check (search "TOM-GOLF-HEIGHTS" browser-text))
+      (check (search "HEIGHTS.GOLF" browser-text)))
     (check (kee:true.in.world bad-world 'tom 'sport 'golf))
     (check (null (kee:get.value 'tom 'sport))))
   (kee:create.unit 'hypothesis.rules 'veg 'entities 'classes)

@@ -125,3 +125,11 @@ First demos:
 - `FRED_HACKER` style unit browser.
 - NASA VEG-style menu panels.
 - Computer Chronicles reactor-control style panel.
+
+Status:
+
+- A first structured inspector layer exists for KBs, units, slots, and worlds.
+- `print.browser` provides a terminal browser that renders selected units,
+  slot/facet summaries, generated worlds, and nogood explanations.
+- `examples/kee-browser.lisp` exercises the browser against the Hamburg puzzle
+  demo.
