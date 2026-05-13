@@ -28,11 +28,13 @@
 (defvar *knowledge-bases* (make-hash-table :test #'eq))
 (defvar *current-kb* nil)
 (defvar *active-value-depth* 0)
+(defvar *change-count* 0)
 
 (defun reset-kee ()
   "Clear all reconstructed KEE state."
   (setf *knowledge-bases* (make-hash-table :test #'eq)
-        *current-kb* nil)
+        *current-kb* nil
+        *change-count* 0)
   t)
 
 (defun create.kb (name)
@@ -327,6 +329,10 @@
     (inherited (kee-slot-inherited-values slot))
     (combined (kee-slot-combined-values slot))))
 
+(defun note-change (old-values new-values)
+  (unless (equal old-values new-values)
+    (incf *change-count*)))
+
 (defun facet-values (slot facet)
   (copy-list (gethash facet (kee-slot-facets slot))))
 
@@ -366,6 +372,7 @@
     (setf (kee-slot-local-values slot) (copy-list values))
     (recompute-slot unit slot-name)
     (propagate-slot unit slot-name)
+    (note-change old-values (kee-slot-combined-values slot))
     (invoke-active-values unit slot-name 'value-written
                           old-values (copy-list (kee-slot-combined-values slot)))
     values))
@@ -378,11 +385,16 @@
   (declare (ignore facet))
   (let* ((unit (unit unit-designator))
          (slot (ensure-slot unit slot-name))
-         (old-values (copy-list (kee-slot-combined-values slot))))
+         (old-values (copy-list (kee-slot-combined-values slot)))
+         (new-local-values (copy-list (kee-slot-local-values slot))))
+    (dolist (value values)
+      (unless (member value new-local-values :test #'equal)
+        (setf new-local-values (append new-local-values (list value)))))
     (setf (kee-slot-local-values slot)
-          (append (kee-slot-local-values slot) (copy-list values)))
+          new-local-values)
     (recompute-slot unit slot-name)
     (propagate-slot unit slot-name)
+    (note-change old-values (kee-slot-combined-values slot))
     (invoke-active-values unit slot-name 'value-added
                           old-values (copy-list (kee-slot-combined-values slot)))
     values))
@@ -399,6 +411,7 @@
     (setf (kee-slot-local-values slot) nil)
     (recompute-slot unit slot-name)
     (propagate-slot unit slot-name)
+    (note-change old-values (kee-slot-combined-values slot))
     (invoke-active-values unit slot-name 'values-removed
                           old-values (copy-list (kee-slot-combined-values slot)))
     nil))

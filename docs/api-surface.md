@@ -68,6 +68,13 @@ Evidence suggests KEE slots distinguish local, inherited, and combined values.
 The first implementation models this directly, but only supports simple
 override-style inheritance so far.
 
+Current value semantics:
+
+- `add.value` and `add.values` treat slot values as set-like lists and do not
+  duplicate an already-present value.
+- This is a reconstruction choice that helps forward chaining converge. Exact
+  duplicate-value semantics still need manual confirmation.
+
 ## Messages and Methods
 
 High confidence:
@@ -152,7 +159,7 @@ Current reconstruction:
 - rule units store source rules in `external.form`
 - `parse` stores a parsed plist in `internal.form`
 - parse failures are stored as strings in `parse.errors`
-- `forward.chain` runs one pass over member rules of a rule class
+- `forward.chain` runs member rules of a rule class until no slot values change
 - supported conditions:
   - `(THE slot OF unit IS ?variable)`
   - `(LISP form)`

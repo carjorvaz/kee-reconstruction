@@ -172,10 +172,13 @@ THEN, THE/OF/IS patterns, and LISP conditions/actions."
             (execute-action action bindings)))
         (and bindings-list t)))))
 
-(defun forward.chain (rule-class-designator)
-  "Run one forward-chaining pass over member rules of RULE-CLASS-DESIGNATOR."
+(defun forward.chain (rule-class-designator &key (max-passes 100))
+  "Run member rules of RULE-CLASS-DESIGNATOR until no slot values change."
   (let ((fired nil))
-    (dolist (rule-unit (unit.children rule-class-designator 'member)
-             (nreverse fired))
-      (when (execute-rule rule-unit)
-        (push rule-unit fired)))))
+    (loop repeat max-passes
+          for before = *change-count*
+          do (dolist (rule-unit (unit.children rule-class-designator 'member))
+               (when (execute-rule rule-unit)
+                 (pushnew rule-unit fired)))
+          until (= before *change-count*)
+          finally (return (nreverse fired)))))

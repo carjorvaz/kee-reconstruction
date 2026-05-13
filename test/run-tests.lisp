@@ -122,11 +122,30 @@
                         then
                         (lisp (add.value ?x 'techniques
                                          'pgc.near.nadir))))
+    (kee:create.unit 'pgc.followup 'veg nil 'technique.selection.rules)
+    (kee:put.value 'pgc.followup 'kee:external.form
+                   '(if (the current.sample.wavelengths
+                         of estimate.hemispherical.reflectance
+                         is ?x)
+                        (the techniques of ?x is pgc.near.nadir)
+                        then
+                        (lisp (add.value ?x 'recommended.techniques
+                                         'pgc.near.nadir))))
     (check (kee:unitmsg 'pgcswr.10 'kee:parse))
+    (check (kee:unitmsg 'pgc.followup 'kee:parse))
     (check (null (kee:get.value 'pgcswr.10 'kee:parse.errors)))
-    (check (equal (names (kee:forward.chain 'technique.selection.rules))
-                  '(pgcswr.10)))
+    (check (equal (sort (names (kee:forward.chain 'technique.selection.rules))
+                        #'string<
+                        :key #'symbol-name)
+                  '(pgc.followup pgcswr.10)))
     (check (equal (kee:get.values wave 'techniques)
+                  '(pgc.near.nadir)))
+    (check (equal (kee:get.values wave 'recommended.techniques)
+                  '(pgc.near.nadir)))
+    (kee:forward.chain 'technique.selection.rules)
+    (check (equal (kee:get.values wave 'techniques)
+                  '(pgc.near.nadir)))
+    (check (equal (kee:get.values wave 'recommended.techniques)
                   '(pgc.near.nadir))))
   (format t "~&~A~%" (if (zerop *failures*) "All tests passed." "Tests failed."))
   (unless (zerop *failures*)

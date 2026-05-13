@@ -69,7 +69,8 @@ Status:
 
 - A first subset exists.
 - It parses `external.form` on rule units.
-- It supports `THE`/`OF`/`IS`, `LISP`, `THEN`, and one-pass `forward.chain`.
+- It supports `THE`/`OF`/`IS`, `LISP`, `THEN`, and stable `forward.chain`
+  passes.
 - The regression tests include a VEG-style technique-selection rule.
 
 ## Phase 4: KEEworlds and TMS
