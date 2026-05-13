@@ -378,6 +378,9 @@
   (normalize-one-of-values
    (first-slot-facet-value unit slot-name '(value.class value-class))))
 
+(defun slot.allowed.values (unit-designator slot-name)
+  (copy-list (slot-value-class-values (unit unit-designator) slot-name)))
+
 (defun slot-cardinality (unit slot-name facets)
   (let ((value (first-slot-facet-value unit slot-name facets)))
     (when value

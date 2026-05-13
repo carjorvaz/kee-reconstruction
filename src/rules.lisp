@@ -57,8 +57,7 @@
                      (or (rule-symbol-p item "BELIEVE")
                          (rule-head-p item "BELIEVE")
                          (rule-symbol-p item "IN.NEW.WORLD")
-                         (rule-head-p item "IN.NEW.WORLD")
-                         (rule-head-p item "LISP")))
+                         (rule-head-p item "IN.NEW.WORLD")))
                    items)))
     (unless position
       (error "Expected an action in WHILE rule: ~S." items))
@@ -165,9 +164,14 @@ WHILE, THEN, THE/OF/IS patterns, BELIEVE FALSE, and LISP conditions/actions."
   (multiple-value-bind (kee-symbol status) (find-symbol (symbol-name symbol) '#:kee)
     (if (and status (fboundp kee-symbol)) kee-symbol symbol)))
 
+(defun lisp-literal (value)
+  (if (or (symbolp value) (consp value))
+      `',value
+      value))
+
 (defun substitute-rule-bindings (form bindings)
   (cond ((variable-symbol-p form)
-         (resolve-rule-term form bindings))
+         (lisp-literal (resolve-rule-term form bindings)))
         ((atom form) form)
         ((rule-symbol-p (first form) "QUOTE") form)
         (t (cons (if (symbolp (first form))
@@ -184,6 +188,12 @@ WHILE, THEN, THE/OF/IS patterns, BELIEVE FALSE, and LISP conditions/actions."
 
 (defun evaluate-lisp-clause (clause bindings)
   (eval (substitute-rule-bindings (lisp-clause-body clause) bindings)))
+
+(defun cant.find (unit-designator slot-name)
+  (null (get.values unit-designator slot-name)))
+
+(defun find.any (unit-designator slot-name)
+  (get.value unit-designator slot-name))
 
 (defun evaluate-condition (condition bindings)
   (cond ((and (consp condition) (rule-symbol-p (first condition) "THE"))
@@ -209,31 +219,67 @@ WHILE, THEN, THE/OF/IS patterns, BELIEVE FALSE, and LISP conditions/actions."
          (execute-in-new-world-action action bindings))
         (t (error "Unsupported rule action: ~S." action))))
 
-(defun assert-the-fact (fact bindings)
+(defun resolved-fact (fact bindings)
   (multiple-value-bind (slot-name unit-term value-term)
       (parse-the-condition fact)
     (let ((target-unit (resolve-rule-term unit-term bindings))
           (target-value (resolve-rule-term value-term bindings)))
       (when (variable-symbol-p target-unit)
         (error "Unbound unit variable in IN.NEW.WORLD fact: ~S." fact))
-      (when (variable-symbol-p target-value)
-        (error "Unbound value variable in IN.NEW.WORLD fact: ~S." fact))
+      (values (unit target-unit) slot-name target-value))))
+
+(defun fact-value-alternatives (unit slot-name value-term)
+  (cond ((and (consp value-term) (constraint-symbol-p (first value-term) "ONE.OF"))
+         (rest value-term))
+        ((and (symbolp value-term)
+              (or (constraint-symbol-p value-term "$VALUES")
+                  (constraint-symbol-p value-term "VALUES")))
+         (or (slot.allowed.values unit slot-name)
+             (error "No value.class facet is available for ~S of ~S."
+                    slot-name (unit.name unit))))
+        (t (list value-term))))
+
+(defun assert-the-fact (fact bindings)
+  (multiple-value-bind (target-unit slot-name value-term)
+      (resolved-fact fact bindings)
+    (when (variable-symbol-p value-term)
+      (error "Unbound value variable in IN.NEW.WORLD fact: ~S." fact))
+    (dolist (target-value (fact-value-alternatives target-unit slot-name value-term))
       (put.value target-unit slot-name target-value))))
 
 (defun execute-in-new-world-action (action bindings)
-  (let* ((branch-key (list (and *current-world* (get.world.name *current-world*))
-                           (and *current-rule-unit*
-                                (unit.name *current-rule-unit*))
-                           (current-bindings-for-justification)
-                           action))
-         (new-world (ensure.branch.world branch-key)))
-    (with-world (new-world)
-      (dolist (fact (rest action) new-world)
-        (cond ((rule-head-p fact "THE")
-               (assert-the-fact fact bindings))
-              ((rule-head-p fact "LISP")
-               (evaluate-lisp-clause fact bindings))
-              (t (error "Unsupported IN.NEW.WORLD fact/action: ~S." fact)))))))
+  (labels ((branch (world remaining)
+             (if (null remaining)
+                 world
+                 (let ((item (first remaining)))
+                   (cond ((rule-head-p item "THE")
+                          (multiple-value-bind (target-unit slot-name value-term)
+                              (resolved-fact item bindings)
+                            (let ((result-worlds nil))
+                              (dolist (target-value
+                                        (fact-value-alternatives target-unit
+                                                                 slot-name
+                                                                 value-term))
+                                (let* ((fact-signature
+                                         (list (kb.name (unit.kb target-unit))
+                                               (unit.name target-unit)
+                                               slot-name
+                                               (list target-value)))
+                                       (child-world
+                                         (ensure.fact.branch.world world
+                                                                   fact-signature)))
+                                  (with-world (child-world)
+                                    (put.value target-unit slot-name target-value)
+                                    (push (branch child-world (rest remaining))
+                                          result-worlds))))
+                              (nreverse result-worlds))))
+                         ((rule-head-p item "LISP")
+                          (with-world (world)
+                            (evaluate-lisp-clause item bindings))
+                          (branch world (rest remaining)))
+                         (t (error "Unsupported IN.NEW.WORLD fact/action: ~S."
+                                   item)))))))
+    (branch *current-world* (rest action))))
 
 (defun parsed-rule (rule-unit)
   (or (get.value rule-unit 'internal.form)
@@ -262,3 +308,23 @@ WHILE, THEN, THE/OF/IS patterns, BELIEVE FALSE, and LISP conditions/actions."
                  (pushnew rule-unit fired)))
           until (= before *change-count*)
           finally (return (nreverse fired)))))
+
+(defun normalize-rule-class-list (rule-classes)
+  (cond ((null rule-classes) nil)
+        ((listp rule-classes) rule-classes)
+        (t (list rule-classes))))
+
+(defun run.world.agenda (rule-classes &key (max-iterations 20))
+  "Run RULE-CLASSES across consistent worlds until worlds and values stabilize."
+  (let ((classes (normalize-rule-class-list rule-classes)))
+    (when (null ($worlds))
+      (create.world 'base.world))
+    (loop repeat max-iterations
+          for before = (list (length ($worlds)) *change-count*)
+          do (dolist (world (copy-list (consistent.worlds)))
+               (with-world (world)
+                 (dolist (rule-class classes)
+                   (unless (world.inconsistent.p world)
+                     (forward.chain rule-class)))))
+          until (equal before (list (length ($worlds)) *change-count*)))
+    (consistent.worlds)))

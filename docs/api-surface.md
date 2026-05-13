@@ -173,6 +173,11 @@ Current reconstruction:
   - `(IN.NEW.WORLD (THE slot OF unit IS value) ...)`
 - Lisp clauses substitute `?variables` and canonicalize calls such as
   `get.value` and `add.value` into the `kee` package
+- `cant.find` returns true when a unit has no value for a slot in the current
+  world
+- `find.any` returns the first value of a slot in the current world
+- `run.world.agenda` runs rule classes across consistent worlds until the world
+  set and values stabilize
 
 ## KEEworlds and ATMS
 
@@ -204,6 +209,8 @@ Current reconstruction:
 - `BELIEVE FALSE` marks the current world inconsistent
 - `IN.NEW.WORLD` rules create reusable child worlds for the same rule/bindings
   branch instead of generating an unbounded stream of duplicates
+- generated worlds are deduplicated by effective fact signature, so different
+  rule orders can converge on the same candidate world
 - `WHILE ... BELIEVE FALSE` rules can be used for puzzle-style constraints
 - `world.justifications`, `world.nogoods`, and `why.false` expose a small
   reason trail for contradictions

@@ -39,6 +39,7 @@
    #:min-cardinality
    #:max.cardinality
    #:max-cardinality
+   #:slot.allowed.values
    #:add.method
    #:active.values
    #:active-values
@@ -63,6 +64,7 @@
    #:believe
    #:false
    #:why.false
+   #:consistent.worlds
    #:justification.rule
    #:justification.bindings
    #:justification.conditions
@@ -75,5 +77,8 @@
    #:internal.form
    #:parse.errors
    #:forward.chain
+   #:run.world.agenda
+   #:cant.find
+   #:find.any
    #:unitmsg
    #:unitmsg*))

@@ -71,6 +71,8 @@ Status:
 - It parses `external.form` on rule units.
 - It supports `THE`/`OF`/`IS`, `LISP`, `THEN`, `IN.NEW.WORLD`, and stable
   `forward.chain` passes.
+- It includes `cant.find`, `find.any`, and `run.world.agenda` for small
+  world-search demos.
 - The regression tests include a VEG-style technique-selection rule.
 
 ## Phase 4: KEEworlds and TMS
@@ -95,6 +97,7 @@ Status:
 - `why.false` reports the rule and bindings responsible for a contradiction.
 - `IN.NEW.WORLD` can create reusable child worlds for hypotheses.
 - `world.facts` lists a world's local overlay facts.
+- generated worlds are deduplicated by effective fact signature.
 - The regression tests and `examples/hamburg-puzzle-mini.lisp` cover a
   training-slide-style constraint.
 - Full ATMS environments, assumptions, and dependency propagation are still

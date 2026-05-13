@@ -26,6 +26,7 @@
 
 (defvar *worlds* (make-hash-table :test #'eq))
 (defvar *world-branches* (make-hash-table :test #'equal))
+(defvar *world-fact-index* (make-hash-table :test #'equal))
 (defvar *current-world* nil)
 (defvar *world-counter* 0)
 (defvar *current-rule-unit* nil)
@@ -36,6 +37,7 @@
 (defun reset-worlds ()
   (setf *worlds* (make-hash-table :test #'eq)
         *world-branches* (make-hash-table :test #'equal)
+        *world-fact-index* (make-hash-table :test #'equal)
         *current-world* nil
         *world-counter* 0))
 
@@ -94,6 +96,9 @@
   (loop for world being the hash-values of *worlds*
         collect world))
 
+(defun consistent.worlds ()
+  (remove-if #'world.inconsistent.p ($worlds)))
+
 (defmacro with-world ((world-designator) &body body)
   `(let ((*current-world* (world ,world-designator)))
      ,@body))
@@ -121,6 +126,30 @@
                          (walk (kee-world-parent candidate))))
                    (base-slot-values unit slot-name))))
       (walk world))))
+
+(defun world-ancestor-chain (world)
+  (let ((result nil))
+    (loop for cursor = world then (kee-world-parent cursor)
+          while cursor
+          do (push cursor result))
+    result))
+
+(defun world-effective-fact-signature (world &optional extra-fact)
+  (let ((facts (make-hash-table :test #'equal)))
+    (dolist (ancestor (world-ancestor-chain world))
+      (loop for key being the hash-keys of (kee-world-values ancestor)
+              using (hash-value values)
+            do (setf (gethash key facts) (copy-list values))))
+    (when extra-fact
+      (destructuring-bind (kb-name unit-name slot-name values) extra-fact
+        (setf (gethash (list kb-name unit-name slot-name) facts)
+              (copy-list values))))
+    (sort
+     (loop for key being the hash-keys of facts
+             using (hash-value values)
+           collect (append key (list values)))
+     #'string<
+     :key #'prin1-to-string)))
 
 (defun world-active-p ()
   (not (null *current-world*)))
@@ -160,6 +189,13 @@
   (or (gethash key *world-branches*)
       (setf (gethash key *world-branches*)
             (create.world nil *current-world*))))
+
+(defun ensure.fact.branch.world (parent fact)
+  (let ((signature (world-effective-fact-signature parent fact)))
+    (or (gethash signature *world-fact-index*)
+        (let ((new (create.world nil parent)))
+          (setf (gethash signature *world-fact-index*) new)
+          new))))
 
 (defun true.in.world (world-designator unit-designator slot-name value)
   (let ((target-world (world world-designator))

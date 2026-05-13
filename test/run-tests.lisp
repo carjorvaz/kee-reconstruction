@@ -202,9 +202,10 @@
   (kee:create.unit 'guess.tom.golf 'veg nil 'hypothesis.rules)
   (kee:put.value 'guess.tom.golf 'kee:external.form
                  '(if (the needs.guess of ?person is sport)
+                      (lisp (cant.find ?person 'sport))
                       then
                       (in.new.world
-                       (the sport of ?person is golf))))
+                       (the sport of ?person is values))))
   (check (kee:parse 'guess.tom.golf))
   (let ((root-world (kee:create.world 'root-hypotheses)))
     (kee:with-world (root-world)
@@ -215,9 +216,18 @@
                      (lambda (world)
                        (eq (kee:world.parent world) root-world))
                      (kee:$worlds))))
-      (check (= (length children) 1))
-      (let ((child (first children)))
-        (check (kee:true.in.world child 'tom 'sport 'golf))
+      (check (= (length children) 3))
+      (check (equal (sort (mapcar (lambda (child)
+                                     (kee:with-world (child)
+                                       (first (kee:get.values 'tom 'sport))))
+                                   children)
+                          #'string<
+                          :key #'symbol-name)
+                    '(basketball golf sailing)))
+      (let ((child (find-if (lambda (world)
+                              (kee:true.in.world world 'tom 'sport 'golf))
+                            children)))
+        (check child)
         (check (not (kee:true.in.world root-world 'tom 'sport 'golf)))
         (check (member 'sport (kee:world.facts child)
                        :key (lambda (fact) (getf fact :slot)))))))

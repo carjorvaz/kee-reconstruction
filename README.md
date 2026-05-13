@@ -31,6 +31,8 @@ The first implementation target is `kee-core`:
   `parse.errors`, `THE`/`OF`/`IS`, `LISP`, `THEN`, `IN.NEW.WORLD`, and
   `forward.chain`
 - a tiny KEEworlds subset with world overlays and `BELIEVE FALSE`
+- small world-search helpers: `cant.find`, `find.any`, `run.world.agenda`, and
+  effective-fact deduplication for generated worlds
 
 Later phases broaden RuleSystem/TellAndAsk, grow the KEEworlds/ATMS model, and
 add the Common Windows / KEEpictures / ActiveImages GUI layer.
@@ -44,10 +46,10 @@ units, and a method invoked with `unitmsg`.
 `examples/veg-rule-mini.lisp` adds a VEG-style rule that selects a technique
 for a wavelength unit using `forward.chain`.
 
-`examples/hamburg-puzzle-mini.lisp` demonstrates a KEE 3.0 training-slide
-style constraint: a world where Tom has both `sport = golf` and
-`phobia = heights` is marked inconsistent by `WHILE ... BELIEVE FALSE`, with a
-small reason trail showing the rule and bindings that produced the nogood.
+`examples/hamburg-puzzle-mini.lisp` demonstrates KEE 3.0 training-slide-style
+constraints and hypothesis search. It marks impossible worlds inconsistent,
+prints a nogood reason, branches missing sports/phobias with `IN.NEW.WORLD`,
+and lists complete consistent candidate worlds.
 
 ## Running Tests
 
