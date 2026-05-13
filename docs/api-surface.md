@@ -147,6 +147,20 @@ High confidence functions or slots:
 - `parse`
 - `parse.errors`
 
+Current reconstruction:
+
+- rule units store source rules in `external.form`
+- `parse` stores a parsed plist in `internal.form`
+- parse failures are stored as strings in `parse.errors`
+- `forward.chain` runs one pass over member rules of a rule class
+- supported conditions:
+  - `(THE slot OF unit IS ?variable)`
+  - `(LISP form)`
+- supported actions:
+  - `(LISP form)`
+- Lisp clauses substitute `?variables` and canonicalize calls such as
+  `get.value` and `add.value` into the `kee` package
+
 ## KEEworlds and ATMS
 
 Training and patent evidence supports:

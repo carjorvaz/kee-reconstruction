@@ -1,5 +1,6 @@
 (load (merge-pathnames "../src/package.lisp" *load-truename*))
 (load (merge-pathnames "../src/core.lisp" *load-truename*))
+(load (merge-pathnames "../src/rules.lisp" *load-truename*))
 
 (in-package #:cl-user)
 
@@ -105,6 +106,28 @@
                   '((written sample.1 complete.description
                      ("demo sample") ("changed"))
                     (read sample.1 complete.description ("changed"))))))
+  (kee:create.unit 'technique.selection.rules 'veg 'entities 'classes)
+  (kee:put.value 'technique.selection.rules 'kee:parse #'kee:parse)
+  (let ((wave (kee:create.unit 'wavelength.1 'veg nil nil)))
+    (kee:add.value 'estimate.hemispherical.reflectance
+                   'current.sample.wavelengths
+                   wave)
+    (kee:put.value wave 'reflectance.data '((0 0 0.31) (30 180 0.28)))
+    (kee:create.unit 'pgcswr.10 'veg nil 'technique.selection.rules)
+    (kee:put.value 'pgcswr.10 'kee:external.form
+                   '(if (the current.sample.wavelengths
+                         of estimate.hemispherical.reflectance
+                         is ?x)
+                        (lisp (consp (get.value ?x 'reflectance.data)))
+                        then
+                        (lisp (add.value ?x 'techniques
+                                         'pgc.near.nadir))))
+    (check (kee:unitmsg 'pgcswr.10 'kee:parse))
+    (check (null (kee:get.value 'pgcswr.10 'kee:parse.errors)))
+    (check (equal (names (kee:forward.chain 'technique.selection.rules))
+                  '(pgcswr.10)))
+    (check (equal (kee:get.values wave 'techniques)
+                  '(pgc.near.nadir))))
   (format t "~&~A~%" (if (zerop *failures*) "All tests passed." "Tests failed."))
   (unless (zerop *failures*)
     (quit-with-status 1)))

@@ -38,5 +38,10 @@
    #:value-written
    #:value-added
    #:values-removed
+   #:parse
+   #:external.form
+   #:internal.form
+   #:parse.errors
+   #:forward.chain
    #:unitmsg
    #:unitmsg*))

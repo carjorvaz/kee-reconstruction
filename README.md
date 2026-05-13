@@ -25,15 +25,20 @@ The first implementation target is `kee-core`:
   `unit.parents`, `unit.children`, and `unitmsg`
 - method slots with `:before`, `:primary`, and `:after` contributions
 - first-pass ActiveValue hooks on slot read/write/add/remove
+- a tiny RuleSystem subset with rule units, `external.form`, `parse`,
+  `parse.errors`, `THE`/`OF`/`IS`, `LISP`, `THEN`, and `forward.chain`
 
-Later phases add RuleSystem/TellAndAsk, KEEworlds/ATMS, and the Common Windows
-/ KEEpictures / ActiveImages GUI layer.
+Later phases broaden RuleSystem/TellAndAsk, add KEEworlds/ATMS, and add the
+Common Windows / KEEpictures / ActiveImages GUI layer.
 
 ## Examples
 
 `examples/veg-mini.lisp` is a small executable specimen inspired by the NASA
 VEG listings. It creates a `veg` KB, a `target.data` class, sample/wavelength
 units, and a method invoked with `unitmsg`.
+
+`examples/veg-rule-mini.lisp` adds a VEG-style rule that selects a technique
+for a wavelength unit using `forward.chain`.
 
 ## Running Tests
 

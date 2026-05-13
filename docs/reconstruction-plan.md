@@ -65,6 +65,13 @@ First demos:
 - Hamburg 3-by-3 puzzle constraints
 - NASA VEG technique selection rules
 
+Status:
+
+- A first subset exists.
+- It parses `external.form` on rule units.
+- It supports `THE`/`OF`/`IS`, `LISP`, `THEN`, and one-pass `forward.chain`.
+- The regression tests include a VEG-style technique-selection rule.
+
 ## Phase 4: KEEworlds and TMS
 
 Implement:
