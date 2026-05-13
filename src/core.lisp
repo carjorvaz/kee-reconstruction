@@ -29,12 +29,20 @@
 (defvar *current-kb* nil)
 (defvar *active-value-depth* 0)
 (defvar *change-count* 0)
+(defvar *reset-hooks* nil)
+(defvar *world-active-p-hook* nil)
+(defvar *world-get-values-hook* nil)
+(defvar *world-put-values-hook* nil)
+(defvar *world-add-values-hook* nil)
+(defvar *world-remove-all-values-hook* nil)
 
 (defun reset-kee ()
   "Clear all reconstructed KEE state."
   (setf *knowledge-bases* (make-hash-table :test #'eq)
         *current-kb* nil
         *change-count* 0)
+  (dolist (hook *reset-hooks*)
+    (funcall hook))
   t)
 
 (defun create.kb (name)
@@ -352,11 +360,16 @@
             (unitmsg active-value operation
                      unit slot-name old-values new-values)))))))
 
+(defun world-values-active-p ()
+  (and *world-active-p-hook* (funcall *world-active-p-hook*)))
+
 (defun get.values (unit-designator slot-name &optional facet)
   (let* ((unit (unit unit-designator))
          (slot (gethash slot-name (kee-unit-slots unit))))
     (cond ((null slot) nil)
           (facet (copy-list (slot-values-for-facet slot facet)))
+          ((world-values-active-p)
+           (funcall *world-get-values-hook* unit slot-name))
           (t (let ((values (copy-list (kee-slot-combined-values slot))))
                (invoke-active-values unit slot-name 'value-read values values)
                values)))))
@@ -369,13 +382,16 @@
   (let* ((unit (unit unit-designator))
          (slot (ensure-slot unit slot-name))
          (old-values (copy-list (kee-slot-combined-values slot))))
-    (setf (kee-slot-local-values slot) (copy-list values))
-    (recompute-slot unit slot-name)
-    (propagate-slot unit slot-name)
-    (note-change old-values (kee-slot-combined-values slot))
-    (invoke-active-values unit slot-name 'value-written
-                          old-values (copy-list (kee-slot-combined-values slot)))
-    values))
+    (if (world-values-active-p)
+        (funcall *world-put-values-hook* unit slot-name values)
+        (progn
+          (setf (kee-slot-local-values slot) (copy-list values))
+          (recompute-slot unit slot-name)
+          (propagate-slot unit slot-name)
+          (note-change old-values (kee-slot-combined-values slot))
+          (invoke-active-values unit slot-name 'value-written
+                                old-values (copy-list (kee-slot-combined-values slot)))
+          values))))
 
 (defun put.value (unit-designator slot-name value &optional facet)
   (put.values unit-designator slot-name (list value) facet)
@@ -387,17 +403,20 @@
          (slot (ensure-slot unit slot-name))
          (old-values (copy-list (kee-slot-combined-values slot)))
          (new-local-values (copy-list (kee-slot-local-values slot))))
-    (dolist (value values)
-      (unless (member value new-local-values :test #'equal)
-        (setf new-local-values (append new-local-values (list value)))))
-    (setf (kee-slot-local-values slot)
-          new-local-values)
-    (recompute-slot unit slot-name)
-    (propagate-slot unit slot-name)
-    (note-change old-values (kee-slot-combined-values slot))
-    (invoke-active-values unit slot-name 'value-added
-                          old-values (copy-list (kee-slot-combined-values slot)))
-    values))
+    (if (world-values-active-p)
+        (funcall *world-add-values-hook* unit slot-name values)
+        (progn
+          (dolist (value values)
+            (unless (member value new-local-values :test #'equal)
+              (setf new-local-values (append new-local-values (list value)))))
+          (setf (kee-slot-local-values slot)
+                new-local-values)
+          (recompute-slot unit slot-name)
+          (propagate-slot unit slot-name)
+          (note-change old-values (kee-slot-combined-values slot))
+          (invoke-active-values unit slot-name 'value-added
+                                old-values (copy-list (kee-slot-combined-values slot)))
+          values))))
 
 (defun add.value (unit-designator slot-name value &optional facet)
   (add.values unit-designator slot-name (list value) facet)
@@ -408,13 +427,16 @@
   (let* ((unit (unit unit-designator))
          (slot (ensure-slot unit slot-name))
          (old-values (copy-list (kee-slot-combined-values slot))))
-    (setf (kee-slot-local-values slot) nil)
-    (recompute-slot unit slot-name)
-    (propagate-slot unit slot-name)
-    (note-change old-values (kee-slot-combined-values slot))
-    (invoke-active-values unit slot-name 'values-removed
-                          old-values (copy-list (kee-slot-combined-values slot)))
-    nil))
+    (if (world-values-active-p)
+        (funcall *world-remove-all-values-hook* unit slot-name)
+        (progn
+          (setf (kee-slot-local-values slot) nil)
+          (recompute-slot unit slot-name)
+          (propagate-slot unit slot-name)
+          (note-change old-values (kee-slot-combined-values slot))
+          (invoke-active-values unit slot-name 'values-removed
+                                old-values (copy-list (kee-slot-combined-values slot)))
+          nil))))
 
 (defun put.facet.value (unit-designator slot-name facet value &rest ignored)
   (declare (ignore ignored))

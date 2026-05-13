@@ -5,4 +5,5 @@
   :serial t
   :components ((:file "src/package")
                (:file "src/core")
+               (:file "src/worlds")
                (:file "src/rules")))

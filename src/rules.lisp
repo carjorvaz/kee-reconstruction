@@ -35,34 +35,69 @@
            (read stream nil nil)))
         (t external-form)))
 
-(defun find-if-form (form)
-  (cond ((and (consp form) (rule-symbol-p (first form) "IF"))
+(defun rule-head-p (item name)
+  (and (consp item) (rule-symbol-p (first item) name)))
+
+(defun find-rule-form (form)
+  (cond ((and (consp form)
+              (or (rule-symbol-p (first form) "IF")
+                  (rule-symbol-p (first form) "WHILE")))
          form)
         ((and (consp form) (rule-symbol-p (first form) "RULE"))
          (find-if #'(lambda (item)
-                      (and (consp item) (rule-symbol-p (first item) "IF")))
+                      (and (consp item)
+                           (or (rule-symbol-p (first item) "IF")
+                               (rule-symbol-p (first item) "WHILE"))))
                   form))
         (t nil)))
 
-(defun parse-if-form (form)
-  (let ((if-form (find-if-form (read-rule-form form))))
-    (unless if-form
-      (error "Rule form does not contain an IF form: ~S." form))
-    (multiple-value-bind (conditions actions) (split-at-keyword (rest if-form) "THEN")
-      (when (null actions)
-        (error "Rule has no THEN actions: ~S." form))
-      (list :source if-form
-            :conditions conditions
-            :actions actions))))
+(defun split-while-form (items)
+  (let ((position (position-if
+                   (lambda (item)
+                     (or (rule-symbol-p item "BELIEVE")
+                         (rule-head-p item "BELIEVE")
+                         (rule-symbol-p item "IN.NEW.WORLD")
+                         (rule-head-p item "IN.NEW.WORLD")
+                         (rule-head-p item "LISP")))
+                   items)))
+    (unless position
+      (error "Expected an action in WHILE rule: ~S." items))
+    (let ((conditions (subseq items 0 position))
+          (action-tail (subseq items position)))
+      (values conditions
+              (if (consp (first action-tail))
+                  action-tail
+                  (list action-tail))))))
+
+(defun parse-rule-form (form)
+  (let ((rule-form (find-rule-form (read-rule-form form))))
+    (unless rule-form
+      (error "Rule form does not contain an IF or WHILE form: ~S." form))
+    (cond ((rule-symbol-p (first rule-form) "IF")
+           (multiple-value-bind (conditions actions)
+               (split-at-keyword (rest rule-form) "THEN")
+             (when (null actions)
+               (error "Rule has no THEN actions: ~S." form))
+             (list :kind :if
+                   :source rule-form
+                   :conditions conditions
+                   :actions actions)))
+          ((rule-symbol-p (first rule-form) "WHILE")
+           (multiple-value-bind (conditions actions)
+               (split-while-form (rest rule-form))
+             (list :kind :while
+                   :source rule-form
+                   :conditions conditions
+                   :actions actions))))))
 
 (defun parse (rule-unit-designator)
   "Parse a rule unit's EXTERNAL.FORM into INTERNAL.FORM.
 
 This is a deliberately small TellAndAsk/RuleSystem subset. It supports IF,
-THEN, THE/OF/IS patterns, and LISP conditions/actions."
+WHILE, THEN, THE/OF/IS patterns, BELIEVE FALSE, and LISP conditions/actions."
   (let ((rule-unit (unit rule-unit-designator)))
     (handler-case
-        (let ((parsed (parse-if-form (get.value rule-unit 'external.form))))
+        (let ((parsed (parse-rule-form (get.value rule-unit 'external.form))))
           (put.value rule-unit 'internal.form parsed)
           (remove.all.values rule-unit 'parse.errors)
           parsed)
@@ -157,7 +192,31 @@ THEN, THE/OF/IS patterns, and LISP conditions/actions."
 (defun execute-action (action bindings)
   (cond ((and (consp action) (rule-symbol-p (first action) "LISP"))
          (evaluate-lisp-clause action bindings))
+        ((and (consp action) (rule-symbol-p (first action) "BELIEVE"))
+         (believe (substitute-rule-bindings (second action) bindings)))
+        ((and (consp action) (rule-symbol-p (first action) "IN.NEW.WORLD"))
+         (execute-in-new-world-action action bindings))
         (t (error "Unsupported rule action: ~S." action))))
+
+(defun assert-the-fact (fact bindings)
+  (multiple-value-bind (slot-name unit-term value-term)
+      (parse-the-condition fact)
+    (let ((target-unit (resolve-rule-term unit-term bindings))
+          (target-value (resolve-rule-term value-term bindings)))
+      (when (variable-symbol-p target-unit)
+        (error "Unbound unit variable in IN.NEW.WORLD fact: ~S." fact))
+      (when (variable-symbol-p target-value)
+        (error "Unbound value variable in IN.NEW.WORLD fact: ~S." fact))
+      (put.value target-unit slot-name target-value))))
+
+(defun execute-in-new-world-action (action bindings)
+  (let ((new-world (in.new.world)))
+    (dolist (fact (rest action) new-world)
+      (cond ((rule-head-p fact "THE")
+             (assert-the-fact fact bindings))
+            ((rule-head-p fact "LISP")
+             (evaluate-lisp-clause fact bindings))
+            (t (error "Unsupported IN.NEW.WORLD fact/action: ~S." fact))))))
 
 (defun parsed-rule (rule-unit)
   (or (get.value rule-unit 'internal.form)

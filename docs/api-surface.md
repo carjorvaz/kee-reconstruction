@@ -186,6 +186,22 @@ Training syntax includes:
 - `BELIEVE FALSE`
 - `$WORLDS`
 
+Current reconstruction:
+
+- worlds have names, optional parent worlds, overlay slot values, and an
+  inconsistency flag
+- normal `get.value`, `put.value`, `add.value`, and `remove.all.values` use the
+  current world's overlay when a current world is active
+- `create.world`, `goto.world`, `current.world`, `with-world`, `$worlds`,
+  `get.world.name`, `true.in.world`, and `world.inconsistent.p` exist
+- `BELIEVE FALSE` marks the current world inconsistent
+- `WHILE ... BELIEVE FALSE` rules can be used for puzzle-style constraints
+
+Important uncertainty:
+
+This is not yet an ATMS. It does not model justifications, environments,
+nondeletion assumptions, deletion nogoods, or dependency-directed propagation.
+
 ## GUI Layer
 
 Recovered layers:

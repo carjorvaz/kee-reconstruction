@@ -27,9 +27,10 @@ The first implementation target is `kee-core`:
 - first-pass ActiveValue hooks on slot read/write/add/remove
 - a tiny RuleSystem subset with rule units, `external.form`, `parse`,
   `parse.errors`, `THE`/`OF`/`IS`, `LISP`, `THEN`, and `forward.chain`
+- a tiny KEEworlds subset with world overlays and `BELIEVE FALSE`
 
-Later phases broaden RuleSystem/TellAndAsk, add KEEworlds/ATMS, and add the
-Common Windows / KEEpictures / ActiveImages GUI layer.
+Later phases broaden RuleSystem/TellAndAsk, grow the KEEworlds/ATMS model, and
+add the Common Windows / KEEpictures / ActiveImages GUI layer.
 
 ## Examples
 
@@ -39,6 +40,10 @@ units, and a method invoked with `unitmsg`.
 
 `examples/veg-rule-mini.lisp` adds a VEG-style rule that selects a technique
 for a wavelength unit using `forward.chain`.
+
+`examples/hamburg-puzzle-mini.lisp` demonstrates a KEE 3.0 training-slide
+style constraint: a world where Tom has both `sport = golf` and
+`phobia = heights` is marked inconsistent by `WHILE ... BELIEVE FALSE`.
 
 ## Running Tests
 

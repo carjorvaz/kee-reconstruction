@@ -38,6 +38,19 @@
    #:value-written
    #:value-added
    #:values-removed
+   #:create.world
+   #:world
+   #:goto.world
+   #:current.world
+   #:get.world.name
+   #:world.inconsistent.p
+   #:world.parent
+   #:$worlds
+   #:with-world
+   #:in.new.world
+   #:true.in.world
+   #:believe
+   #:false
    #:parse
    #:external.form
    #:internal.form
