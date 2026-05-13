@@ -1,0 +1,7 @@
+(asdf:defsystem #:kee-core
+  :description "Evidence-led reconstruction of the KEE core object system."
+  :author "Carlos Vaz and Codex"
+  :license "Research prototype"
+  :serial t
+  :components ((:file "src/package")
+               (:file "src/core")))
