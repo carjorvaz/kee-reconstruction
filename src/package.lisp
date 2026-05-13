@@ -31,6 +31,14 @@
    #:remove.all.values
    #:put.facet.value
    #:remove.all.facet.values
+   #:slot.facet.values
+   #:value.class
+   #:value-class
+   #:one.of
+   #:min.cardinality
+   #:min-cardinality
+   #:max.cardinality
+   #:max-cardinality
    #:add.method
    #:active.values
    #:active-values
@@ -45,6 +53,7 @@
    #:get.world.name
    #:world.inconsistent.p
    #:world.parent
+   #:world.facts
    #:world.justifications
    #:world.nogoods
    #:$worlds

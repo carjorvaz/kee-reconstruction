@@ -74,6 +74,11 @@ Current value semantics:
   duplicate an already-present value.
 - This is a reconstruction choice that helps forward chaining converge. Exact
   duplicate-value semantics still need manual confirmation.
+- Slot facets can declare value classes using `(one.of ...)`.
+- Slot facets can declare `min.cardinality` and `max.cardinality`.
+- Constraints are inherited through parent units.
+- Constraint violations signal Common Lisp errors for now; original KEE's UI
+  and condition behavior still need manual evidence.
 
 ## Messages and Methods
 
@@ -165,6 +170,7 @@ Current reconstruction:
   - `(LISP form)`
 - supported actions:
   - `(LISP form)`
+  - `(IN.NEW.WORLD (THE slot OF unit IS value) ...)`
 - Lisp clauses substitute `?variables` and canonicalize calls such as
   `get.value` and `add.value` into the `kee` package
 
@@ -193,8 +199,11 @@ Current reconstruction:
 - normal `get.value`, `put.value`, `add.value`, and `remove.all.values` use the
   current world's overlay when a current world is active
 - `create.world`, `goto.world`, `current.world`, `with-world`, `$worlds`,
-  `get.world.name`, `true.in.world`, and `world.inconsistent.p` exist
+  `get.world.name`, `true.in.world`, `world.facts`, and
+  `world.inconsistent.p` exist
 - `BELIEVE FALSE` marks the current world inconsistent
+- `IN.NEW.WORLD` rules create reusable child worlds for the same rule/bindings
+  branch instead of generating an unbounded stream of duplicates
 - `WHILE ... BELIEVE FALSE` rules can be used for puzzle-style constraints
 - `world.justifications`, `world.nogoods`, and `why.false` expose a small
   reason trail for contradictions

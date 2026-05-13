@@ -337,12 +337,73 @@
     (inherited (kee-slot-inherited-values slot))
     (combined (kee-slot-combined-values slot))))
 
+(defun constraint-symbol-p (value name)
+  (and (symbolp value) (string= (symbol-name value) name)))
+
 (defun note-change (old-values new-values)
   (unless (equal old-values new-values)
     (incf *change-count*)))
 
 (defun facet-values (slot facet)
   (copy-list (gethash facet (kee-slot-facets slot))))
+
+(defun slot.facet.values (unit-designator slot-name facet)
+  "Return local or inherited facet values for SLOT-NAME on UNIT-DESIGNATOR."
+  (let ((unit (unit unit-designator)))
+    (labels ((walk (candidate seen)
+               (unless (member candidate seen)
+                 (let* ((slot (gethash slot-name (kee-unit-slots candidate)))
+                        (values (and slot (facet-values slot facet))))
+                   (if values
+                       values
+                       (loop for parent in (all-parents candidate)
+                             append (walk parent (cons candidate seen))))))))
+      (walk unit nil))))
+
+(defun first-slot-facet-value (unit slot-name facets)
+  (loop for facet in facets
+        for values = (slot.facet.values unit slot-name facet)
+        when values
+          return (first values)))
+
+(defun normalize-one-of-values (value-class)
+  (cond ((null value-class) nil)
+        ((and (consp value-class)
+              (constraint-symbol-p (first value-class) "ONE.OF"))
+         (rest value-class))
+        ((consp value-class) value-class)
+        (t (list value-class))))
+
+(defun slot-value-class-values (unit slot-name)
+  (normalize-one-of-values
+   (first-slot-facet-value unit slot-name '(value.class value-class))))
+
+(defun slot-cardinality (unit slot-name facets)
+  (let ((value (first-slot-facet-value unit slot-name facets)))
+    (when value
+      (unless (and (integerp value) (not (minusp value)))
+        (error "Cardinality facet for ~S of ~S must be a non-negative integer, got ~S."
+               slot-name (unit.name unit) value))
+      value)))
+
+(defun validate-slot-values (unit slot-name values)
+  (let ((allowed-values (slot-value-class-values unit slot-name))
+        (min-cardinality (slot-cardinality unit slot-name
+                                          '(min.cardinality min-cardinality)))
+        (max-cardinality (slot-cardinality unit slot-name
+                                          '(max.cardinality max-cardinality))))
+    (when allowed-values
+      (dolist (value values)
+        (unless (member value allowed-values :test #'equal)
+          (error "Value ~S is not in value class ~S for ~S of ~S."
+                 value allowed-values slot-name (unit.name unit)))))
+    (when (and min-cardinality (< (length values) min-cardinality))
+      (error "Slot ~S of ~S requires at least ~D value(s), got ~D."
+             slot-name (unit.name unit) min-cardinality (length values)))
+    (when (and max-cardinality (> (length values) max-cardinality))
+      (error "Slot ~S of ~S allows at most ~D value(s), got ~D."
+             slot-name (unit.name unit) max-cardinality (length values))))
+  values)
 
 (defun active-value-units (slot)
   (when slot
@@ -385,6 +446,7 @@
     (if (world-values-active-p)
         (funcall *world-put-values-hook* unit slot-name values)
         (progn
+          (validate-slot-values unit slot-name values)
           (setf (kee-slot-local-values slot) (copy-list values))
           (recompute-slot unit slot-name)
           (propagate-slot unit slot-name)
@@ -409,6 +471,7 @@
           (dolist (value values)
             (unless (member value new-local-values :test #'equal)
               (setf new-local-values (append new-local-values (list value)))))
+          (validate-slot-values unit slot-name new-local-values)
           (setf (kee-slot-local-values slot)
                 new-local-values)
           (recompute-slot unit slot-name)
@@ -430,6 +493,7 @@
     (if (world-values-active-p)
         (funcall *world-remove-all-values-hook* unit slot-name)
         (progn
+          (validate-slot-values unit slot-name nil)
           (setf (kee-slot-local-values slot) nil)
           (recompute-slot unit slot-name)
           (propagate-slot unit slot-name)

@@ -25,6 +25,7 @@
   justification)
 
 (defvar *worlds* (make-hash-table :test #'eq))
+(defvar *world-branches* (make-hash-table :test #'equal))
 (defvar *current-world* nil)
 (defvar *world-counter* 0)
 (defvar *current-rule-unit* nil)
@@ -34,6 +35,7 @@
 
 (defun reset-worlds ()
   (setf *worlds* (make-hash-table :test #'eq)
+        *world-branches* (make-hash-table :test #'equal)
         *current-world* nil
         *world-counter* 0))
 
@@ -78,6 +80,16 @@
 (defun world.nogoods (world-designator)
   (copy-list (kee-world-nogoods (world world-designator))))
 
+(defun world.facts (world-designator)
+  (let ((world (world world-designator)))
+    (loop for key being the hash-keys of (kee-world-values world)
+            using (hash-value values)
+          collect (destructuring-bind (kb-name unit-name slot-name) key
+                    (list :kb kb-name
+                          :unit unit-name
+                          :slot slot-name
+                          :values (copy-list values))))))
+
 (defun $worlds ()
   (loop for world being the hash-values of *worlds*
         collect world))
@@ -118,6 +130,7 @@
 
 (defun set-world-values (unit slot-name values)
   (let ((old-values (world-effective-values *current-world* unit slot-name)))
+    (validate-slot-values unit slot-name values)
     (setf (gethash (world-key unit slot-name)
                    (kee-world-values *current-world*))
           (copy-list values))
@@ -142,6 +155,11 @@
 (defun in.new.world (&optional name)
   (let ((new (create.world name *current-world*)))
     (goto.world new)))
+
+(defun ensure.branch.world (key)
+  (or (gethash key *world-branches*)
+      (setf (gethash key *world-branches*)
+            (create.world nil *current-world*))))
 
 (defun true.in.world (world-designator unit-designator slot-name value)
   (let ((target-world (world world-designator))

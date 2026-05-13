@@ -19,6 +19,11 @@
   #+sbcl (sb-ext:exit :code status)
   #-sbcl (error "Tests failed with status ~D." status))
 
+(defun signals-error-p (thunk)
+  (handler-case
+      (progn (funcall thunk) nil)
+    (error () t)))
+
 (defun run ()
   (kee:reset-kee)
   (kee:create.kb 'veg)
@@ -149,7 +154,20 @@
     (check (equal (kee:get.values wave 'recommended.techniques)
                   '(pgc.near.nadir))))
   (kee:create.unit 'people 'veg 'entities 'classes)
+  (kee:create.slot 'people 'sport 'member nil nil nil nil
+                   '((kee:value.class (kee:one.of golf basketball sailing))
+                     (kee:min.cardinality 1)
+                     (kee:max.cardinality 1)))
+  (kee:create.slot 'people 'phobia 'member nil nil nil nil
+                   '((kee:value.class (kee:one.of cats heights close.spaces))
+                     (kee:min.cardinality 1)
+                     (kee:max.cardinality 1)))
   (kee:create.unit 'tom 'veg nil 'people)
+  (check (equal (kee:slot.facet.values 'tom 'sport 'kee:value.class)
+                '((kee:one.of golf basketball sailing))))
+  (check (signals-error-p
+          (lambda ()
+            (kee:put.value 'tom 'sport 'tennis))))
   (kee:create.unit 'constraint.rules 'veg 'entities 'classes)
   (kee:create.unit 'heights.golf 'veg nil 'constraint.rules)
   (kee:put.value 'heights.golf 'kee:external.form
@@ -180,6 +198,29 @@
       (check (not (kee:world.inconsistent.p good-world))))
     (check (kee:true.in.world bad-world 'tom 'sport 'golf))
     (check (null (kee:get.value 'tom 'sport))))
+  (kee:create.unit 'hypothesis.rules 'veg 'entities 'classes)
+  (kee:create.unit 'guess.tom.golf 'veg nil 'hypothesis.rules)
+  (kee:put.value 'guess.tom.golf 'kee:external.form
+                 '(if (the needs.guess of ?person is sport)
+                      then
+                      (in.new.world
+                       (the sport of ?person is golf))))
+  (check (kee:parse 'guess.tom.golf))
+  (let ((root-world (kee:create.world 'root-hypotheses)))
+    (kee:with-world (root-world)
+      (kee:put.value 'tom 'needs.guess 'sport)
+      (kee:forward.chain 'hypothesis.rules)
+      (kee:forward.chain 'hypothesis.rules))
+    (let ((children (remove-if-not
+                     (lambda (world)
+                       (eq (kee:world.parent world) root-world))
+                     (kee:$worlds))))
+      (check (= (length children) 1))
+      (let ((child (first children)))
+        (check (kee:true.in.world child 'tom 'sport 'golf))
+        (check (not (kee:true.in.world root-world 'tom 'sport 'golf)))
+        (check (member 'sport (kee:world.facts child)
+                       :key (lambda (fact) (getf fact :slot)))))))
   (format t "~&~A~%" (if (zerop *failures*) "All tests passed." "Tests failed."))
   (unless (zerop *failures*)
     (quit-with-status 1)))

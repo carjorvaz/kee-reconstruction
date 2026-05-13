@@ -25,8 +25,11 @@ The first implementation target is `kee-core`:
   `unit.parents`, `unit.children`, and `unitmsg`
 - method slots with `:before`, `:primary`, and `:after` contributions
 - first-pass ActiveValue hooks on slot read/write/add/remove
+- value-class and cardinality facets such as `(one.of ...)`,
+  `min.cardinality`, and `max.cardinality`
 - a tiny RuleSystem subset with rule units, `external.form`, `parse`,
-  `parse.errors`, `THE`/`OF`/`IS`, `LISP`, `THEN`, and `forward.chain`
+  `parse.errors`, `THE`/`OF`/`IS`, `LISP`, `THEN`, `IN.NEW.WORLD`, and
+  `forward.chain`
 - a tiny KEEworlds subset with world overlays and `BELIEVE FALSE`
 
 Later phases broaden RuleSystem/TellAndAsk, grow the KEEworlds/ATMS model, and

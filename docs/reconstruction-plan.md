@@ -69,8 +69,8 @@ Status:
 
 - A first subset exists.
 - It parses `external.form` on rule units.
-- It supports `THE`/`OF`/`IS`, `LISP`, `THEN`, and stable `forward.chain`
-  passes.
+- It supports `THE`/`OF`/`IS`, `LISP`, `THEN`, `IN.NEW.WORLD`, and stable
+  `forward.chain` passes.
 - The regression tests include a VEG-style technique-selection rule.
 
 ## Phase 4: KEEworlds and TMS
@@ -93,6 +93,8 @@ Status:
 - A first world overlay model exists.
 - `WHILE ... BELIEVE FALSE` can mark a world inconsistent.
 - `why.false` reports the rule and bindings responsible for a contradiction.
+- `IN.NEW.WORLD` can create reusable child worlds for hypotheses.
+- `world.facts` lists a world's local overlay facts.
 - The regression tests and `examples/hamburg-puzzle-mini.lisp` cover a
   training-slide-style constraint.
 - Full ATMS environments, assumptions, and dependency propagation are still
