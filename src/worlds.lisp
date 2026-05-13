@@ -4,11 +4,33 @@
   name
   parent
   (values (make-hash-table :test #'equal))
-  inconsistent-p)
+  inconsistent-p
+  justifications
+  nogoods)
+
+(defstruct (kee-justification
+            (:constructor make-justification
+                (&key rule bindings conditions action proposition))
+            (:conc-name justification.))
+  rule
+  bindings
+  conditions
+  action
+  proposition)
+
+(defstruct (kee-nogood
+            (:constructor make-nogood (&key world justification))
+            (:conc-name nogood.))
+  world
+  justification)
 
 (defvar *worlds* (make-hash-table :test #'eq))
 (defvar *current-world* nil)
 (defvar *world-counter* 0)
+(defvar *current-rule-unit* nil)
+(defvar *current-rule-bindings* nil)
+(defvar *current-rule-conditions* nil)
+(defvar *current-rule-action* nil)
 
 (defun reset-worlds ()
   (setf *worlds* (make-hash-table :test #'eq)
@@ -49,6 +71,12 @@
 
 (defun world.inconsistent.p (world-designator)
   (kee-world-inconsistent-p (world world-designator)))
+
+(defun world.justifications (world-designator)
+  (copy-list (kee-world-justifications (world world-designator))))
+
+(defun world.nogoods (world-designator)
+  (copy-list (kee-world-nogoods (world world-designator))))
 
 (defun $worlds ()
   (loop for world being the hash-values of *worlds*
@@ -121,11 +149,53 @@
     (with-world (target-world)
       (member value (get.values target-unit slot-name) :test #'equal))))
 
+(defun justification-value (value)
+  (cond ((typep value 'kee-unit) (unit.name value))
+        ((consp value) (mapcar #'justification-value value))
+        (t value)))
+
+(defun current-bindings-for-justification ()
+  (mapcar (lambda (binding)
+            (cons (car binding) (justification-value (cdr binding))))
+          *current-rule-bindings*))
+
+(defun make-current-justification (proposition)
+  (make-justification
+   :rule (and *current-rule-unit* (unit.name *current-rule-unit*))
+   :bindings (current-bindings-for-justification)
+   :conditions *current-rule-conditions*
+   :action *current-rule-action*
+   :proposition proposition))
+
+(defun same-justification-p (left right)
+  (and (equal (justification.rule left) (justification.rule right))
+       (equal (justification.bindings left) (justification.bindings right))
+       (equal (justification.conditions left) (justification.conditions right))
+       (equal (justification.action left) (justification.action right))
+       (equal (justification.proposition left) (justification.proposition right))))
+
+(defun record-world-justification (world justification)
+  (unless (some (lambda (existing)
+                  (same-justification-p existing justification))
+                (kee-world-justifications world))
+    (push justification (kee-world-justifications world))
+    (push (make-nogood :world (kee-world-name world)
+                       :justification justification)
+          (kee-world-nogoods world))
+    (incf *change-count*)
+    t))
+
+(defun why.false (&optional world-designator)
+  (mapcar #'nogood.justification
+          (world.nogoods (or world-designator *current-world*))))
+
 (defun believe (proposition)
   (cond ((and (symbolp proposition)
               (string= (symbol-name proposition) "FALSE"))
          (let ((world (or *current-world*
-                          (setf *current-world* (create.world 'base.world)))))
+                          (setf *current-world* (create.world 'base.world))))
+               (justification (make-current-justification proposition)))
+           (record-world-justification world justification)
            (unless (kee-world-inconsistent-p world)
              (setf (kee-world-inconsistent-p world) t)
              (incf *change-count*))

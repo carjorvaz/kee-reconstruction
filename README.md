@@ -43,7 +43,8 @@ for a wavelength unit using `forward.chain`.
 
 `examples/hamburg-puzzle-mini.lisp` demonstrates a KEE 3.0 training-slide
 style constraint: a world where Tom has both `sport = golf` and
-`phobia = heights` is marked inconsistent by `WHILE ... BELIEVE FALSE`.
+`phobia = heights` is marked inconsistent by `WHILE ... BELIEVE FALSE`, with a
+small reason trail showing the rule and bindings that produced the nogood.
 
 ## Running Tests
 

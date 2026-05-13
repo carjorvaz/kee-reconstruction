@@ -15,8 +15,8 @@
   (kee:create.unit 'constraint.rules 'puzzle 'entities 'classes)
   (kee:create.unit 'heights.golf 'puzzle nil 'constraint.rules)
   (kee:put.value 'heights.golf 'kee:external.form
-                 '(while (the sport of tom is golf)
-                         (the phobia of tom is heights)
+                 '(while (the sport of ?person is golf)
+                         (the phobia of ?person is heights)
                     believe false))
   (kee:parse 'heights.golf))
 
@@ -35,6 +35,10 @@
     (format t "~&~S inconsistent? ~S~%"
             (kee:get.world.name bad)
             (kee:world.inconsistent.p bad))
+    (dolist (reason (kee:why.false bad))
+      (format t "  because ~S matched ~S~%"
+              (kee:justification.rule reason)
+              (kee:justification.bindings reason)))
     (format t "~S inconsistent? ~S~%"
             (kee:get.world.name good)
             (kee:world.inconsistent.p good))))

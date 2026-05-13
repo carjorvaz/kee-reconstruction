@@ -45,12 +45,22 @@
    #:get.world.name
    #:world.inconsistent.p
    #:world.parent
+   #:world.justifications
+   #:world.nogoods
    #:$worlds
    #:with-world
    #:in.new.world
    #:true.in.world
    #:believe
    #:false
+   #:why.false
+   #:justification.rule
+   #:justification.bindings
+   #:justification.conditions
+   #:justification.action
+   #:justification.proposition
+   #:nogood.world
+   #:nogood.justification
    #:parse
    #:external.form
    #:internal.form

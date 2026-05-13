@@ -92,9 +92,11 @@ Status:
 
 - A first world overlay model exists.
 - `WHILE ... BELIEVE FALSE` can mark a world inconsistent.
+- `why.false` reports the rule and bindings responsible for a contradiction.
 - The regression tests and `examples/hamburg-puzzle-mini.lisp` cover a
   training-slide-style constraint.
-- ATMS justifications and nogoods are still future work.
+- Full ATMS environments, assumptions, and dependency propagation are still
+  future work.
 
 ## Phase 5: GUI Reconstruction
 

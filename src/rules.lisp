@@ -145,10 +145,21 @@ WHILE, THEN, THE/OF/IS patterns, BELIEVE FALSE, and LISP conditions/actions."
   (multiple-value-bind (slot-name unit-term value-pattern)
       (parse-the-condition condition)
     (let ((target-unit (resolve-rule-term unit-term bindings)))
-      (when (variable-symbol-p target-unit)
-        (error "Unbound unit variable in THE condition: ~S." condition))
-      (loop for value in (get.values target-unit slot-name)
-            append (match-rule-value value-pattern value bindings)))))
+      (cond ((and (variable-symbol-p unit-term)
+                  (not (bound-variable-p unit-term bindings)))
+             (loop for candidate being the hash-values of
+                     (knowledge-base-units (kb))
+                   append
+                   (let ((candidate-bindings
+                           (bind-variable unit-term candidate bindings)))
+                     (loop for value in (get.values candidate slot-name)
+                           append (match-rule-value value-pattern value
+                                                    candidate-bindings)))))
+            ((variable-symbol-p target-unit)
+             (error "Unbound unit variable in THE condition: ~S." condition))
+            (t
+             (loop for value in (get.values target-unit slot-name)
+                   append (match-rule-value value-pattern value bindings)))))))
 
 (defun canonical-function-symbol (symbol)
   (multiple-value-bind (kee-symbol status) (find-symbol (symbol-name symbol) '#:kee)
@@ -228,7 +239,11 @@ WHILE, THEN, THE/OF/IS patterns, BELIEVE FALSE, and LISP conditions/actions."
       (let ((bindings-list (evaluate-conditions (getf parsed :conditions))))
         (dolist (bindings bindings-list)
           (dolist (action (getf parsed :actions))
-            (execute-action action bindings)))
+            (let ((*current-rule-unit* rule-unit)
+                  (*current-rule-bindings* bindings)
+                  (*current-rule-conditions* (getf parsed :conditions))
+                  (*current-rule-action* action))
+              (execute-action action bindings))))
         (and bindings-list t)))))
 
 (defun forward.chain (rule-class-designator &key (max-passes 100))

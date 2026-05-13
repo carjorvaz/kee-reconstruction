@@ -196,11 +196,16 @@ Current reconstruction:
   `get.world.name`, `true.in.world`, and `world.inconsistent.p` exist
 - `BELIEVE FALSE` marks the current world inconsistent
 - `WHILE ... BELIEVE FALSE` rules can be used for puzzle-style constraints
+- `world.justifications`, `world.nogoods`, and `why.false` expose a small
+  reason trail for contradictions
+- justifications currently record the rule name, variable bindings, conditions,
+  action, and proposition
 
 Important uncertainty:
 
-This is not yet an ATMS. It does not model justifications, environments,
-nondeletion assumptions, deletion nogoods, or dependency-directed propagation.
+This is not yet a real ATMS. It records justification-shaped evidence for
+contradictions, but it does not yet model ATMS environments, nondeletion
+assumptions, deletion nogoods, or dependency-directed propagation.
 
 ## GUI Layer
 
