@@ -14,7 +14,26 @@
 (setup)
 (kee:create.world 'hypothesis-root)
 (kee:run.world.agenda '(constraint.rules hypothesis.rules) :max-iterations 20)
-(kee:write.kee.viewer.html *standard-output*
-                           :kb 'puzzle
-                           :world-limit 80
-                           :title "Hamburg Puzzle")
+
+(defun demo-review-world ()
+  (or (find-if (lambda (world)
+                 (and (kee:world.inconsistent.p world)
+                      (kee:world.nogoods world)
+                      (kee:world.facts world)))
+               (sort (copy-list (kee:$worlds))
+                     #'string<
+                     :key (lambda (world)
+                            (symbol-name (kee:get.world.name world)))))
+      (first (kee:$worlds))))
+
+(let* ((review-world (demo-review-world))
+       (review-world-id (format nil "world:~A"
+                                (symbol-name
+                                 (kee:get.world.name review-world)))))
+  (kee:write.kee.viewer.html *standard-output*
+                             :kb 'puzzle
+                             :world-limit 80
+                             :title "Hamburg Puzzle"
+                             :initial-view "worlds"
+                             :initial-selection review-world-id
+                             :initial-trace-scope "selected"))

@@ -3,7 +3,7 @@
 An evidence-first reconstruction of IntelliCorp's Knowledge Engineering
 Environment (KEE).
 
-![Hamburg puzzle viewer screenshot](docs/assets/screenshots/hamburg-viewer-units.png)
+![Hamburg puzzle reviewer-view screenshot](docs/assets/screenshots/hamburg-viewer-review.png)
 
 This is not original IntelliCorp KEE source. It is a clean-room reconstruction
 of selected behavior, built from public evidence and runnable experiments.
@@ -49,8 +49,9 @@ nix develop --command scripts/screenshot-demo.sh
 nix develop --command scripts/smoke.sh
 ```
 
-See `docs/demo.md` for the demo path and `docs/expert-review.md` for the
-questions this repo is now prepared to ask people who used KEE professionally.
+See `docs/demo.md` for the demo path, `docs/reviewer-packet.md` for a guided
+first look, and `docs/expert-review.md` for the questions this repo is now
+prepared to ask people who used KEE professionally.
 
 ## Repository Knowledge
 
@@ -62,6 +63,7 @@ reason about it.
 - `docs/artifacts.md` is the evidence ledger and missing-artifact list.
 - `docs/provenance-policy.md` explains what can be checked in.
 - `docs/agent-workflow.md` records the repo-local agent workflow.
+- `docs/reviewer-packet.md` is the short guided path for first-hand reviewers.
 - `docs/gui-reconstruction.md` tracks the historically important GUI layer.
 
 ## Current Scope

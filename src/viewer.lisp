@@ -505,8 +505,23 @@
    (or (ignore-errors (list.kbs))
        (remove nil (list (getf unit-graph :kb))))))
 
-(defun viewer-json-object (unit-graph world-graph title)
+(defun viewer-initial-json (&key view selected trace-family trace-kind
+                                 trace-scope trace-query)
+  (remove nil
+          (list (when view (cons "view" (detail-string view)))
+                (when selected (cons "selected" (detail-string selected)))
+                (when trace-family
+                  (cons "traceFamily" (detail-string trace-family)))
+                (when trace-kind
+                  (cons "traceKind" (detail-string trace-kind)))
+                (when trace-scope
+                  (cons "traceScope" (detail-string trace-scope)))
+                (when trace-query
+                  (cons "traceQuery" (detail-string trace-query))))))
+
+(defun viewer-json-object (unit-graph world-graph title initial)
   (list (cons "title" title)
+        (cons "initial" initial)
         (cons "kbs" (viewer-kbs-json unit-graph))
         (cons "units" (graph-json-object unit-graph))
         (cons "worlds" (graph-json-object world-graph))
@@ -751,6 +766,7 @@
    (list "</script>"
          "<script>"
          "const DATA = JSON.parse(document.getElementById('kee-data').textContent);"
+         "const INITIAL = DATA.initial || {};"
          "const svg = document.getElementById('graph');"
          "const inspector = document.getElementById('inspector');"
          "const browserPane = document.querySelector('.browser-pane');"
@@ -761,7 +777,7 @@
          "const nodeList = document.getElementById('node-list');"
          "const nodeCount = document.getElementById('node-count');"
          "const search = document.getElementById('search');"
-         "const state = { view: 'units', selected: null, query: '', zoom: 1, viewBox: null, focusSelected: false, traceFamily: 'all', traceKind: 'all', traceScope: 'selected', traceQuery: '', traceFocusId: null, traceReplaySpeed: 'normal', traceReplayLoop: false, xrefOperation: 'all', xrefSlot: 'all', xrefTarget: 'all' };"
+         "const state = { view: INITIAL.view || 'units', selected: INITIAL.selected || null, query: '', zoom: 1, viewBox: null, focusSelected: !!INITIAL.selected, traceFamily: INITIAL.traceFamily || 'all', traceKind: INITIAL.traceKind || 'all', traceScope: INITIAL.traceScope || 'selected', traceQuery: INITIAL.traceQuery || '', traceFocusId: null, traceReplaySpeed: 'normal', traceReplayLoop: false, xrefOperation: 'all', xrefSlot: 'all', xrefTarget: 'all' };"
          "let traceReplayTimer = null;"
          "function esc(value) { return String(value ?? '').replace(/[&<>\"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;',\"'\":'&#39;'}[ch])); }"
          "function short(value, limit = 25) { const text = String(value ?? ''); return text.length > limit ? text.slice(0, limit - 3) + '...' : text; }"
@@ -1029,39 +1045,73 @@
          "document.querySelector('[data-action=\"fit\"]').addEventListener('click', () => { state.zoom = 1; state.viewBox = null; render(); });"
          "document.querySelector('[data-action=\"zoom-in\"]').addEventListener('click', () => { state.zoom = Math.min(3, state.zoom * 1.2); state.viewBox = null; render(); });"
          "document.querySelector('[data-action=\"zoom-out\"]').addEventListener('click', () => { state.zoom = Math.max(0.4, state.zoom / 1.2); state.viewBox = null; render(); });"
+         "setView(state.view);"
          "render();"
          "</script>"
          "</body>"
          "</html>")))
 
 (defun write.graph.viewer.html
-    (stream &key unit-graph world-graph (title "KEE Graph Browser"))
+    (stream &key unit-graph world-graph (title "KEE Graph Browser")
+              initial-view initial-selection initial-trace-family
+              initial-trace-kind initial-trace-scope initial-trace-query)
   "Write a standalone HTML/SVG viewer for structured KEE graphs."
   (write-viewer-head stream title)
-  (write-json-value stream (viewer-json-object unit-graph world-graph title))
+  (write-json-value
+   stream
+   (viewer-json-object
+    unit-graph
+    world-graph
+    title
+    (viewer-initial-json :view initial-view
+                         :selected initial-selection
+                         :trace-family initial-trace-family
+                         :trace-kind initial-trace-kind
+                         :trace-scope initial-trace-scope
+                         :trace-query initial-trace-query)))
   (write-viewer-script stream)
   (values))
 
 (defun graph.viewer.html (&key unit-graph world-graph
-                               (title "KEE Graph Browser"))
+                               (title "KEE Graph Browser")
+                               initial-view initial-selection
+                               initial-trace-family initial-trace-kind
+                               initial-trace-scope initial-trace-query)
   "Return a standalone HTML/SVG viewer for structured KEE graphs."
   (with-output-to-string (stream)
     (write.graph.viewer.html stream
                              :unit-graph unit-graph
                              :world-graph world-graph
-                             :title title)))
+                             :title title
+                             :initial-view initial-view
+                             :initial-selection initial-selection
+                             :initial-trace-family initial-trace-family
+                             :initial-trace-kind initial-trace-kind
+                             :initial-trace-scope initial-trace-scope
+                             :initial-trace-query initial-trace-query)))
 
 (defun write.kee.viewer.html
-    (stream &key kb units worlds world-limit (title "KEE Graph Browser"))
+    (stream &key kb units worlds world-limit (title "KEE Graph Browser")
+              initial-view initial-selection initial-trace-family
+              initial-trace-kind initial-trace-scope initial-trace-query)
   "Write a standalone HTML/SVG viewer for the current KEE image."
   (write.graph.viewer.html stream
                            :unit-graph (unit.graph :kb kb :units units)
                            :world-graph (world.graph :worlds worlds
                                                      :limit world-limit)
-                           :title title))
+                           :title title
+                           :initial-view initial-view
+                           :initial-selection initial-selection
+                           :initial-trace-family initial-trace-family
+                           :initial-trace-kind initial-trace-kind
+                           :initial-trace-scope initial-trace-scope
+                           :initial-trace-query initial-trace-query))
 
 (defun kee.viewer.html (&key kb units worlds world-limit
-                             (title "KEE Graph Browser"))
+                             (title "KEE Graph Browser")
+                             initial-view initial-selection
+                             initial-trace-family initial-trace-kind
+                             initial-trace-scope initial-trace-query)
   "Return a standalone HTML/SVG viewer for the current KEE image."
   (with-output-to-string (stream)
     (write.kee.viewer.html stream
@@ -1069,4 +1119,10 @@
                            :units units
                            :worlds worlds
                            :world-limit world-limit
-                           :title title)))
+                           :title title
+                           :initial-view initial-view
+                           :initial-selection initial-selection
+                           :initial-trace-family initial-trace-family
+                           :initial-trace-kind initial-trace-kind
+                           :initial-trace-scope initial-trace-scope
+                           :initial-trace-query initial-trace-query)))

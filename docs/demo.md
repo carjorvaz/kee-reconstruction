@@ -5,6 +5,11 @@ the historical KEE GUI, but it exercises reconstructed KEE concepts in one
 place: units, slots, rule classes, generated worlds, trace events, fact labels,
 world assumptions, and nogood explanations.
 
+The generated page opens on the Worlds tab with an inconsistent generated world
+selected. This is intentional: it gives reviewers a concrete first view of
+KEEworlds-style branching, assumptions, support labels, nogoods, and rule trace
+explanations instead of a blank or generic hierarchy view.
+
 ## Run
 
 With Nix:
@@ -38,7 +43,7 @@ nix develop --command scripts/screenshot-demo.sh
 The command writes:
 
 ```text
-docs/assets/screenshots/hamburg-viewer-units.png
+docs/assets/screenshots/hamburg-viewer-review.png
 ```
 
 ## Smoke Test

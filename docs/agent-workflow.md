@@ -11,6 +11,8 @@ Source: https://openai.com/index/harness-engineering/
 - `AGENTS.md` is a map, not a manual.
 - `docs/` is the system of record for evidence, uncertainty, design direction,
   and demo instructions.
+- `docs/reviewer-packet.md` is the current human-facing handoff packet for
+  first-hand KEE reviewers.
 - Scripts provide repeatable feedback loops: test, render, screenshot, inspect.
 - Generated screenshots are allowed when the command that produced them is
   checked in.

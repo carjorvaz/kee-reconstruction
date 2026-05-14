@@ -68,8 +68,10 @@ No full scans found yet. These identifiers make the search precise.
 These are generated or authored inside this repository and are safe to
 redistribute with it.
 
-- `docs/assets/screenshots/hamburg-viewer-units.png` - generated screenshot of
+- `docs/assets/screenshots/hamburg-viewer-review.png` - generated screenshot of
   the current standalone Hamburg puzzle viewer.
+- `docs/reviewer-packet.md` - short guided path for first-hand KEE and Lisp
+  Machine reviewers.
 - `docs/demo.md` - reproducible commands for generating the interactive HTML
   demo and screenshot.
 - `docs/expert-review.md` - prompts for collecting first-hand review from KEE

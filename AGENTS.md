@@ -14,6 +14,8 @@ work legible to both humans and future agents.
 - `docs/gui-reconstruction.md` tracks KEE browser, Common Windows,
   KEEpictures, ActiveImages, trace, and viewer evidence.
 - `docs/demo.md` explains how to generate and view the runnable demo.
+- `docs/reviewer-packet.md` is the concise first-look packet for people who
+  used KEE or Lisp machines professionally.
 - `docs/expert-review.md` frames questions for people who used KEE or Lisp
   machines professionally.
 

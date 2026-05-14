@@ -1,0 +1,70 @@
+# Reviewer Packet
+
+This packet is for someone who used IntelliCorp KEE, Texas Instruments Lisp
+Machines, Symbolics machines, or KEE-based professional systems.
+
+## What This Is
+
+This is a clean-room Common Lisp reconstruction of selected KEE behavior. It is
+guided by public evidence, small translated examples, patents, papers, NASA
+reports, training slides, and implementation experiments.
+
+It is not original IntelliCorp KEE source, not a binary distribution, and not a
+claim of historical completeness.
+
+## Quick Start
+
+```sh
+nix develop --command scripts/render-demo.sh
+```
+
+Open:
+
+```text
+demo/hamburg-viewer.html
+```
+
+The demo opens on the Worlds tab with an inconsistent generated world selected.
+That first view is meant to show KEEworlds-style branching, local facts,
+assumptions, support labels, nogoods, rule traces, agenda/conflict-set
+reconstruction, and causality views in one place.
+
+## What To Inspect
+
+- The Units tab: class/member hierarchy, rule units, parsed rule forms, slots,
+  facets, rule cross-references, and ActiveImage evidence.
+- The Worlds tab: generated branch worlds, consistent versus inconsistent
+  worlds, local world facts, support labels, assumptions, and nogoods.
+- The Trace pane: agenda passes, rule matches/fires, world branches, slot
+  writes, contradictions, label retractions, why trails, and trace map.
+- `examples/hamburg-puzzle-mini.lisp`: the small KEE 3.0 training-slide-style
+  puzzle that drives the demo.
+- `examples/veg-rule-mini.lisp`: a tiny NASA VEG-inspired rule example.
+
+## What We Most Need Corrected
+
+- Which GUI elements feel unlike KEE's browser, Common Windows, KEEpictures,
+  ActiveImages, or tracing tools?
+- Which API names, argument conventions, or idioms look wrong?
+- What did the rule agenda/conflict-set viewer actually expose?
+- How did KEEworlds, assumptions, nogoods, and contradictions appear to users?
+- What was specific to TI Lisp Machines versus Symbolics or Sun/Lucid KEE?
+- Which missing feature would most improve the "yes, this evokes KEE" feeling?
+
+## Evidence Map
+
+- `docs/artifacts.md` - evidence ledger and missing artifact list.
+- `docs/api-surface.md` - reconstructed API surface and known uncertainty.
+- `docs/gui-reconstruction.md` - GUI, KEEpictures, ActiveImages, and trace
+  evidence.
+- `docs/provenance-policy.md` - what can be stored in this repository.
+- `docs/expert-review.md` - notes and prompts for first-hand conversations.
+
+## Running Checks
+
+```sh
+nix develop --command scripts/smoke.sh
+```
+
+The smoke script runs the Common Lisp regression tests, ASDF load, viewer
+generation, viewer JavaScript syntax check, and the current example scripts.

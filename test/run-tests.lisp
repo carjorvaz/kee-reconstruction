@@ -296,6 +296,9 @@
     (check (search "id='kee-data'" viewer-html))
     (check (search "unit:VEG/TOM" viewer-html))
     (check (search "function render" viewer-html))
+    (check (search "\"initial\"" viewer-html))
+    (check (search "const INITIAL" viewer-html))
+    (check (search "INITIAL.view" viewer-html))
     (check (search "\"kbs\"" viewer-html))
     (check (search "\"details\"" viewer-html))
     (check (search "\"activeImages\"" viewer-html))
@@ -402,6 +405,15 @@
     (check (search "renderNodeBrowser" viewer-html))
     (check (search "selectReference" viewer-html))
     (check (search "data-ref-kind" viewer-html)))
+  (let ((initial-html
+          (kee:kee.viewer.html :kb 'veg
+                               :world-limit 0
+                               :initial-view "worlds"
+                               :initial-selection "world:TOM-GOLF-HEIGHTS"
+                               :initial-trace-scope "selected")))
+    (check (search "\"view\":\"worlds\"" initial-html))
+    (check (search "\"selected\":\"world:TOM-GOLF-HEIGHTS\"" initial-html))
+    (check (search "\"traceScope\":\"selected\"" initial-html)))
   (let ((loop-text
           (with-output-to-string (output)
             (with-input-from-string (input "(kbs) (quit)")

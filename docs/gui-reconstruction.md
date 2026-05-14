@@ -163,6 +163,8 @@ The reconstruction now has a first trace layer for rule/world debugging:
   matches/firings, and downstream effects
 - the standalone viewer includes a Trace pane beside the selected unit or
   world detail
+- generated viewer pages can specify an initial view, selected node, and trace
+  scope so demos open on historically meaningful review states
 - trace panes can filter by event kind and selected-node scope
 - trace panes can also isolate method, rule, world, and problem event families
 - trace panes include search text plus previous/next jump controls, with the
