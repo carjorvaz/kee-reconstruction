@@ -277,19 +277,23 @@ Current reconstruction:
 - `world.justifications`, `world.nogoods`, and `why.false` expose a small
   reason trail for contradictions
 - generated branch worlds record explicit assumption objects, and
-  `world.environment` returns the selected world's cumulative assumptions
-- changed world facts record first-pass support labels through `world.labels`
+  `world.environment` returns the selected world's currently active cumulative
+  assumptions
+- changed world facts record first-pass current support labels through
+  `world.labels`; overwritten support labels are removed from the current label
+  set and traced as `:world-label-retract`
 - nogoods snapshot the current world environment through `nogood.environment`
 - justifications currently record the rule name, variable bindings, conditions,
   action, and proposition
 - `trace.events` also records world creation, world slot writes, generated
-  branches, nogoods, and contradictions
+  branches, support-label retractions, nogoods, and contradictions
 
 Important uncertainty:
 
-This is not yet a real ATMS. It now records first-pass environment assumptions,
-fact support labels, and nogood environment snapshots, but it does not yet
-model nondeletion assumptions, deletion nogoods, assumption retraction, or
+This is not yet a real ATMS. It now records first-pass active environment
+assumptions, current fact support labels, explicit label retraction on local
+fact overwrite, and nogood environment snapshots, but it does not yet model
+nondeletion assumptions, deletion nogoods, full assumption retraction, or
 dependency-directed propagation.
 
 ## Inspector and Browser

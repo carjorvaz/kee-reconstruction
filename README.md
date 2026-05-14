@@ -39,9 +39,9 @@ The first implementation target is `kee-core`:
 - a tiny RuleSystem subset with rule units, `external.form`, `parse`,
   `parse.errors`, `THE`/`OF`/`IS`, `LISP`, `THEN`, `IN.NEW.WORLD`, and
   `forward.chain`
-- a tiny KEEworlds subset with world overlays, first-pass environment
-  assumptions, fact support labels, nogood environment snapshots, and
-  `BELIEVE FALSE`
+- a tiny KEEworlds subset with world overlays, first-pass active environment
+  assumptions, current fact support labels, label retraction traces, nogood
+  environment snapshots, and `BELIEVE FALSE`
 - small world-search helpers: `cant.find`, `find.any`, `run.world.agenda`, and
   effective-fact deduplication for generated worlds
 - structured trace events for world creation, slot writes, agenda passes, rule

@@ -103,13 +103,14 @@ Status:
 - `world.facts` lists a world's local overlay facts.
 - generated worlds are deduplicated by effective fact signature.
 - generated branch worlds record first-pass assumption objects.
-- `world.environment` returns a world's cumulative assumptions, and nogoods
-  snapshot that environment.
-- changed world facts record first-pass support labels through `world.labels`.
+- `world.environment` returns a world's currently active cumulative
+  assumptions, and nogoods snapshot that environment.
+- changed world facts record first-pass current support labels through
+  `world.labels`, and local overwrites trace support-label retraction.
 - The regression tests and `examples/hamburg-puzzle-mini.lisp` cover a
   training-slide-style constraint.
-- Full ATMS labels, nondeletion/deletion assumptions, retraction, and
-  dependency propagation are still future work.
+- Full ATMS labels, nondeletion/deletion assumptions, full assumption
+  retraction, and dependency propagation are still future work.
 
 ## Phase 5: GUI Reconstruction
 

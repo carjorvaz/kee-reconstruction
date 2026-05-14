@@ -124,13 +124,6 @@
 (defun world.assumptions (world-designator)
   (reverse (copy-list (kee-world-assumptions (world world-designator)))))
 
-(defun world.environment (world-designator)
-  (loop for ancestor in (world-ancestor-chain (world world-designator))
-        append (world.assumptions ancestor)))
-
-(defun world.labels (world-designator)
-  (reverse (copy-list (kee-world-labels (world world-designator)))))
-
 (defun world.facts (world-designator)
   (let ((world (world world-designator)))
     (loop for key being the hash-keys of (kee-world-values world)
@@ -207,22 +200,24 @@
   (world-effective-values *current-world* unit slot-name))
 
 (defun set-world-values (unit slot-name values)
-  (let ((old-values (world-effective-values *current-world* unit slot-name)))
+  (let ((old-values (world-effective-values *current-world* unit slot-name))
+        (key (world-key unit slot-name)))
     (validate-slot-values unit slot-name values)
-    (setf (gethash (world-key unit slot-name)
-                   (kee-world-values *current-world*))
+    (setf (gethash key (kee-world-values *current-world*))
           (copy-list values))
     (note-change old-values values)
     (unless (equal old-values values)
-      (record-world-fact-label
-       *current-world*
-       (append (world-key unit slot-name) (list (copy-list values))))
       (record.trace.event :world-slot-write
                           :world (kee-world-name *current-world*)
                           :unit (unit.name unit)
                           :slot slot-name
                           :old-values old-values
-                          :new-values values))
+                          :new-values values)
+      (retract-world-fact-labels *current-world* key)
+      (when values
+        (record-world-fact-label
+         *current-world*
+         (append key (list (copy-list values))))))
     values))
 
 (defun world-put-values (unit slot-name values)
@@ -298,6 +293,42 @@
    :activation-id *current-trace-activation-id*
    :fire-id *current-trace-fire-id*))
 
+(defun fact-slot-key (fact)
+  (list (first fact) (second fact) (third fact)))
+
+(defun fact-current-p (world fact)
+  (when (and (consp fact) (cdddr fact))
+    (destructuring-bind (kb-name unit-name slot-name values) fact
+      (let ((target-unit (unit.exists.p unit-name kb-name)))
+        (and target-unit
+             (equal (world-effective-values world target-unit slot-name)
+                    values))))))
+
+(defun assumption-current-p (world assumption)
+  (fact-current-p world (assumption.fact assumption)))
+
+(defun label-current-p (world label)
+  (and (fact-current-p world (label.fact label))
+       (every (lambda (assumption)
+                (assumption-current-p world assumption))
+              (label.environment label))))
+
+(defun world.environment (world-designator)
+  (let ((target-world (world world-designator)))
+    (loop for ancestor in (world-ancestor-chain target-world)
+          append (remove-if-not
+                  (lambda (assumption)
+                    (assumption-current-p target-world assumption))
+                  (world.assumptions ancestor)))))
+
+(defun world.labels (world-designator)
+  (let ((target-world (world world-designator)))
+    (reverse
+     (remove-if-not
+      (lambda (label)
+        (label-current-p target-world label))
+      (copy-list (kee-world-labels target-world))))))
+
 (defun same-assumption-p (left right)
   (and (equal (assumption.world left) (assumption.world right))
        (equal (assumption.parent left) (assumption.parent right))
@@ -336,11 +367,28 @@
        (equal (label.rule left) (label.rule right))
        (equal (label.bindings left) (label.bindings right))))
 
+(defun retract-world-fact-labels (world key)
+  (let ((removed nil)
+        (kept nil))
+    (dolist (label (kee-world-labels world))
+      (if (equal (fact-slot-key (label.fact label)) key)
+          (push label removed)
+          (push label kept)))
+    (when removed
+      (setf (kee-world-labels world) (nreverse kept))
+      (record.trace.event :world-label-retract
+                          :world (kee-world-name world)
+                          :unit (second key)
+                          :slot (third key)
+                          :fact (mapcar #'label.fact (nreverse removed))
+                          :message "support-labels-retracted"))
+    removed))
+
 (defun record-world-fact-label (world fact)
   (let ((label (make-current-label :fact world fact)))
     (unless (some (lambda (existing)
                     (same-label-p existing label))
-                  (kee-world-labels world))
+                  (world.labels world))
       (push label (kee-world-labels world)))
     label))
 

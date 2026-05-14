@@ -156,8 +156,9 @@ The reconstruction now has a first trace layer for rule/world debugging:
 
 - `trace.events` returns structured chronological events
 - `clear.trace.events` clears the trace log and participates in `reset-kee`
-- recorded events include world creation, world slot writes, agenda passes,
-  rule matches/firings, generated branches, nogoods, and contradictions
+- recorded events include world creation, world slot writes, support-label
+  retractions, agenda passes, rule matches/firings, generated branches,
+  nogoods, and contradictions
 - agenda, activation, and fire provenance IDs connect agenda passes, rule
   matches/firings, and downstream effects
 - the standalone viewer includes a Trace pane beside the selected unit or
@@ -173,7 +174,8 @@ The reconstruction now has a first trace layer for rule/world debugging:
   events
 - agenda candidates show matched conditions and fired actions inline
 - fired agenda candidates show immediate downstream effects such as slot
-  writes, generated branches, nogoods, and contradictions
+  writes, support-label retractions, generated branches, nogoods, and
+  contradictions
 - a provenance-backed causality graph renders agenda -> match -> fire -> effect
   flows
 - selected world details render trace-backed why trails for world branches,
@@ -182,7 +184,7 @@ The reconstruction now has a first trace layer for rule/world debugging:
   selected world's ancestry
 - world and nogood detail maps now embed first-pass explicit environment
   records rather than depending only on trace reconstruction
-- world fact detail maps embed first-pass support labels
+- world fact detail maps embed first-pass current support labels
 - focused traces highlight referenced units or worlds in the visible SVG graph,
   including world ancestry paths for focused world/problem traces
 - focused trace detail exposes clickable unit/world graph targets
