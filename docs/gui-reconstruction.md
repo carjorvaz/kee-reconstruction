@@ -182,6 +182,7 @@ The reconstruction now has a first trace layer for rule/world debugging:
   selected world's ancestry
 - world and nogood detail maps now embed first-pass explicit environment
   records rather than depending only on trace reconstruction
+- world fact detail maps embed first-pass support labels
 - focused traces highlight referenced units or worlds in the visible SVG graph,
   including world ancestry paths for focused world/problem traces
 - focused trace detail exposes clickable unit/world graph targets

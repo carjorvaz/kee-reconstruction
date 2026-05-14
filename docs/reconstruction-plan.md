@@ -105,6 +105,7 @@ Status:
 - generated branch worlds record first-pass assumption objects.
 - `world.environment` returns a world's cumulative assumptions, and nogoods
   snapshot that environment.
+- changed world facts record first-pass support labels through `world.labels`.
 - The regression tests and `examples/hamburg-puzzle-mini.lisp` cover a
   training-slide-style constraint.
 - Full ATMS labels, nondeletion/deletion assumptions, retraction, and

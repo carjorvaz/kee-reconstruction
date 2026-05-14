@@ -70,6 +70,7 @@
    #:world.nogoods
    #:world.assumptions
    #:world.environment
+   #:world.labels
    #:$worlds
    #:with-world
    #:in.new.world
@@ -96,6 +97,17 @@
    #:assumption.agenda-id
    #:assumption.activation-id
    #:assumption.fire-id
+   #:label.kind
+   #:label.world
+   #:label.fact
+   #:label.environment
+   #:label.rule
+   #:label.bindings
+   #:label.conditions
+   #:label.action
+   #:label.agenda-id
+   #:label.activation-id
+   #:label.fire-id
    #:parse
    #:external.form
    #:internal.form

@@ -194,7 +194,9 @@
   (list (cons "kb" (detail-string (getf fact :kb)))
         (cons "unit" (detail-string (getf fact :unit)))
         (cons "slot" (detail-string (getf fact :slot)))
-        (cons "values" (detail-string-array (getf fact :values)))))
+        (cons "values" (detail-string-array (getf fact :values)))
+        (cons "labels" (json-array (mapcar #'label-detail-json
+                                            (getf fact :labels))))))
 
 (defun binding-detail-json (binding)
   (list (cons "variable" (detail-string (car binding)))
@@ -261,6 +263,24 @@
                                  :json-null))
         (cons "fireId" (or (getf assumption :fire-id) :json-null))))
 
+(defun label-detail-json (label)
+  (list (cons "kind" (detail-string (getf label :kind)))
+        (cons "world" (detail-string (getf label :world)))
+        (cons "fact" (or (getf label :fact) :json-null))
+        (cons "environment"
+              (json-array (mapcar #'assumption-detail-json
+                                   (getf label :environment))))
+        (cons "rule" (if (getf label :rule)
+                         (detail-string (getf label :rule))
+                         :json-null))
+        (cons "bindings" (json-array (mapcar #'binding-detail-json
+                                              (getf label :bindings))))
+        (cons "conditions" (detail-string-array (getf label :conditions)))
+        (cons "action" (or (getf label :action) :json-null))
+        (cons "agendaId" (or (getf label :agenda-id) :json-null))
+        (cons "activationId" (or (getf label :activation-id) :json-null))
+        (cons "fireId" (or (getf label :fire-id) :json-null))))
+
 (defun nogood-detail-json (nogood)
   (list (cons "world" (detail-string (getf nogood :world)))
         (cons "rule" (detail-string (getf nogood :rule)))
@@ -282,6 +302,8 @@
         (cons "inconsistentP" (json-bool (getf report :inconsistent-p)))
         (cons "facts" (json-array (mapcar #'fact-detail-json
                                            (getf report :facts))))
+        (cons "labels" (json-array (mapcar #'label-detail-json
+                                            (getf report :labels))))
         (cons "environment" (json-array (mapcar #'assumption-detail-json
                                                  (getf report :environment))))
         (cons "nogoods" (json-array (mapcar #'nogood-detail-json
@@ -876,7 +898,9 @@
          "  const slots = detail.slots || [];"
          "  return `<section class='detail-section'><h3>Parents</h3>${pillList(parents, 'unit', detail.kb)}</section><section class='detail-section'><h3>Children</h3>${pillList(children, 'unit', detail.kb)}</section>${renderRuleXref(detail)}<section class='detail-section'><h3>Slots</h3>${slots.length ? slots.map(renderSlot).join('') : `<p class='empty'>None</p>`}</section>`;"
          "}"
-         "function renderFact(fact) { return `<div class='detail-block'><strong>${esc(fact.slot)}</strong>${refLine('unit', 'unit', fact.unit, fact.kb)}${pillList(fact.values || [])}</div>`; }"
+         "function factLabelSummary(label) { const env = (label.environment || []).map(assumption => traceFactLabel(assumption.fact)).join(' | ') || 'base'; return `${label.kind || 'label'} ${label.rule || 'direct'} env ${env}`; }"
+         "function renderFactLabels(fact) { const labels = fact.labels || []; return labels.length ? detailLine('labels', labels.map(factLabelSummary).join(' ; ')) : ''; }"
+         "function renderFact(fact) { return `<div class='detail-block'><strong>${esc(fact.slot)}</strong>${refLine('unit', 'unit', fact.unit, fact.kb)}${pillList(fact.values || [])}${renderFactLabels(fact)}</div>`; }"
          "function renderNogood(nogood) {"
          "  const bindings = (nogood.bindings || []).map(binding => `${binding.variable}=${binding.value}`);"
          "  const conditions = (nogood.conditions || []).join(' | ');"

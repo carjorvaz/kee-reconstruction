@@ -6,6 +6,7 @@
   (values (make-hash-table :test #'equal))
   inconsistent-p
   assumptions
+  labels
   justifications
   nogoods)
 
@@ -34,6 +35,23 @@
   world
   parent
   fact
+  rule
+  bindings
+  conditions
+  action
+  agenda-id
+  activation-id
+  fire-id)
+
+(defstruct (kee-label
+            (:constructor make-label
+                (&key kind world fact environment rule bindings conditions action
+                      agenda-id activation-id fire-id))
+            (:conc-name label.))
+  kind
+  world
+  fact
+  environment
   rule
   bindings
   conditions
@@ -109,6 +127,9 @@
 (defun world.environment (world-designator)
   (loop for ancestor in (world-ancestor-chain (world world-designator))
         append (world.assumptions ancestor)))
+
+(defun world.labels (world-designator)
+  (reverse (copy-list (kee-world-labels (world world-designator)))))
 
 (defun world.facts (world-designator)
   (let ((world (world world-designator)))
@@ -193,6 +214,9 @@
           (copy-list values))
     (note-change old-values values)
     (unless (equal old-values values)
+      (record-world-fact-label
+       *current-world*
+       (append (world-key unit slot-name) (list (copy-list values))))
       (record.trace.event :world-slot-write
                           :world (kee-world-name *current-world*)
                           :unit (unit.name unit)
@@ -288,6 +312,37 @@
                   (kee-world-assumptions world))
       (push assumption (kee-world-assumptions world)))
     assumption))
+
+(defun make-current-label (kind world fact)
+  (make-label
+   :kind kind
+   :world (kee-world-name world)
+   :fact (copy-tree fact)
+   :environment (world.environment world)
+   :rule (and *current-rule-unit* (unit.name *current-rule-unit*))
+   :bindings (current-bindings-for-justification)
+   :conditions (copy-tree *current-rule-conditions*)
+   :action (copy-tree *current-rule-action*)
+   :agenda-id *current-trace-agenda-id*
+   :activation-id *current-trace-activation-id*
+   :fire-id *current-trace-fire-id*))
+
+(defun same-label-p (left right)
+  (and (eq (label.kind left) (label.kind right))
+       (equal (label.world left) (label.world right))
+       (equal (label.fact left) (label.fact right))
+       (equal (mapcar #'assumption.fact (label.environment left))
+              (mapcar #'assumption.fact (label.environment right)))
+       (equal (label.rule left) (label.rule right))
+       (equal (label.bindings left) (label.bindings right))))
+
+(defun record-world-fact-label (world fact)
+  (let ((label (make-current-label :fact world fact)))
+    (unless (some (lambda (existing)
+                    (same-label-p existing label))
+                  (kee-world-labels world))
+      (push label (kee-world-labels world)))
+    label))
 
 (defun same-justification-p (left right)
   (and (equal (justification.rule left) (justification.rule right))

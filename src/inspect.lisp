@@ -82,6 +82,36 @@
         :activation-id (assumption.activation-id assumption)
         :fire-id (assumption.fire-id assumption)))
 
+(defun inspect.label (label)
+  (list :kind (label.kind label)
+        :world (label.world label)
+        :fact (label.fact label)
+        :environment (mapcar #'inspect.assumption
+                             (label.environment label))
+        :rule (label.rule label)
+        :bindings (label.bindings label)
+        :conditions (label.conditions label)
+        :action (label.action label)
+        :agenda-id (label.agenda-id label)
+        :activation-id (label.activation-id label)
+        :fire-id (label.fire-id label)))
+
+(defun label-matches-fact-p (label fact)
+  (destructuring-bind (kb-name unit-name slot-name values) (label.fact label)
+    (and (equal kb-name (getf fact :kb))
+         (equal unit-name (getf fact :unit))
+         (equal slot-name (getf fact :slot))
+         (equal values (getf fact :values)))))
+
+(defun inspect.fact (fact labels)
+  (append fact
+          (list :labels
+                (mapcar #'inspect.label
+                        (remove-if-not
+                         (lambda (label)
+                           (label-matches-fact-p label fact))
+                         labels)))))
+
 (defun inspect.nogood (nogood)
   (let ((justification (nogood.justification nogood)))
     (list :world (nogood.world nogood)
@@ -99,7 +129,11 @@
           :parent (and (world.parent target-world)
                        (get.world.name (world.parent target-world)))
           :inconsistent-p (world.inconsistent.p target-world)
-          :facts (world.facts target-world)
+          :facts (mapcar (lambda (fact)
+                            (inspect.fact fact (world.labels target-world)))
+                          (world.facts target-world))
+          :labels (mapcar #'inspect.label
+                           (world.labels target-world))
           :environment (mapcar #'inspect.assumption
                                (world.environment target-world))
           :nogoods (mapcar #'inspect.nogood

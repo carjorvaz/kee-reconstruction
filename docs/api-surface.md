@@ -266,7 +266,8 @@ Current reconstruction:
   current world's overlay when a current world is active
 - `create.world`, `goto.world`, `current.world`, `with-world`, `$worlds`,
   `get.world.name`, `true.in.world`, `world.facts`,
-  `world.assumptions`, `world.environment`, and `world.inconsistent.p` exist
+  `world.assumptions`, `world.environment`, `world.labels`, and
+  `world.inconsistent.p` exist
 - `BELIEVE FALSE` marks the current world inconsistent
 - `IN.NEW.WORLD` rules create reusable child worlds for the same rule/bindings
   branch instead of generating an unbounded stream of duplicates
@@ -277,6 +278,7 @@ Current reconstruction:
   reason trail for contradictions
 - generated branch worlds record explicit assumption objects, and
   `world.environment` returns the selected world's cumulative assumptions
+- changed world facts record first-pass support labels through `world.labels`
 - nogoods snapshot the current world environment through `nogood.environment`
 - justifications currently record the rule name, variable bindings, conditions,
   action, and proposition
@@ -285,10 +287,10 @@ Current reconstruction:
 
 Important uncertainty:
 
-This is not yet a real ATMS. It now records first-pass environment assumptions
-and nogood environment snapshots, but it does not yet model nondeletion
-assumptions, deletion nogoods, assumption retraction, or dependency-directed
-propagation.
+This is not yet a real ATMS. It now records first-pass environment assumptions,
+fact support labels, and nogood environment snapshots, but it does not yet
+model nondeletion assumptions, deletion nogoods, assumption retraction, or
+dependency-directed propagation.
 
 ## Inspector and Browser
 
@@ -300,8 +302,8 @@ Current reconstruction:
   values for a slot.
 - `inspect.unit` returns a plist with parent links, child links, and inspected
   slots.
-- `inspect.world` returns a plist with parent, consistency, local facts,
-  environment assumptions, and nogood summaries for a world.
+- `inspect.world` returns a plist with parent, consistency, local facts with
+  support labels, environment assumptions, and nogood summaries for a world.
 - `inspect.world.tree` returns inspected worlds sorted by name.
 - `print.browser` prints a compact terminal browser view over KBs, units,
   slots, worlds, and contradiction reasons.
