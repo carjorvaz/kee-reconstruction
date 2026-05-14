@@ -48,6 +48,17 @@ The command writes:
 docs/assets/screenshots/hamburg-viewer-review.png
 ```
 
+## Interaction Check
+
+Run the browser-level viewer check:
+
+```sh
+nix develop --command scripts/check-viewer.sh
+```
+
+It renders the demo into a temporary file, opens it with Playwright, and checks
+the Review Tour controls, slot table, rule cross-reference, and agenda panes.
+
 ## Smoke Test
 
 Run the full local check:

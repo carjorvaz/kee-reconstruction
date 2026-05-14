@@ -13,6 +13,8 @@ required_files=(
   "docs/gui-fidelity-matrix.md"
   "docs/demo.md"
   "docs/assets/screenshots/hamburg-viewer-review.png"
+  "scripts/check-viewer.sh"
+  "test/viewer-tour.spec.js"
 )
 
 artifact_terms=(

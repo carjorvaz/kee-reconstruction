@@ -43,6 +43,7 @@ Common checks:
 
 ```sh
 scripts/check-docs.sh
+scripts/check-viewer.sh
 scripts/smoke.sh
 scripts/render-demo.sh
 scripts/screenshot-demo.sh

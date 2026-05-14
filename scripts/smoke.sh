@@ -19,6 +19,7 @@ sbcl --noinform --disable-debugger \
 perl -0ne 'print $1 if m{<script>\n(.*)</script>\n</body>}s' \
   "$tmpdir/kee-viewer.html" > "$tmpdir/kee-viewer.js"
 node --check "$tmpdir/kee-viewer.js"
+"$repo_root/scripts/check-viewer.sh"
 
 sbcl --script examples/veg-rule-mini.lisp
 sbcl --script examples/hamburg-puzzle-mini.lisp

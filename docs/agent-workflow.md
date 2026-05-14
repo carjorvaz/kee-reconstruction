@@ -23,6 +23,7 @@ Source: https://openai.com/index/harness-engineering/
 
 ```sh
 scripts/check-docs.sh
+scripts/check-viewer.sh
 scripts/smoke.sh
 scripts/render-demo.sh
 scripts/screenshot-demo.sh
@@ -30,6 +31,5 @@ scripts/screenshot-demo.sh
 
 Future useful loops:
 
-- browser-driven assertions over the generated viewer
 - screenshot comparison for the demo surface
 - an expert-review checklist that can be updated after conversations

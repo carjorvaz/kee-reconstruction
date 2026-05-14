@@ -68,5 +68,6 @@ reconstruction, and causality views in one place.
 nix develop --command scripts/smoke.sh
 ```
 
-The smoke script runs the Common Lisp regression tests, ASDF load, viewer
-generation, viewer JavaScript syntax check, and the current example scripts.
+The smoke script runs the documentation harness, Common Lisp regression tests,
+ASDF load, viewer generation, viewer JavaScript syntax check, Playwright viewer
+interaction check, and the current example scripts.
