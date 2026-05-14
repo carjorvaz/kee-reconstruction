@@ -164,11 +164,24 @@ The reconstruction now has a first trace layer for rule/world debugging:
 - trace rows expose clickable unit/world references
 - a compact trace graph summarizes agenda/rule/world/contradiction flow
 
+## Implemented Rule Cross-Reference Increment
+
+The reconstruction now has a first static rule cross-referencer:
+
+- `rule.references` reports a rule's classes, slot reads, slot writes, and
+  assertions
+- `rule.reference.index` indexes reconstructed rule references for a KB or
+  rule class
+- the standalone viewer embeds a global rule-reference index
+- selected rule units show a Rule Xref pane with reads, writes, and assertions
+- selected ordinary units show rules that literally mention that unit or use it
+  as a rule class
+
 ## Next Build Target
 
-Expand the debugging tools around the first trace panes:
+Expand the debugging tools around the first trace and xref panes:
 
-- rule cross-reference entry points from units and nogoods
 - textual method traces
 - a more spatial graphic trace view over rule firings, generated worlds, and
   contradictions
+- richer xref filtering by slot name, operation, and variable target

@@ -210,6 +210,191 @@ WHILE, THEN, THE/OF/IS patterns, BELIEVE FALSE, and LISP conditions/actions."
             (loop for bindings in bindings-list
                   append (evaluate-condition condition bindings))))))
 
+(defun quoted-rule-form-p (form)
+  (and (consp form)
+       (rule-symbol-p (first form) "QUOTE")
+       (null (cddr form))))
+
+(defun proper-rule-list-p (value)
+  (or (null value)
+      (and (consp value)
+           (proper-rule-list-p (cdr value)))))
+
+(defun rule-reference-term (term)
+  (cond ((quoted-rule-form-p term) (second term))
+        ((typep term 'kee-unit) (unit.name term))
+        ((and (consp term) (proper-rule-list-p term))
+         (mapcar #'rule-reference-term term))
+        (t term)))
+
+(defun rule-reference-operation (symbol)
+  (intern (symbol-name symbol) '#:keyword))
+
+(defun make-rule-slot-reference
+    (&key kind context operation unit slot value source)
+  (list :kind kind
+        :context context
+        :operation operation
+        :unit (rule-reference-term unit)
+        :slot (rule-reference-term slot)
+        :value (rule-reference-term value)
+        :source source))
+
+(defun make-rule-assertion-reference (&key context operation proposition source)
+  (list :kind :assert
+        :context context
+        :operation operation
+        :proposition (rule-reference-term proposition)
+        :source source))
+
+(defun rule-the-reference (form context kind operation)
+  (handler-case
+      (multiple-value-bind (slot-name unit-term value-term)
+          (parse-the-condition form)
+        (list (make-rule-slot-reference
+               :kind kind
+               :context context
+               :operation operation
+               :unit unit-term
+               :slot slot-name
+               :value value-term
+               :source form)))
+    (error () nil)))
+
+(defun rule-read-call-p (symbol)
+  (and (symbolp symbol)
+       (member (symbol-name symbol)
+               '("GET.VALUE" "GET.VALUES" "FIND.ANY" "CANT.FIND")
+               :test #'string=)))
+
+(defun rule-write-call-p (symbol)
+  (and (symbolp symbol)
+       (member (symbol-name symbol)
+               '("PUT.VALUE" "PUT.VALUES" "ADD.VALUE" "ADD.VALUES"
+                 "REMOVE.ALL.VALUES" "REMOVE.ALL.FACET.VALUES"
+                 "PUT.FACET.VALUE")
+               :test #'string=)))
+
+(defun rule-lisp-call-reference (form context)
+  (let ((operator (first form))
+        (arguments (rest form)))
+    (cond ((and (rule-read-call-p operator)
+                (>= (length arguments) 2))
+           (list (make-rule-slot-reference
+                  :kind :read
+                  :context context
+                  :operation (rule-reference-operation operator)
+                  :unit (first arguments)
+                  :slot (second arguments)
+                  :source form)))
+          ((and (rule-write-call-p operator)
+                (>= (length arguments) 2))
+           (list (make-rule-slot-reference
+                  :kind :write
+                  :context context
+                  :operation (rule-reference-operation operator)
+                  :unit (first arguments)
+                  :slot (second arguments)
+                  :value (third arguments)
+                  :source form)))
+          (t nil))))
+
+(defun collect-lisp-rule-references (form context)
+  (cond ((atom form) nil)
+        ((quoted-rule-form-p form) nil)
+        (t (append (rule-lisp-call-reference form context)
+                   (loop for item in (rest form)
+                         append (collect-lisp-rule-references
+                                 item context))))))
+
+(defun rule-condition-references (condition)
+  (cond ((rule-head-p condition "THE")
+         (rule-the-reference condition :condition :read :the))
+        ((rule-head-p condition "LISP")
+         (loop for form in (rest condition)
+               append (collect-lisp-rule-references form :condition)))
+        (t nil)))
+
+(defun rule-action-references (action)
+  (cond ((rule-head-p action "LISP")
+         (loop for form in (rest action)
+               append (collect-lisp-rule-references form :action)))
+        ((rule-head-p action "IN.NEW.WORLD")
+         (loop for form in (rest action)
+               when (rule-head-p form "THE")
+                 append (rule-the-reference form :action :write
+                                            :in.new.world)
+               else append (when (rule-head-p form "LISP")
+                             (loop for lisp-form in (rest form)
+                                   append (collect-lisp-rule-references
+                                           lisp-form :action)))))
+        ((rule-head-p action "BELIEVE")
+         (list (make-rule-assertion-reference
+                :context :action
+                :operation :believe
+                :proposition (second action)
+                :source action)))
+        (t nil)))
+
+(defun rule-reference-source-present-p (rule-unit)
+  (or (get.value rule-unit 'internal.form)
+      (get.value rule-unit 'external.form)))
+
+(defun parsed-rule (rule-unit)
+  (or (get.value rule-unit 'internal.form)
+      (parse rule-unit)))
+
+(defun rule.references (rule-unit-designator)
+  "Return a reconstructed static cross-reference report for a rule unit."
+  (let ((rule-unit (unit rule-unit-designator)))
+    (when (rule-reference-source-present-p rule-unit)
+      (let ((parsed (parsed-rule rule-unit)))
+        (when parsed
+          (let* ((condition-refs
+                   (loop for condition in (getf parsed :conditions)
+                         append (rule-condition-references condition)))
+                 (action-refs
+                   (loop for action in (getf parsed :actions)
+                         append (rule-action-references action)))
+                 (references (remove-duplicates
+                              (append condition-refs action-refs)
+                              :test #'equal)))
+            (list :rule (unit.name rule-unit)
+                  :kb (kb.name (unit.kb rule-unit))
+                  :kind (getf parsed :kind)
+                  :rule-classes (mapcar #'unit.name
+                                         (unit.parents rule-unit 'member))
+                  :reads (remove-if-not
+                          (lambda (reference)
+                            (eq (getf reference :kind) :read))
+                          references)
+                  :writes (remove-if-not
+                           (lambda (reference)
+                             (eq (getf reference :kind) :write))
+                           references)
+                  :asserts (remove-if-not
+                            (lambda (reference)
+                              (eq (getf reference :kind) :assert))
+                            references))))))))
+
+(defun rule-reference-candidates (&key kb rule-class)
+  (cond (rule-class
+         (unit.children rule-class 'member))
+        (t (sort
+            (loop for rule-unit being the hash-values of
+                    (knowledge-base-units (or (and kb (kb kb)) (kb)))
+                  collect rule-unit)
+            #'string<
+            :key #'unit.name))))
+
+(defun rule.reference.index (&key kb rule-class)
+  "Return reconstructed static cross-reference reports for known rule units."
+  (remove nil
+          (mapcar #'rule.references
+                  (rule-reference-candidates
+                   :kb kb
+                   :rule-class rule-class))))
+
 (defun current-trace-world-name ()
   (and (current.world) (get.world.name (current.world))))
 
@@ -283,10 +468,6 @@ WHILE, THEN, THE/OF/IS patterns, BELIEVE FALSE, and LISP conditions/actions."
                          (t (error "Unsupported IN.NEW.WORLD fact/action: ~S."
                                    item)))))))
     (branch *current-world* (rest action))))
-
-(defun parsed-rule (rule-unit)
-  (or (get.value rule-unit 'internal.form)
-      (parse rule-unit)))
 
 (defun execute-rule (rule-unit)
   (let ((parsed (parsed-rule rule-unit)))

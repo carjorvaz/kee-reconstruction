@@ -186,6 +186,7 @@
               (detail-string-array (getf report :class-children)))
         (cons "memberChildren"
               (detail-string-array (getf report :member-children)))
+        (cons "ruleReference" (unit-rule-reference-json report))
         (cons "slots" (json-array (mapcar #'slot-detail-json
                                            (getf report :slots))))))
 
@@ -198,6 +199,48 @@
 (defun binding-detail-json (binding)
   (list (cons "variable" (detail-string (car binding)))
         (cons "value" (detail-string (cdr binding)))))
+
+(defun rule-reference-entry-json (entry)
+  (list (cons "kind" (detail-string (getf entry :kind)))
+        (cons "context" (detail-string (getf entry :context)))
+        (cons "operation" (detail-string (getf entry :operation)))
+        (cons "unit" (if (getf entry :unit)
+                         (detail-string (getf entry :unit))
+                         :json-null))
+        (cons "slot" (if (getf entry :slot)
+                         (detail-string (getf entry :slot))
+                         :json-null))
+        (cons "value" (if (getf entry :value)
+                          (detail-string (getf entry :value))
+                          :json-null))
+        (cons "proposition" (if (getf entry :proposition)
+                                (detail-string (getf entry :proposition))
+                                :json-null))
+        (cons "source" (detail-string (getf entry :source)))))
+
+(defun rule-reference-json (reference)
+  (if reference
+      (list (cons "rule" (detail-string (getf reference :rule)))
+            (cons "kb" (detail-string (getf reference :kb)))
+            (cons "kind" (detail-string (getf reference :kind)))
+            (cons "ruleClasses"
+                  (detail-string-array (getf reference :rule-classes)))
+            (cons "reads"
+                  (json-array (mapcar #'rule-reference-entry-json
+                                       (getf reference :reads))))
+            (cons "writes"
+                  (json-array (mapcar #'rule-reference-entry-json
+                                       (getf reference :writes))))
+            (cons "asserts"
+                  (json-array (mapcar #'rule-reference-entry-json
+                                       (getf reference :asserts)))))
+      :json-null))
+
+(defun unit-rule-reference-json (report)
+  (if (fboundp 'rule.references)
+      (rule-reference-json
+       (rule.references (list (getf report :name) (getf report :kb))))
+      :json-null))
 
 (defun nogood-detail-json (nogood)
   (list (cons "world" (detail-string (getf nogood :world)))
@@ -268,6 +311,12 @@
                (active-image-report-json (active.image.report image)))
              (list.active.images (getf unit-graph :kb))))))
 
+(defun rule-reference-detail-json (unit-graph)
+  (json-array
+   (when (fboundp 'rule.reference.index)
+     (mapcar #'rule-reference-json
+             (rule.reference.index :kb (getf unit-graph :kb))))))
+
 (defun trace-json-value (value)
   (cond ((null value) :json-null)
         ((or (stringp value) (numberp value)) value)
@@ -310,6 +359,7 @@
   (list (cons "units" (unit-detail-map-json unit-graph))
         (cons "worlds" (world-detail-map-json world-graph))
         (cons "activeImages" (active-image-detail-json unit-graph))
+        (cons "ruleReferences" (rule-reference-detail-json unit-graph))
         (cons "traces" (trace-detail-json))))
 
 (defun viewer-kbs-json (unit-graph)
@@ -435,6 +485,7 @@
          "button.pill:hover { border-color: var(--accent); background: var(--accent-soft); }"
          ".detail-section { margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--line); }"
          ".detail-section h3 { margin: 0 0 8px; font-size: 13px; color: var(--muted); }"
+         ".detail-section h4 { margin: 10px 0 6px; font-size: 12px; color: var(--muted); }"
          ".detail-block { border: 1px solid var(--line); border-radius: 6px; padding: 8px; margin-top: 8px; background: #fbfcfd; }"
          ".detail-block strong { display: block; font-size: 13px; margin-bottom: 5px; }"
          ".detail-line { display: flex; gap: 6px; flex-wrap: wrap; font-size: 12px; margin-top: 4px; }"
@@ -605,11 +656,20 @@
          "  const facets = (slot.facets || []).map(facetSummary).join('; ');"
          "  return `<div class='detail-block'><strong>${esc(slot.name)}</strong>${detailLine('kind', slot.kind)}${detailLine('values', combinedValues || 'NIL')}${localValues ? detailLine('local', localValues) : ''}${inheritedValues ? detailLine('inherited', inheritedValues) : ''}${slot.inheritance ? detailLine('inheritance', slot.inheritance) : ''}${slot.valueType ? detailLine('value type', slot.valueType) : ''}${slot.default ? detailLine('default', slot.default) : ''}${facets ? detailLine('facets', facets) : ''}</div>`;"
          "}"
+         "function allRuleReferences() { return DATA.details.ruleReferences || []; }"
+         "function ruleReferenceEntries(ref) { return [...(ref?.reads || []), ...(ref?.writes || []), ...(ref?.asserts || [])]; }"
+         "function ruleReferenceTouchesUnit(ref, name) { return (ref.ruleClasses || []).includes(name) || ruleReferenceEntries(ref).some(entry => entry.unit === name); }"
+         "function ruleReferencesForUnit(detail) { return allRuleReferences().filter(ref => ref.rule !== detail.name && ruleReferenceTouchesUnit(ref, detail.name)); }"
+         "function renderRuleReferenceEntry(entry) { const unit = entry.unit ? refButton('unit', entry.unit, DATA.units.kb) : `<span class='pill'>NIL</span>`; const target = entry.slot ? `${unit}<span class='code-text'>.${esc(entry.slot)}</span>` : unit; const value = entry.value ? detailLine('value', entry.value) : ''; const proposition = entry.proposition ? detailLine('proposition', entry.proposition) : ''; return `<div class='detail-block'><strong>${esc(entry.operation || entry.kind || 'REFERENCE')}</strong><div class='detail-line'><span class='detail-label'>target</span>${target}</div>${value}${proposition}${detailLine('context', entry.context)}${detailLine('source', entry.source)}</div>`; }"
+         "function renderRuleReferenceGroup(title, entries) { return entries && entries.length ? `<h4>${esc(title)}</h4>${entries.map(renderRuleReferenceEntry).join('')}` : ''; }"
+         "function renderOwnRuleReference(ref) { if (!ref) return ''; const classes = ref.ruleClasses && ref.ruleClasses.length ? `<div class='pill-row'>${ref.ruleClasses.map(name => refButton('unit', name, ref.kb)).join('')}</div>` : ''; return `<div class='detail-block'><strong>${esc(ref.rule)}</strong>${classes}</div>${renderRuleReferenceGroup('Reads', ref.reads)}${renderRuleReferenceGroup('Writes', ref.writes)}${renderRuleReferenceGroup('Asserts', ref.asserts)}`; }"
+         "function renderMentionedRule(ref, name) { const entries = ruleReferenceEntries(ref).filter(entry => entry.unit === name); const classHit = (ref.ruleClasses || []).includes(name); const labels = entries.map(entry => `${entry.operation}${entry.slot ? ' ' + entry.slot : ''}`); if (classHit) labels.unshift('MEMBER RULE'); return `<div class='detail-block'><strong>${refButton('unit', ref.rule, ref.kb)}</strong>${labels.length ? detailLine('mentions', labels.join(', ')) : ''}</div>`; }"
+         "function renderRuleXref(detail) { const own = detail.ruleReference; const mentioned = ruleReferencesForUnit(detail); if (!own && !mentioned.length) return ''; const ownHtml = renderOwnRuleReference(own); const mentionedHtml = mentioned.length ? `<h4>Referenced By</h4>${mentioned.map(ref => renderMentionedRule(ref, detail.name)).join('')}` : ''; return `<section class='detail-section'><h3>Rule Xref</h3>${ownHtml}${mentionedHtml}</section>`; }"
          "function renderUnitDetail(detail) {"
          "  const parents = [...(detail.classParents || []), ...(detail.memberParents || [])];"
          "  const children = [...(detail.classChildren || []), ...(detail.memberChildren || [])];"
          "  const slots = detail.slots || [];"
-         "  return `<section class='detail-section'><h3>Parents</h3>${pillList(parents, 'unit', detail.kb)}</section><section class='detail-section'><h3>Children</h3>${pillList(children, 'unit', detail.kb)}</section><section class='detail-section'><h3>Slots</h3>${slots.length ? slots.map(renderSlot).join('') : `<p class='empty'>None</p>`}</section>`;"
+         "  return `<section class='detail-section'><h3>Parents</h3>${pillList(parents, 'unit', detail.kb)}</section><section class='detail-section'><h3>Children</h3>${pillList(children, 'unit', detail.kb)}</section>${renderRuleXref(detail)}<section class='detail-section'><h3>Slots</h3>${slots.length ? slots.map(renderSlot).join('') : `<p class='empty'>None</p>`}</section>`;"
          "}"
          "function renderFact(fact) { return `<div class='detail-block'><strong>${esc(fact.slot)}</strong>${refLine('unit', 'unit', fact.unit, fact.kb)}${pillList(fact.values || [])}</div>`; }"
          "function renderNogood(nogood) {"

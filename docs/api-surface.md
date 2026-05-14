@@ -213,6 +213,25 @@ Current reconstruction:
   set and values stabilize
 - `trace.events` records rule matches/firings and agenda passes as structured
   events that the standalone viewer can display
+- `rule.references` returns a reconstructed static cross-reference report for
+  one rule unit: rule classes, slot reads, slot writes, and assertions
+- `rule.reference.index` returns those reports for a KB or rule class
+
+Current static cross-reference coverage:
+
+- `THE ... OF ... IS ...` conditions
+- common slot-reading Lisp calls such as `get.value`, `get.values`,
+  `find.any`, and `cant.find`
+- common slot-writing Lisp calls such as `put.value`, `put.values`,
+  `add.value`, `add.values`, and removal/facet mutators
+- `IN.NEW.WORLD` slot assertions
+- `BELIEVE` assertions
+
+Important uncertainty:
+
+The original rule cross-referencer UI and API are not recovered. This is a
+support API for reconstruction and debugging; variable targets such as `?X`
+are reported as variables rather than resolved statically.
 
 ## KEEworlds and ATMS
 
@@ -288,8 +307,8 @@ Current reconstruction:
 - The standalone viewer embeds `inspect.unit` and `inspect.world` detail maps,
   so its Current KB strip, hierarchy browser, synchronized slot table,
   searchable node list, and clicked graph nodes can show slots, facets, world
-  facts, nogoods, trace events, a compact trace graph, and navigable references
-  to visible units or worlds.
+  facts, nogoods, rule cross-references, trace events, a compact trace graph,
+  and navigable references to visible units or worlds.
 
 This is a reconstruction support layer rather than a recovered KEE API. It is
 intended to keep display logic separate from the object/rule/world core, so a

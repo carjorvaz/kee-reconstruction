@@ -142,10 +142,14 @@ Status:
   loaded-KB chips, top-level-unit selection, class/member hierarchy browsing,
   synchronized slot display, embedded ActiveImage controls with local static
   updates, a searchable node list, and clicked-node detail panes for slots,
-  facets, facts, nogoods, and in-graph references, plus filterable trace panes
-  with clickable trace references and a compact trace graph.
+  facets, facts, nogoods, and in-graph references, plus rule cross-reference
+  panes, filterable trace panes with clickable trace references, and a compact
+  trace graph.
 - `trace.events` records world creation, world slot writes, agenda passes,
   rule matches/firings, generated branches, nogoods, and contradictions.
+- `rule.references` and `rule.reference.index` provide a first static rule
+  cross-referencer over TellAndAsk `THE`, Lisp slot accessors/mutators,
+  `IN.NEW.WORLD`, and `BELIEVE`.
 - `docs/gui-reconstruction.md` records the recovered browser, Common Windows,
   KEEpictures, ActiveImages, and trace/debugging evidence that should guide the
   next GUI increments.
@@ -159,6 +163,6 @@ Status:
 
 Next GUI target:
 
-- Expand the recovered debugging tools beyond the first trace view: a rule
-  cross-referencer, textual method traces, and a more spatial graphic trace
-  over rule firings, generated worlds, and contradictions.
+- Expand the recovered debugging tools beyond the first trace/xref view:
+  textual method traces, richer rule-reference filtering, and a more spatial
+  graphic trace over rule firings, generated worlds, and contradictions.

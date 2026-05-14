@@ -43,6 +43,9 @@ The first implementation target is `kee-core`:
 - structured trace events for world creation, slot writes, agenda passes, rule
   matches/firings, branch creation, nogoods, and contradictions through
   `trace.events` and `clear.trace.events`
+- a first static rule cross-referencer through `rule.references` and
+  `rule.reference.index`, covering `THE`, common slot accessor/mutator calls,
+  `IN.NEW.WORLD`, and `BELIEVE`
 - structured inspector helpers and a compact terminal browser, including
   `list.kbs`, `list.units`, `inspect.unit`, `inspect.slot`, `inspect.world`,
   `inspect.world.tree`, `print.browser`, `browser.command`, and `browse`
@@ -53,8 +56,8 @@ The first implementation target is `kee-core`:
   class/member hierarchy browser, synchronized slot table, embedded
   ActiveImage controls with local static-page updates, searchable node browser,
   and a clickable inspector for slots, facets, facts, nogood explanations, and
-  in-graph references, plus filterable rule/world trace panes with clickable
-  trace references and a compact trace graph
+  in-graph references, rule cross-reference panes, plus filterable rule/world
+  trace panes with clickable trace references and a compact trace graph
 
 Later phases broaden RuleSystem/TellAndAsk, grow the KEEworlds/ATMS model, and
 add the Common Windows / KEEpictures / ActiveImages GUI layer.

@@ -87,6 +87,8 @@
    #:external.form
    #:internal.form
    #:parse.errors
+   #:rule.references
+   #:rule.reference.index
    #:forward.chain
    #:run.world.agenda
    #:cant.find
