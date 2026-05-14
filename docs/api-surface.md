@@ -288,8 +288,8 @@ Current reconstruction:
 - The standalone viewer embeds `inspect.unit` and `inspect.world` detail maps,
   so its Current KB strip, hierarchy browser, synchronized slot table,
   searchable node list, and clicked graph nodes can show slots, facets, world
-  facts, nogoods, trace events, and navigable references to visible units or
-  worlds.
+  facts, nogoods, trace events, a compact trace graph, and navigable references
+  to visible units or worlds.
 
 This is a reconstruction support layer rather than a recovered KEE API. It is
 intended to keep display logic separate from the object/rule/world core, so a

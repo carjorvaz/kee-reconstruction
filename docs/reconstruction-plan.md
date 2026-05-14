@@ -142,8 +142,8 @@ Status:
   loaded-KB chips, top-level-unit selection, class/member hierarchy browsing,
   synchronized slot display, embedded ActiveImage controls with local static
   updates, a searchable node list, and clicked-node detail panes for slots,
-  facets, facts, nogoods, and in-graph references, plus a first trace pane for
-  rule/world activity.
+  facets, facts, nogoods, and in-graph references, plus filterable trace panes
+  with clickable trace references and a compact trace graph.
 - `trace.events` records world creation, world slot writes, agenda passes,
   rule matches/firings, generated branches, nogoods, and contradictions.
 - `docs/gui-reconstruction.md` records the recovered browser, Common Windows,
@@ -159,6 +159,6 @@ Status:
 
 Next GUI target:
 
-- Expand the trace pane toward the recovered debugging tools: agenda/conflict
-  filtering, rule cross-reference entry points from fired rules and nogoods,
-  and a graphical rule/world trace view.
+- Expand the recovered debugging tools beyond the first trace view: a rule
+  cross-referencer, textual method traces, and a more spatial graphic trace
+  over rule firings, generated worlds, and contradictions.

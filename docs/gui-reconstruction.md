@@ -160,12 +160,15 @@ The reconstruction now has a first trace layer for rule/world debugging:
   rule matches/firings, generated branches, nogoods, and contradictions
 - the standalone viewer includes a Trace pane beside the selected unit or
   world detail
+- trace panes can filter by event kind and selected-node scope
+- trace rows expose clickable unit/world references
+- a compact trace graph summarizes agenda/rule/world/contradiction flow
 
 ## Next Build Target
 
-Expand the first trace panes:
+Expand the debugging tools around the first trace panes:
 
-- agenda/conflict-set filtering
-- textual method traces
-- graphical rule/world trace view
 - rule cross-reference entry points from units and nogoods
+- textual method traces
+- a more spatial graphic trace view over rule firings, generated worlds, and
+  contradictions
