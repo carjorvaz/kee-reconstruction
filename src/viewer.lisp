@@ -676,7 +676,7 @@
          "svg { display: block; min-width: 100%; min-height: 100%; background: rgba(255, 255, 255, 0.52); }"
          ".edge { fill: none; stroke: #8e99a6; stroke-width: 1.6; }"
          ".edge.member { stroke-dasharray: 7 5; }"
-         ".edge.background { opacity: 0.2; stroke-width: 1.1; }"
+         ".edge.background { display: none; }"
          ".edge.adjacent { stroke: #64748b; stroke-width: 2; }"
          ".edge.trace-hit { stroke: var(--accent); stroke-width: 3; }"
          ".edge-label { fill: var(--muted); font-size: 11px; pointer-events: none; }"
