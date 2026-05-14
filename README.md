@@ -43,8 +43,9 @@ The first implementation target is `kee-core`:
 - small world-search helpers: `cant.find`, `find.any`, `run.world.agenda`, and
   effective-fact deduplication for generated worlds
 - structured trace events for world creation, slot writes, agenda passes, rule
-  matches/firings, branch creation, nogoods, and contradictions through
-  `trace.events` and `clear.trace.events`
+  matches/firings, branch creation, nogoods, and contradictions, with
+  agenda/activation/fire provenance IDs through `trace.events` and
+  `clear.trace.events`
 - a first static rule cross-referencer through `rule.references` and
   `rule.reference.index`, covering `THE`, common slot accessor/mutator calls,
   `IN.NEW.WORLD`, and `BELIEVE`

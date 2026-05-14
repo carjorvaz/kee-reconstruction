@@ -156,7 +156,8 @@ Status:
   emphasis, focused-branch emphasis, and speed/loop replay controls.
 - `trace.events` records world creation, world slot writes, agenda passes,
   rule matches/firings, method dispatch/calls/returns, generated branches,
-  nogoods, and contradictions.
+  nogoods, and contradictions, with agenda, activation, and fire provenance IDs
+  where rule-system context is available.
 - `rule.references` and `rule.reference.index` provide a first static rule
   cross-referencer over TellAndAsk `THE`, Lisp slot accessors/mutators,
   `IN.NEW.WORLD`, and `BELIEVE`.
@@ -174,4 +175,5 @@ Status:
 Next GUI target:
 
 - Expand the recovered debugging tools beyond the first trace/xref view:
-  explicit agenda pass/effect provenance IDs in the trace data.
+  a causality graph over agenda activations, rule fires, and downstream world
+  effects.

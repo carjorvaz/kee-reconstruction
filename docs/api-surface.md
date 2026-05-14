@@ -218,7 +218,8 @@ Current reconstruction:
 - `run.world.agenda` runs rule classes across consistent worlds until the world
   set and values stabilize
 - `trace.events` records rule matches/firings and agenda passes as structured
-  events that the standalone viewer can display
+  events with agenda, activation, and fire provenance IDs that the standalone
+  viewer can display
 - `rule.references` returns a reconstructed static cross-reference report for
   one rule unit: rule classes, slot reads, slot writes, and assertions
 - `rule.reference.index` returns those reports for a KB or rule class

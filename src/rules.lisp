@@ -474,23 +474,25 @@ WHILE, THEN, THE/OF/IS patterns, BELIEVE FALSE, and LISP conditions/actions."
     (when parsed
       (let ((bindings-list (evaluate-conditions (getf parsed :conditions))))
         (dolist (bindings bindings-list)
-          (record.trace.event :rule-match
-                              :world (current-trace-world-name)
-                              :rule (unit.name rule-unit)
-                              :bindings bindings
-                              :conditions (getf parsed :conditions))
-          (dolist (action (getf parsed :actions))
-            (let ((*current-rule-unit* rule-unit)
-                  (*current-rule-bindings* bindings)
-                  (*current-rule-conditions* (getf parsed :conditions))
-                  (*current-rule-action* action))
-              (record.trace.event :rule-fire
-                                  :world (current-trace-world-name)
-                                  :rule (unit.name rule-unit)
-                                  :bindings bindings
-                                  :conditions (getf parsed :conditions)
-                                  :action action)
-              (execute-action action bindings))))
+          (let ((*current-trace-activation-id* (next.trace.activation.id)))
+            (record.trace.event :rule-match
+                                :world (current-trace-world-name)
+                                :rule (unit.name rule-unit)
+                                :bindings bindings
+                                :conditions (getf parsed :conditions))
+            (dolist (action (getf parsed :actions))
+              (let ((*current-rule-unit* rule-unit)
+                    (*current-rule-bindings* bindings)
+                    (*current-rule-conditions* (getf parsed :conditions))
+                    (*current-rule-action* action)
+                    (*current-trace-fire-id* (next.trace.fire.id)))
+                (record.trace.event :rule-fire
+                                    :world (current-trace-world-name)
+                                    :rule (unit.name rule-unit)
+                                    :bindings bindings
+                                    :conditions (getf parsed :conditions)
+                                    :action action)
+                (execute-action action bindings)))))
         (and bindings-list t)))))
 
 (defun forward.chain (rule-class-designator &key (max-passes 100))
@@ -520,10 +522,13 @@ WHILE, THEN, THE/OF/IS patterns, BELIEVE FALSE, and LISP conditions/actions."
                (with-world (world)
                  (dolist (rule-class classes)
                    (unless (world.inconsistent.p world)
-                     (record.trace.event :agenda
-                                         :world (get.world.name world)
-                                         :rule-class (unit.name (unit rule-class))
-                                         :message "forward-chain")
-                     (forward.chain rule-class)))))
+                     (let ((*current-trace-agenda-id*
+                             (next.trace.agenda.id)))
+                       (record.trace.event :agenda
+                                           :world (get.world.name world)
+                                           :rule-class (unit.name
+                                                       (unit rule-class))
+                                           :message "forward-chain")
+                       (forward.chain rule-class))))))
           until (equal before (list (length ($worlds)) *change-count*)))
     (consistent.worlds)))

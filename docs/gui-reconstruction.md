@@ -158,6 +158,8 @@ The reconstruction now has a first trace layer for rule/world debugging:
 - `clear.trace.events` clears the trace log and participates in `reset-kee`
 - recorded events include world creation, world slot writes, agenda passes,
   rule matches/firings, generated branches, nogoods, and contradictions
+- agenda, activation, and fire provenance IDs connect agenda passes, rule
+  matches/firings, and downstream effects
 - the standalone viewer includes a Trace pane beside the selected unit or
   world detail
 - trace panes can filter by event kind and selected-node scope
@@ -206,4 +208,5 @@ The reconstruction now has a first static rule cross-referencer:
 
 Expand the debugging tools around the first trace and xref panes:
 
-- explicit agenda pass/effect provenance IDs in the trace data
+- causality graph over agenda activations, rule fires, and downstream world
+  effects
