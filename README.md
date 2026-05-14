@@ -3,6 +3,16 @@
 An evidence-first reconstruction of IntelliCorp's Knowledge Engineering
 Environment (KEE).
 
+![Hamburg puzzle viewer screenshot](docs/assets/screenshots/hamburg-viewer-units.png)
+
+This is not original IntelliCorp KEE source. It is a clean-room reconstruction
+of selected behavior, built from public evidence and runnable experiments.
+
+This repository is being developed collaboratively by Carlos Vaz and OpenAI
+Codex. Codex has generated substantial portions of the implementation,
+documentation, scripts, and tests under human direction. The standard here is
+evidence plus verification, not hand-authorship.
+
 This project is deliberately split into two tracks:
 
 - `docs/`: provenance, recovered API notes, and design decisions.
@@ -16,6 +26,43 @@ work.
 The rule here is simple: public evidence first, implementation second. When
 the original behavior is unknown, we record the uncertainty instead of quietly
 inventing history.
+
+## Try The Demo
+
+With Nix:
+
+```sh
+nix develop --command scripts/render-demo.sh
+```
+
+Then open `demo/hamburg-viewer.html` in a browser.
+
+The current demo is a standalone Hamburg puzzle viewer. It is not the original
+KEE GUI, but it gives a concrete surface for reviewing reconstructed units,
+slots, rule classes, generated worlds, trace events, assumptions, support
+labels, and nogood explanations.
+
+Useful follow-up commands:
+
+```sh
+nix develop --command scripts/screenshot-demo.sh
+nix develop --command scripts/smoke.sh
+```
+
+See `docs/demo.md` for the demo path and `docs/expert-review.md` for the
+questions this repo is now prepared to ask people who used KEE professionally.
+
+## Repository Knowledge
+
+This project follows a lightweight harness-engineering style: keep repository
+knowledge local, structured, and executable so both humans and agents can
+reason about it.
+
+- `AGENTS.md` is the short map for future Codex work.
+- `docs/artifacts.md` is the evidence ledger and missing-artifact list.
+- `docs/provenance-policy.md` explains what can be checked in.
+- `docs/agent-workflow.md` records the repo-local agent workflow.
+- `docs/gui-reconstruction.md` tracks the historically important GUI layer.
 
 ## Current Scope
 
@@ -115,8 +162,8 @@ ActiveImage so ActiveValue write hooks still run.
 sbcl --script test/run-tests.lisp
 ```
 
-If `sbcl` is not installed:
+Or with the dev shell:
 
 ```sh
-nix shell nixpkgs#sbcl --command sbcl --script test/run-tests.lisp
+nix develop --command scripts/smoke.sh
 ```

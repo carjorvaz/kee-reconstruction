@@ -9,10 +9,14 @@ secondary descriptions.
 - Do not call something "original KEE source" unless it is an IntelliCorp
   distribution or source tree.
 - Prefer exact URLs, report numbers, manual numbers, and local filenames.
+- Keep the repo-local record in this ledger even when the underlying artifact
+  cannot be redistributed here.
 - Keep implementation code clean-room: use public behavior descriptions and
   public API evidence, not copied proprietary source.
 - Short code fragments from public reports are useful as tests, but large
   transcriptions belong in a private research note, not in source files.
+- See `docs/provenance-policy.md` before adding raw PDFs, scans, binaries, or
+  recovered source.
 
 ## Strong Evidence
 
@@ -58,6 +62,18 @@ No full scans found yet. These identifiers make the search precise.
 - NASA VEG files: `veg4.u`, `veg-methods.lisp`, and extension Lisp files.
 - The NASA GSFC Sun cartridge tape mentioned in the VEG reports.
 - KEEtutor materials and puzzle files such as `3X3IMPLEM1.U`.
+
+## Repository-Held Artifacts
+
+These are generated or authored inside this repository and are safe to
+redistribute with it.
+
+- `docs/assets/screenshots/hamburg-viewer-units.png` - generated screenshot of
+  the current standalone Hamburg puzzle viewer.
+- `docs/demo.md` - reproducible commands for generating the interactive HTML
+  demo and screenshot.
+- `docs/expert-review.md` - prompts for collecting first-hand review from KEE
+  and Lisp Machine users.
 
 ## Local Corpus Leads
 

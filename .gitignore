@@ -1,3 +1,6 @@
 *.fasl
 *.fasl-temp
 .DS_Store
+/demo/
+/result
+/.direnv/
