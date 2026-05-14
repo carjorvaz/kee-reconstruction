@@ -93,6 +93,10 @@
    #:world.graph.dot
    #:write.unit.graph.dot
    #:write.world.graph.dot
+   #:graph.viewer.html
+   #:kee.viewer.html
+   #:write.graph.viewer.html
+   #:write.kee.viewer.html
    #:browser.commands
    #:browser.command
    #:browse

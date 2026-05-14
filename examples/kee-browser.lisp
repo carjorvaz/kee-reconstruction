@@ -4,6 +4,7 @@
 (load (merge-pathnames "../src/rules.lisp" *load-truename*))
 (load (merge-pathnames "../src/inspect.lisp" *load-truename*))
 (load (merge-pathnames "../src/graph.lisp" *load-truename*))
+(load (merge-pathnames "../src/viewer.lisp" *load-truename*))
 (load (merge-pathnames "../src/browser.lisp" *load-truename*))
 (defparameter *run-hamburg-puzzle-demo* nil)
 (load (merge-pathnames "hamburg-puzzle-mini.lisp" *load-truename*))

@@ -38,6 +38,8 @@ The first implementation target is `kee-core`:
   `inspect.world.tree`, `print.browser`, `browser.command`, and `browse`
 - structured unit/world graph exports and Graphviz DOT renderers, including
   `unit.graph`, `world.graph`, `unit.graph.dot`, and `world.graph.dot`
+- standalone HTML/SVG graph viewer generation through `kee.viewer.html` and
+  `write.kee.viewer.html`
 
 Later phases broaden RuleSystem/TellAndAsk, grow the KEEworlds/ATMS model, and
 add the Common Windows / KEEpictures / ActiveImages GUI layer.
@@ -68,6 +70,9 @@ form-oriented browser shell. Useful commands include `(help)`, `(kbs)`,
 `examples/kee-graph-dot.lisp` emits DOT graphs for the Hamburg puzzle's unit
 hierarchy and generated worlds. The browser shell can also print DOT with
 `(unit-graph)` and `(world-graph 20)`.
+
+`examples/kee-graph-viewer.lisp` emits a standalone HTML/SVG graph browser for
+the Hamburg puzzle. The browser shell can also print one with `(viewer 40)`.
 
 ## Running Tests
 

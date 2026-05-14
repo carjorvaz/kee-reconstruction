@@ -9,4 +9,5 @@
                (:file "src/rules")
                (:file "src/inspect")
                (:file "src/graph")
+               (:file "src/viewer")
                (:file "src/browser")))

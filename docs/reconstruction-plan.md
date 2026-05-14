@@ -135,7 +135,10 @@ Status:
   browsing KBs, units, slots, and worlds.
 - `unit.graph` and `world.graph` provide structured graph exports with DOT
   renderers for quick visual inspection.
+- `kee.viewer.html` and `write.kee.viewer.html` generate a standalone HTML/SVG
+  graph browser over the same data.
 - `examples/kee-browser.lisp` and `examples/kee-browser-shell.lisp` exercise
   the browser against the Hamburg puzzle demo.
 - `examples/kee-graph-dot.lisp` emits DOT for the Hamburg puzzle unit
   hierarchy and generated worlds.
+- `examples/kee-graph-viewer.lisp` emits a browser-openable HTML graph view.

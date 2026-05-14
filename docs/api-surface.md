@@ -246,6 +246,8 @@ Current reconstruction:
   unit hierarchy and the current KEEworlds DAG.
 - `unit.graph.dot`, `world.graph.dot`, `write.unit.graph.dot`, and
   `write.world.graph.dot` render those graphs as Graphviz DOT.
+- `graph.viewer.html`, `kee.viewer.html`, `write.graph.viewer.html`, and
+  `write.kee.viewer.html` render standalone HTML/SVG graph browsers.
 
 This is a reconstruction support layer rather than a recovered KEE API. It is
 intended to keep display logic separate from the object/rule/world core, so a
