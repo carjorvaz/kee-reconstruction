@@ -7,6 +7,7 @@ trap 'rm -rf "$tmpdir"' EXIT
 
 cd "$repo_root"
 
+"$repo_root/scripts/check-docs.sh"
 sbcl --script test/run-tests.lisp
 sbcl --noinform --disable-debugger \
   --eval '(require :asdf)' \

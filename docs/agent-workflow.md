@@ -22,6 +22,7 @@ Source: https://openai.com/index/harness-engineering/
 ## Current Feedback Loops
 
 ```sh
+scripts/check-docs.sh
 scripts/smoke.sh
 scripts/render-demo.sh
 scripts/screenshot-demo.sh
@@ -31,5 +32,4 @@ Future useful loops:
 
 - browser-driven assertions over the generated viewer
 - screenshot comparison for the demo surface
-- a doc ledger check for artifacts and missing manual identifiers
 - an expert-review checklist that can be updated after conversations
