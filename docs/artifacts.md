@@ -72,7 +72,8 @@ These are generated or authored inside this repository and are safe to
 redistribute with it.
 
 - `docs/assets/screenshots/hamburg-viewer-review.png` - generated screenshot of
-  the current standalone Hamburg puzzle viewer.
+  the current standalone Hamburg puzzle viewer, including the reconstructed
+  Desktop roster and session transcript pane.
 - `docs/reviewer-packet.md` - short guided path for first-hand KEE and Lisp
   Machine reviewers.
 - `docs/demo.md` - reproducible commands for generating the interactive HTML

@@ -35,6 +35,8 @@ reconstruction, and causality views in one place.
   facets, rule cross-references, and ActiveImage evidence.
 - The Worlds tab: generated branch worlds, consistent versus inconsistent
   worlds, local world facts, support labels, assumptions, and nogoods.
+- The Browser pane: Current KB state, Review Tour controls, the reconstructed
+  Desktop roster, and Listener/Typescript/Prompt transcript panes.
 - The Trace pane: agenda passes, rule matches/fires, world branches, slot
   writes, contradictions, label retractions, why trails, and trace map.
 - `examples/hamburg-puzzle-mini.lisp`: the small KEE 3.0 training-slide-style
@@ -45,6 +47,8 @@ reconstruction, and causality views in one place.
 
 - Which GUI elements feel unlike KEE's browser, Common Windows, KEEpictures,
   ActiveImages, or tracing tools?
+- Do the Lisp Listener, Typescript, and Prompt surfaces feel plausible as a
+  first review cue, or do they suggest the wrong work rhythm?
 - Which API names, argument conventions, or idioms look wrong?
 - What did the rule agenda/conflict-set viewer actually expose?
 - How did KEEworlds, assumptions, nogoods, and contradictions appear to users?

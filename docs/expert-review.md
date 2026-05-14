@@ -38,6 +38,8 @@ nix develop --command scripts/render-demo.sh
 
 Then open `demo/hamburg-viewer.html` and inspect:
 
+- the Browser pane's Current KB, Review Tour, Desktop roster, and
+  Listener/Typescript/Prompt transcript
 - the class/member hierarchy
 - rule units and parsed forms
 - the Worlds tab

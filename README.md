@@ -109,14 +109,16 @@ The first implementation target is `kee-core`:
   `unit.graph`, `world.graph`, `unit.graph.dot`, and `world.graph.dot`
 - standalone HTML/SVG graph viewer generation through `kee.viewer.html` and
   `write.kee.viewer.html`, with visible current-KB state, loaded-KB chips, a
-  class/member hierarchy browser, synchronized slot table, embedded
-  ActiveImage controls with local static-page updates, searchable node browser,
-  and a clickable inspector for slots, facets, facts, nogood explanations, and
-  in-graph references, rule cross-reference panes with operation/slot/target
-  filters, plus trace panes filterable by family, event kind, selected-node
-  scope, and search text, with previous/next trace jumps, focused trace detail,
-  a compact agenda/conflict-set pane with candidate/fired-rule jump controls
-  plus condition/action/effect drilldowns, a provenance-backed causality graph,
+  class/member hierarchy browser, synchronized slot table, Review Tour
+  controls, a reconstructed Desktop roster with Listener/Typescript/Prompt
+  transcript panes, embedded ActiveImage controls with local static-page
+  updates, searchable node browser, and a clickable inspector for slots,
+  facets, facts, nogood explanations, and in-graph references, rule
+  cross-reference panes with operation/slot/target filters, plus trace panes
+  filterable by family, event kind, selected-node scope, and search text, with
+  previous/next trace jumps, focused trace detail, a compact
+  agenda/conflict-set pane with candidate/fired-rule jump controls plus
+  condition/action/effect drilldowns, a provenance-backed causality graph,
   selected world/fact/problem why trails, alternative-world assumption
   summaries, clickable trace references and focused-trace graph targets,
   graph/path highlighting for focused traces, a spatial trace map with
