@@ -62,10 +62,10 @@ The first implementation target is `kee-core`:
   filters, plus trace panes filterable by family, event kind, selected-node
   scope, and search text, with previous/next trace jumps, focused trace detail,
   a compact agenda/conflict-set pane with candidate/fired-rule jump controls
-  and condition/action drilldowns, clickable trace references and focused-trace
-  graph targets, graph/path highlighting for focused traces, a spatial trace
-  map with speed/loop replay controls and focused-branch emphasis, and a
-  compact trace graph
+  plus condition/action/effect drilldowns, clickable trace references and
+  focused-trace graph targets, graph/path highlighting for focused traces, a
+  spatial trace map with speed/loop replay controls and focused-branch
+  emphasis, and a compact trace graph
 
 Later phases broaden RuleSystem/TellAndAsk, grow the KEEworlds/ATMS model, and
 add the Common Windows / KEEpictures / ActiveImages GUI layer.

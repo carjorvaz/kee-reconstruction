@@ -148,7 +148,7 @@ Status:
   panes with operation/slot/target filters, trace panes filterable by family,
   event kind, selected-node scope, and search text, previous/next trace jumps,
   focused trace detail, compact agenda/conflict-set panes with candidate and
-  fired-rule jump controls plus condition/action drilldowns, graph/path
+  fired-rule jump controls plus condition/action/effect drilldowns, graph/path
   highlighting for focused trace references, and a compact trace graph with
   focused-trace graph target links.
 - The Trace pane includes a spatial trace map over recent filtered agenda,
@@ -174,5 +174,4 @@ Status:
 Next GUI target:
 
 - Expand the recovered debugging tools beyond the first trace/xref view:
-  effect drilldowns from fired actions to slot writes, generated branches,
-  nogoods, and contradictions.
+  explicit agenda pass/effect provenance IDs in the trace data.
