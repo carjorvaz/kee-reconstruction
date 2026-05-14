@@ -167,6 +167,8 @@ The reconstruction now has a first trace layer for rule/world debugging:
 - focused traces show a compact normalized event-detail drilldown
 - trace panes include a compact agenda/conflict-set view reconstructed from
   agenda, rule-match, and rule-fire events
+- agenda panes can jump among reconstructed candidates or actual fired-rule
+  events
 - focused traces highlight referenced units or worlds in the visible SVG graph,
   including world ancestry paths for focused world/problem traces
 - focused trace detail exposes clickable unit/world graph targets
@@ -201,5 +203,4 @@ The reconstruction now has a first static rule cross-referencer:
 
 Expand the debugging tools around the first trace and xref panes:
 
-- focused agenda controls for jumping among conflict-set candidates and fired
-  rules
+- condition/action drilldowns for agenda candidates and fired rules
