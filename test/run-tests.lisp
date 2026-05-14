@@ -331,6 +331,8 @@
     (check (search "data-trace-id" viewer-html))
     (check (search "focusedTraceReferenceIds" viewer-html))
     (check (search "trace-hit" viewer-html))
+    (check (search "traceTargets" viewer-html))
+    (check (search "traceTargetButtons" viewer-html))
     (check (search "selected node" viewer-html))
     (check (search "trace-graph" viewer-html))
     (check (search "traceRef" viewer-html))
