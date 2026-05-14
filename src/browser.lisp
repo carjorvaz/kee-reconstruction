@@ -9,6 +9,7 @@
     (worlds "List worlds, optionally limited: (worlds 20) or (worlds all).")
     (world "Inspect a world: (world NAME).")
     (summary "Print the compact KB/unit/world browser summary.")
+    (dump-kb "Print a readable reconstructed KB dump: (dump-kb) or (dump-kb KB).")
     (unit-graph "Print a DOT unit hierarchy graph: (unit-graph) or (unit-graph KB).")
     (world-graph "Print a DOT worlds graph: (world-graph 20) or (world-graph all).")
     (viewer "Print a standalone HTML graph viewer: (viewer 40) or (viewer all).")
@@ -125,6 +126,10 @@ Returns :CONTINUE for ordinary commands and :QUIT for quit commands."
            :continue)
           ((command-named-p name "summary")
            (print.browser :stream stream)
+           :continue)
+          ((command-named-p name "dump-kb" "dump.kb")
+           (destructuring-bind (&optional kb-name) args
+             (write.kb.dump stream kb-name))
            :continue)
           ((command-named-p name "unit-graph" "unit.graph")
            (destructuring-bind (&optional kb-name) args

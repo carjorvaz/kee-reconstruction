@@ -158,7 +158,8 @@ KEE browser/GUI layer.
 
 `examples/kee-browser-shell.lisp` sets up the same puzzle and opens a small
 form-oriented browser shell. Useful commands include `(help)`, `(kbs)`,
-`(units puzzle)`, `(unit tom)`, `(slot tom sport)`, `(worlds 8)`, and `(quit)`.
+`(units puzzle)`, `(unit tom)`, `(slot tom sport)`, `(dump-kb puzzle)`,
+`(worlds 8)`, and `(quit)`.
 
 `examples/kee-graph-dot.lisp` emits DOT graphs for the Hamburg puzzle's unit
 hierarchy and generated worlds. The browser shell can also print DOT with
