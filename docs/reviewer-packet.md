@@ -40,6 +40,8 @@ reconstruction, and causality views in one place.
 - The KEEpictures tour target: a small reconstructed picture with viewport and
   windowpane metadata, an embedded writable ActiveImage, and a picture mouse
   trace.
+- `docs/assets/dumps/delivery.kdump`: a small readable clean-room KB dump for
+  loading from the browser shell with the `load-dump` command.
 - The Trace pane: agenda passes, rule matches/fires, world branches, slot
   writes, contradictions, label retractions, why trails, and trace map.
 - `examples/hamburg-puzzle-mini.lisp`: the small KEE 3.0 training-slide-style

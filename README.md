@@ -91,8 +91,9 @@ The first implementation target is `kee-core`:
   embedded ActiveImage items, reconstructed viewport/windowpane units,
   mouse-event traces, and SVG previews through `kee.picture.svg`
 - readable knowledge-base dumps with `dump.kb`, `write.kb.dump`,
-  `read.kb.dump`, and `load.kb.dump`, preserving units, parent links, local
-  slots, facets, unit references, ActiveImage units, and KEEpicture units
+  `read.kb.dump`, `load.kb.dump`, and file helpers, preserving units, parent
+  links, local slots, facets, unit references, ActiveImage units, and
+  KEEpicture units
 - value-class and cardinality facets such as `(one.of ...)`,
   `min.cardinality`, and `max.cardinality`
 - a tiny RuleSystem subset with rule units, `external.form`, `parse`,
@@ -159,6 +160,7 @@ KEE browser/GUI layer.
 `examples/kee-browser-shell.lisp` sets up the same puzzle and opens a small
 form-oriented browser shell. Useful commands include `(help)`, `(kbs)`,
 `(units puzzle)`, `(unit tom)`, `(slot tom sport)`, `(dump-kb puzzle)`,
+`(write-dump "puzzle.kdump" puzzle)`, `(load-dump "puzzle.kdump" :replace t)`,
 `(worlds 8)`, and `(quit)`.
 
 `examples/kee-graph-dot.lisp` emits DOT graphs for the Hamburg puzzle's unit
@@ -175,7 +177,10 @@ still run.
 
 `examples/kb-dump-mini.lisp` writes a readable reconstructed KB dump, reloads
 it, and checks that units, facets, ActiveImages, and KEEpicture items survived
-the round trip.
+the round trip. `scripts/render-demo-dump.sh` regenerates the checked-in
+`docs/assets/dumps/delivery.kdump` artifact, which can be inspected directly or
+loaded from the browser shell, for example with
+`(load-dump "docs/assets/dumps/delivery.kdump" :replace t)`.
 
 ## Running Tests
 

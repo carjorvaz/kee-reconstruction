@@ -69,6 +69,23 @@ nix develop --command scripts/check-viewer.sh
 It renders the demo into a temporary file, opens it with Playwright, and checks
 the Review Tour controls, slot table, rule cross-reference, and agenda panes.
 
+## KB Dump
+
+The checked-in readable dump artifact is regenerated from the mini delivery KB:
+
+```sh
+nix develop --command scripts/render-demo-dump.sh
+```
+
+The command writes:
+
+```text
+docs/assets/dumps/delivery.kdump
+```
+
+It is not an original KEE file format; it is a clean-room reconstruction aid for
+loading and inspecting portable KB data.
+
 ## Smoke Test
 
 Run the full local check:

@@ -23,6 +23,8 @@ Current reconstruction additions:
 - `read.kb.dump` reads one dump form from a stream.
 - `load.kb.dump` reconstructs the KB, with `:replace t` for overwriting an
   existing KB of the same name.
+- `write.kb.dump.file`, `read.kb.dump.file`, and `load.kb.dump.file` provide
+  the same round trip for files.
 
 This is inspired by public KATYDID evidence for knowledge-structure
 translation and a KEE knowledge-base dumper. It is not an original KEE dump

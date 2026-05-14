@@ -73,6 +73,9 @@
    #:load.kb.dump
    #:write.kb.dump
    #:read.kb.dump
+   #:write.kb.dump.file
+   #:read.kb.dump.file
+   #:load.kb.dump.file
    #:trace.events
    #:clear.trace.events
    #:record.trace.event

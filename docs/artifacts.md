@@ -80,6 +80,9 @@ redistribute with it.
 - `docs/assets/screenshots/hamburg-viewer-kee-picture.png` - generated
   screenshot of the KEEpicture Review Tour target with viewport/windowpane and
   embedded ActiveImage surfaces visible.
+- `docs/assets/dumps/delivery.kdump` - generated readable reconstructed KB dump
+  for the delivery mini-example; useful for inspecting and loading the
+  clean-room dump format.
 - `docs/reviewer-packet.md` - short guided path for first-hand KEE and Lisp
   Machine reviewers.
 - `docs/demo.md` - reproducible commands for generating the interactive HTML
@@ -89,6 +92,8 @@ redistribute with it.
 - `examples/kb-dump-mini.lisp` - generated reconstruction example inspired by
   KATYDID/VEG delivery evidence; demonstrates readable KB dump/load, not an
   original KEE file format.
+- `scripts/render-demo-dump.sh` - regenerates
+  `docs/assets/dumps/delivery.kdump` from the same example.
 
 ## Local Corpus Leads
 

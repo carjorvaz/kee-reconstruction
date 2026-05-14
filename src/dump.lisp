@@ -175,3 +175,21 @@ When REPLACE is true, an existing KB with the same name is removed first."
 (defun read.kb.dump (stream)
   "Read one KB dump from STREAM."
   (read stream))
+
+(defun write.kb.dump.file (path &optional kb-designator)
+  "Write a readable KB dump to PATH and return PATH."
+  (with-open-file (stream path
+                          :direction :output
+                          :if-exists :supersede
+                          :if-does-not-exist :create)
+    (write.kb.dump stream kb-designator))
+  path)
+
+(defun read.kb.dump.file (path)
+  "Read one KB dump from PATH."
+  (with-open-file (stream path :direction :input)
+    (read.kb.dump stream)))
+
+(defun load.kb.dump.file (path &key replace)
+  "Read a KB dump from PATH, load it, and return the reconstructed KB."
+  (load.kb.dump (read.kb.dump.file path) :replace replace))

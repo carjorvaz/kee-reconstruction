@@ -10,6 +10,8 @@
     (world "Inspect a world: (world NAME).")
     (summary "Print the compact KB/unit/world browser summary.")
     (dump-kb "Print a readable reconstructed KB dump: (dump-kb) or (dump-kb KB).")
+    (write-dump "Write a reconstructed KB dump: (write-dump PATH) or (write-dump PATH KB).")
+    (load-dump "Load a reconstructed KB dump: (load-dump PATH :replace t).")
     (unit-graph "Print a DOT unit hierarchy graph: (unit-graph) or (unit-graph KB).")
     (world-graph "Print a DOT worlds graph: (world-graph 20) or (world-graph all).")
     (viewer "Print a standalone HTML graph viewer: (viewer 40) or (viewer all).")
@@ -130,6 +132,16 @@ Returns :CONTINUE for ordinary commands and :QUIT for quit commands."
           ((command-named-p name "dump-kb" "dump.kb")
            (destructuring-bind (&optional kb-name) args
              (write.kb.dump stream kb-name))
+           :continue)
+          ((command-named-p name "write-dump" "write.kb.dump.file")
+           (destructuring-bind (path &optional kb-name) args
+             (write.kb.dump.file path kb-name)
+             (format stream "~&Wrote KB dump: ~A" path))
+           :continue)
+          ((command-named-p name "load-dump" "load.kb.dump.file")
+           (destructuring-bind (path &key replace) args
+             (let ((loaded (load.kb.dump.file path :replace replace)))
+               (format stream "~&Loaded KB dump: ~S" (kb.name loaded))))
            :continue)
           ((command-named-p name "unit-graph" "unit.graph")
            (destructuring-bind (&optional kb-name) args

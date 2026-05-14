@@ -8,6 +8,12 @@
 
 (in-package #:cl-user)
 
+(defun dump-output-path ()
+  #+sbcl
+  (sb-ext:posix-getenv "KEE_KB_DUMP_OUT")
+  #-sbcl
+  nil)
+
 (defun setup-dump-mini ()
   (kee:reset-kee)
   (kee:create.kb 'delivery)
@@ -42,15 +48,20 @@
 
 (defun run ()
   (setup-dump-mini)
-  (let ((dump-text (with-output-to-string (stream)
-                     (kee:write.kb.dump stream 'delivery))))
-    (format t "~&Dump bytes: ~D~%" (length dump-text))
-    (kee:load.kb.dump (read-from-string dump-text) :replace t)
-    (format t "Restored KBs: ~S~%" (kee:list.kbs))
-    (format t "Restored status: ~S~%"
-            (kee:get.value 'target.a 'status))
-    (format t "Restored picture items: ~S~%"
-            (mapcar #'kee:unit.name
-                    (kee:picture.items 'delivery.panel)))))
+  (let ((output-path (dump-output-path)))
+    (if output-path
+        (progn
+          (kee:write.kb.dump.file output-path 'delivery)
+          (format t "~&Wrote ~A~%" output-path))
+        (let ((dump-text (with-output-to-string (stream)
+                           (kee:write.kb.dump stream 'delivery))))
+          (format t "~&Dump bytes: ~D~%" (length dump-text))
+          (kee:load.kb.dump (read-from-string dump-text) :replace t)
+          (format t "Restored KBs: ~S~%" (kee:list.kbs))
+          (format t "Restored status: ~S~%"
+                  (kee:get.value 'target.a 'status))
+          (format t "Restored picture items: ~S~%"
+                  (mapcar #'kee:unit.name
+                          (kee:picture.items 'delivery.panel)))))))
 
 (run)

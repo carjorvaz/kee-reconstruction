@@ -383,6 +383,15 @@
                     '(delivery.window)))
       (check (search "Delivery KB"
                      (kee:kee.picture.svg 'delivery.panel)))))
+  (let ((dump-path #p"/private/tmp/kee-delivery-test.dump"))
+    (kee:write.kb.dump.file dump-path 'delivery)
+    (check (probe-file dump-path))
+    (check (eq (getf (kee:read.kb.dump.file dump-path) :kb) 'delivery))
+    (check (signals-error-p
+            (lambda ()
+              (kee:load.kb.dump.file dump-path))))
+    (kee:load.kb.dump.file dump-path :replace t)
+    (check (eq (kee:get.value 'target.a 'status) 'ready)))
   (kee:goto.kb 'veg)
   (let ((tom-report (kee:inspect.unit 'tom))
         (sport-report (kee:inspect.slot 'tom 'sport))
@@ -413,6 +422,16 @@
                        :continue))
             (check (eq (kee:browser.command '(dump-kb delivery) :stream stream)
                        :continue))
+            (check (eq (kee:browser.command
+                        '(write-dump "/private/tmp/kee-delivery-browser.dump"
+                          delivery)
+                        :stream stream)
+                       :continue))
+            (check (eq (kee:browser.command
+                        '(load-dump "/private/tmp/kee-delivery-browser.dump"
+                          :replace t)
+                        :stream stream)
+                       :continue))
             (check (eq (kee:browser.command '(unit-graph veg) :stream stream)
                        :continue))
             (check (eq (kee:browser.command '(viewer 2) :stream stream)
@@ -427,10 +446,13 @@
     (check (search "TOM" command-text))
     (check (search "SPORT" command-text))
     (check (search ":RECONSTRUCTED-KEE-KB" command-text))
+    (check (search "Wrote KB dump" command-text))
+    (check (search "Loaded KB dump: DELIVERY" command-text))
     (check (search "digraph" command-text))
     (check (search "<!doctype html>" command-text))
     (check (search "member" command-text))
     (check (search "Leaving KEE browser" command-text)))
+  (kee:goto.kb 'veg)
   (let* ((unit-graph (kee:unit.graph :kb 'veg))
          (unit-dot (kee:unit.graph.dot :kb 'veg))
          (viewer-html (kee:kee.viewer.html :kb 'veg :world-limit 0)))

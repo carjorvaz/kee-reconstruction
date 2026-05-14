@@ -227,9 +227,12 @@ reference an existing ActiveImage unit through ACTIVE-IMAGE."
   (let* ((item (unit item-designator))
          (kind (picture-keyword (get.value item 'picture.kind)))
          (active-image-name (get.value item 'active.image))
+         (active-image-designator
+           (and active-image-name
+                (list active-image-name (kb.name (unit.kb item)))))
          (active-image-report
            (and active-image-name
-                (active.image.report active-image-name)))
+                (active.image.report active-image-designator)))
          (values (or (and active-image-report
                           (getf active-image-report :values))
                      (picture-item-values item))))
@@ -316,14 +319,17 @@ slot and ActiveValue behavior."
          (item (unit item-designator))
          (item-report (picture.item.report item))
          (active-image-name (getf item-report :active-image))
+         (active-image-designator
+           (and active-image-name
+                (list active-image-name (kb.name (unit.kb item)))))
          (old-values (and active-image-name
-                          (active.image.values active-image-name)))
+                          (active.image.values active-image-designator)))
          (write-p (and value-supplied-p active-image-name)))
     (when write-p
-      (set.active.image.value active-image-name value))
+      (set.active.image.value active-image-designator value))
     (let* ((updated-report (picture.item.report item))
            (new-values (or (and active-image-name
-                                (active.image.values active-image-name))
+                                (active.image.values active-image-designator))
                            (getf updated-report :values))))
       (record.trace.event
        :picture-mouse
@@ -338,11 +344,11 @@ slot and ActiveValue behavior."
        :active-image active-image-name
        :unit (or (getf updated-report :target-unit)
                  (and active-image-name
-                      (getf (active.image.report active-image-name)
+                      (getf (active.image.report active-image-designator)
                             :target-unit)))
        :slot (or (getf updated-report :target-slot)
                  (and active-image-name
-                      (getf (active.image.report active-image-name)
+                      (getf (active.image.report active-image-designator)
                             :target-slot)))
        :old-values old-values
        :new-values new-values
