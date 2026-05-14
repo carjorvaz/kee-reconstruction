@@ -89,6 +89,8 @@ redistribute with it.
 - `docs/assets/screenshots/hamburg-viewer-panels.png` - generated screenshot
   of the Panels Review Tour target with reconstructed image-panel state and
   linked KEEpicture preview visible.
+- `docs/assets/screenshots/auv-panel-workflow.png` - generated screenshot of
+  the AUV-style panel workflow demo.
 - `docs/assets/dumps/delivery.kdump` - generated readable reconstructed KB dump
   for the delivery mini-example; useful for inspecting and loading the
   clean-room dump format.

@@ -15,8 +15,10 @@ required_files=(
   "docs/assets/screenshots/hamburg-viewer-review.png"
   "docs/assets/screenshots/hamburg-viewer-kee-picture.png"
   "docs/assets/screenshots/hamburg-viewer-panels.png"
+  "docs/assets/screenshots/auv-panel-workflow.png"
   "docs/assets/dumps/delivery.kdump"
   "scripts/check-viewer.sh"
+  "scripts/render-auv-panel-demo.sh"
   "scripts/render-demo-dump.sh"
   "test/demo-screenshot.spec.js"
   "test/viewer-tour.spec.js"
@@ -41,6 +43,7 @@ artifact_terms=(
   "docs/assets/screenshots/hamburg-viewer-review.png"
   "docs/assets/screenshots/hamburg-viewer-kee-picture.png"
   "docs/assets/screenshots/hamburg-viewer-panels.png"
+  "docs/assets/screenshots/auv-panel-workflow.png"
   "docs/assets/dumps/delivery.kdump"
 )
 

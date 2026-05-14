@@ -224,6 +224,9 @@ the NPS AUV mission-planning evidence:
 - the standalone viewer has a Panels Review Tour/Desktop target, panel tabs,
   local open/close controls, open/closed state display, SVG previews, and
   picture-family trace handling for `:panel-open` and `:panel-close`
+- `examples/auv-panel-workflow.lisp` now provides a small reviewer-facing
+  workflow with mission-selection, parameter-entry, and monitoring panels,
+  using panel open/close messages and ActiveImage-backed mouse updates
 
 ## Implemented ActiveImage Increment
 

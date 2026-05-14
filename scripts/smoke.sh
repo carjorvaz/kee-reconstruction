@@ -19,6 +19,14 @@ sbcl --noinform --disable-debugger \
 perl -0ne 'print $1 if m{<script>\n(.*)</script>\n</body>}s' \
   "$tmpdir/kee-viewer.html" > "$tmpdir/kee-viewer.js"
 node --check "$tmpdir/kee-viewer.js"
+"$repo_root/scripts/render-auv-panel-demo.sh" "$tmpdir/auv-panel-workflow.html"
+perl -0ne 'print $1 if m{<script>\n(.*)</script>\n</body>}s' \
+  "$tmpdir/auv-panel-workflow.html" > "$tmpdir/auv-panel-workflow.js"
+node --check "$tmpdir/auv-panel-workflow.js"
+rg -F --quiet "Mission Selection Panel" "$tmpdir/auv-panel-workflow.html"
+rg -F --quiet "Parameter Entry Panel" "$tmpdir/auv-panel-workflow.html"
+rg -F --quiet "Mission Monitoring Panel" "$tmpdir/auv-panel-workflow.html"
+rg -F --quiet "\"kind\":\"PANEL-CLOSE\"" "$tmpdir/auv-panel-workflow.html"
 "$repo_root/scripts/check-viewer.sh"
 "$repo_root/scripts/render-demo-dump.sh" "$tmpdir/delivery.kdump"
 cmp -s "$tmpdir/delivery.kdump" "$repo_root/docs/assets/dumps/delivery.kdump"
@@ -26,4 +34,5 @@ cmp -s "$tmpdir/delivery.kdump" "$repo_root/docs/assets/dumps/delivery.kdump"
 sbcl --script examples/veg-rule-mini.lisp
 sbcl --script examples/kb-dump-mini.lisp
 sbcl --script examples/active-image-mini.lisp
+sbcl --script examples/auv-panel-workflow.lisp > "$tmpdir/auv-panel-workflow-example.html"
 sbcl --script examples/hamburg-puzzle-mini.lisp

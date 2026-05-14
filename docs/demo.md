@@ -32,6 +32,22 @@ demo/hamburg-viewer.html
 
 The HTML is self-contained and can be opened directly in a browser.
 
+The AUV panel workflow demo focuses on reconstructed GUI/application panels:
+
+```sh
+nix develop --command scripts/render-auv-panel-demo.sh
+```
+
+Then open:
+
+```text
+demo/auv-panel-workflow.html
+```
+
+This page builds mission-selection, parameter-entry, and monitoring panels,
+drives them with `open-panel!`/`close-panel!`, and records picture mouse events
+that write through ActiveImages into `mission.state`.
+
 Without Nix, install SBCL and run:
 
 ```sh
@@ -67,6 +83,12 @@ KEE_DEMO_TOUR=panels nix develop --command scripts/screenshot-demo.sh docs/asset
 The Panels tour also has static-page Open and Close controls. They update the
 generated page's local panel state and append reconstructed panel trace events
 for quick reviewer interaction.
+
+The AUV panel workflow screenshot uses the alternate renderer:
+
+```sh
+KEE_DEMO_RENDERER=scripts/render-auv-panel-demo.sh KEE_DEMO_HTML=demo/auv-panel-workflow.html KEE_DEMO_TOUR=panels nix develop --command scripts/screenshot-demo.sh docs/assets/screenshots/auv-panel-workflow.png
+```
 
 ## Interaction Check
 

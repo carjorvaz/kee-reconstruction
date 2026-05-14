@@ -9,6 +9,8 @@ Environment (KEE).
 
 ![Hamburg puzzle Panels tour screenshot](docs/assets/screenshots/hamburg-viewer-panels.png)
 
+![AUV panel workflow screenshot](docs/assets/screenshots/auv-panel-workflow.png)
+
 This is not original IntelliCorp KEE source. It is a clean-room reconstruction
 of selected behavior, built from public evidence and runnable experiments.
 
@@ -51,6 +53,7 @@ Useful follow-up commands:
 ```sh
 nix develop --command scripts/screenshot-demo.sh
 nix develop --command scripts/check-viewer.sh
+nix develop --command scripts/render-auv-panel-demo.sh
 nix develop --command scripts/smoke.sh
 ```
 
@@ -176,6 +179,11 @@ hierarchy and generated worlds. The browser shell can also print DOT with
 
 `examples/kee-graph-viewer.lisp` emits a standalone HTML/SVG graph browser for
 the Hamburg puzzle. The browser shell can also print one with `(viewer 40)`.
+
+`examples/auv-panel-workflow.lisp` emits a standalone AUV-style panel workflow
+demo with mission-selection, parameter-entry, and monitoring panels. It is
+inspired by the NPS AUV image-panel evidence and is meant as a reviewer-facing
+GUI/application-session specimen, not an original KEE application.
 
 `examples/active-image-mini.lisp` creates a slot-bound ActiveImage gauge,
 embeds it in a small reconstructed KEEpicture and image panel, renders
