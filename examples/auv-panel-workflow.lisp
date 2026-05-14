@@ -259,7 +259,15 @@
         (list "Current KB: AUV.WORKFLOW"
               "View: Panels"
               "Selected unit: MISSION.STATE"
-              "Evidence lead: NPS AUV image-panel workflow")))
+              "Evidence lead: NPS AUV image-panel workflow")
+        :desktop-title "Reconstructed KEE desktop"
+        :desktop-subtitle
+        "AUV.WORKFLOW / Symbolics 3675 development evidence / TI Micro-Explorer delivery target noted"
+        :desktop-notice
+        "Clean-room reconstruction; not original IntelliCorp KEE, NPS software, or Common Windows."
+        :tour-notes
+        (list "Panel sequence: mission selection -> parameter entry -> monitoring"
+              "Reviewer target: image panels, KEEpictures, ActiveImages, picture mouse traces")))
 
 (setup-auv-panel-workflow)
 (kee:write.kee.viewer.html *standard-output*

@@ -12,9 +12,9 @@ KEEworlds-style branching, assumptions, support labels, nogoods, and rule trace
 explanations instead of a blank or generic hierarchy view. The Browser pane also
 includes Review Tour controls that jump to representative units, rules, worlds,
 agenda traces, rule cross-references, KEEpictures, panels, and ActiveImages when
-available. It also shows a compact Desktop roster using recovered KEE window
-vocabulary, plus a small Listener/Typescript/Prompt transcript for the
-generated session.
+available. It also shows a compact reconstructed desktop context, a Desktop
+roster using recovered KEE window vocabulary, and a small
+Listener/Typescript/Prompt transcript for the generated session.
 
 ## Run
 
@@ -59,7 +59,9 @@ demo/auv-panel-workflow.html
 
 This page builds mission-selection, parameter-entry, and monitoring panels,
 drives them with `open-panel!`/`close-panel!`, and records picture mouse events
-that write through ActiveImages into `mission.state`.
+that write through ActiveImages into `mission.state`. Its Browser pane also
+shows the three application panels as a small image-panel window deck, with
+Symbolics 3675 and TI Micro-Explorer provenance cues for expert review.
 
 Without Nix, install SBCL and run:
 
@@ -126,8 +128,9 @@ Run the AUV panel workflow browser check:
 nix develop --command scripts/check-auv-panel-demo.sh
 ```
 
-It renders the AUV workflow page, clicks through the three panel tabs, exercises
-Open/Close, and checks that panel and picture traces are visible.
+It renders the AUV workflow page, checks the reconstructed desktop context,
+clicks through the three panel windows, exercises Open/Close, and checks that
+panel and picture traces are visible.
 
 ## KB Dump
 

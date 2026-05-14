@@ -621,10 +621,17 @@
 
 (defun viewer-session-json (session)
   (labels ((lines (key)
-             (detail-string-array (getf session key))))
+             (detail-string-array (getf session key)))
+           (maybe-string (key)
+             (let ((value (getf session key)))
+               (if value (detail-string value) :json-null))))
     (list (cons "listener" (lines :listener))
           (cons "typescript" (lines :typescript))
-          (cons "prompt" (lines :prompt)))))
+          (cons "prompt" (lines :prompt))
+          (cons "desktopTitle" (maybe-string :desktop-title))
+          (cons "desktopSubtitle" (maybe-string :desktop-subtitle))
+          (cons "desktopNotice" (maybe-string :desktop-notice))
+          (cons "tourNotes" (lines :tour-notes)))))
 
 (defun viewer-json-object (unit-graph world-graph title initial session)
   (list (cons "title" title)
@@ -669,8 +676,12 @@
          "svg { display: block; min-width: 100%; min-height: 100%; background: rgba(255, 255, 255, 0.52); }"
          ".edge { fill: none; stroke: #8e99a6; stroke-width: 1.6; }"
          ".edge.member { stroke-dasharray: 7 5; }"
+         ".edge.background { opacity: 0.2; stroke-width: 1.1; }"
+         ".edge.adjacent { stroke: #64748b; stroke-width: 2; }"
          ".edge.trace-hit { stroke: var(--accent); stroke-width: 3; }"
          ".edge-label { fill: var(--muted); font-size: 11px; pointer-events: none; }"
+         ".edge-label.background { display: none; }"
+         ".edge-label.adjacent { fill: #64748b; font-weight: 700; }"
          ".edge-label.trace-hit { fill: var(--accent); font-weight: 700; }"
          ".node { cursor: pointer; }"
          ".node rect { stroke: #8090a0; stroke-width: 1.3; }"
@@ -700,6 +711,12 @@
          ".tour-buttons button { border: 1px solid var(--line); border-radius: 6px; background: #f9fafb; color: var(--ink); min-height: 30px; padding: 0 8px; font: inherit; font-size: 12px; cursor: pointer; }"
          ".tour-buttons button:hover { border-color: var(--accent); background: var(--accent-soft); }"
          ".tour-buttons button:disabled { color: var(--muted); cursor: default; opacity: 0.58; }"
+         ".desktop-context { display: grid; gap: 7px; padding-bottom: 10px; border-bottom: 1px solid var(--line); }"
+         ".desktop-context:empty { display: none; }"
+         ".desktop-context h3 { margin: 0; font-size: 12px; color: var(--muted); }"
+         ".desktop-context p { margin: 0; font-size: 12px; line-height: 1.35; overflow-wrap: anywhere; }"
+         ".desktop-context .desktop-notice { border: 1px solid #e2c56f; border-radius: 6px; background: #fff8dd; padding: 6px 7px; color: #68530b; }"
+         ".desktop-context ul { margin: 0; padding-left: 17px; color: var(--muted); font-size: 12px; line-height: 1.35; }"
          ".desktop-roster { display: grid; gap: 8px; padding-bottom: 10px; border-bottom: 1px solid var(--line); }"
          ".desktop-roster h3 { margin: 0; font-size: 12px; color: var(--muted); }"
          ".desktop-windows { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; }"
@@ -746,6 +763,15 @@
          ".picture-tabs { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 8px; }"
          ".picture-tabs button { border: 1px solid var(--line); border-radius: 6px; background: #f9fafb; color: var(--ink); min-height: 28px; padding: 0 8px; font: inherit; font-size: 12px; cursor: pointer; }"
          ".picture-tabs button.active { border-color: var(--accent); background: var(--accent-soft); }"
+         ".panel-window-deck { display: grid; gap: 7px; margin-bottom: 8px; }"
+         ".panel-window-card { width: 100%; min-width: 0; text-align: left; border: 1px solid var(--line); border-radius: 6px; background: #ffffff; color: var(--ink); padding: 0; font: inherit; cursor: pointer; overflow: hidden; }"
+         ".panel-window-card.active { border-color: var(--accent); box-shadow: 0 0 0 2px var(--accent-soft); }"
+         ".panel-window-card.open .panel-window-titlebar { background: var(--good-soft); }"
+         ".panel-window-card:hover { border-color: var(--accent); }"
+         ".panel-window-titlebar { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 8px; align-items: center; min-height: 28px; padding: 5px 7px; background: #eef2f5; border-bottom: 1px solid var(--line); }"
+         ".panel-window-titlebar strong { min-width: 0; font-size: 12px; line-height: 1.2; overflow-wrap: anywhere; }"
+         ".panel-window-body { display: grid; gap: 3px; padding: 6px 7px; color: var(--muted); font-size: 11px; line-height: 1.3; }"
+         ".panel-window-body span { overflow-wrap: anywhere; }"
          ".kee-panel { border: 1px solid var(--line); border-radius: 6px; background: #fbfcfd; padding: 8px; display: grid; gap: 8px; }"
          ".panel-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 8px; }"
          ".panel-head strong { min-width: 0; font-size: 13px; line-height: 1.25; overflow-wrap: anywhere; }"
@@ -893,6 +919,7 @@
          "<div id='kb-list' class='kb-list'></div>"
          "</div>"
          "<section id='review-tour' class='review-tour' aria-label='Review tour'></section>"
+         "<section id='desktop-context' class='desktop-context' aria-label='Desktop context'></section>"
          "<section id='desktop-roster' class='desktop-roster' aria-label='Desktop windows'></section>"
          "<section id='session-pane' class='session-pane' aria-label='Session window'></section>"
          "<div id='picture-browser'></div>"
@@ -922,6 +949,7 @@
          "const currentKb = document.getElementById('current-kb');"
          "const kbList = document.getElementById('kb-list');"
          "const reviewTour = document.getElementById('review-tour');"
+         "const desktopContext = document.getElementById('desktop-context');"
          "const desktopRoster = document.getElementById('desktop-roster');"
          "const sessionPane = document.getElementById('session-pane');"
          "const pictureBrowser = document.getElementById('picture-browser');"
@@ -976,6 +1004,8 @@
          "}"
          "function colorFor(node, graph) { if (graph.kind === 'world') return node.inconsistentP ? '#ffe7e4' : '#eef7ed'; return (node.slots && node.slots.length) ? '#e8f2fb' : '#ffffff'; }"
          "function edgePath(from, to) { const x1 = from.x + from.w; const y1 = from.y + from.h / 2; const x2 = to.x; const y2 = to.y + to.h / 2; const mid = x1 + Math.max(40, (x2 - x1) / 2); return `M ${x1} ${y1} C ${mid} ${y1}, ${mid} ${y2}, ${x2} ${y2}`; }"
+         "function denseGraphP(graph) { return graph.edges.length > Math.max(30, graph.nodes.length * 1.15); }"
+         "function edgeTouchesSelection(edge) { return !!state.selected && (edge.from === state.selected || edge.to === state.selected); }"
          "function setViewBox(width, height) { state.viewBox = { x: 0, y: 0, w: width / state.zoom, h: height / state.zoom }; svg.setAttribute('viewBox', `${state.viewBox.x} ${state.viewBox.y} ${state.viewBox.w} ${state.viewBox.h}`); }"
          "function clamp(value, min, max) { return Math.max(min, Math.min(max, value)); }"
          "function focusOnNode(node, model) { const width = state.viewBox?.w ?? model.width / state.zoom; const height = state.viewBox?.h ?? model.height / state.zoom; state.viewBox = { x: clamp(node.x + node.w / 2 - width / 2, 0, Math.max(0, model.width - width)), y: clamp(node.y + node.h / 2 - height / 2, 0, Math.max(0, model.height - height)), w: width, h: height }; }"
@@ -988,10 +1018,11 @@
          "  if (state.focusSelected) { const target = state.selected && model.placed.get(state.selected); if (target) focusOnNode(target, model); state.focusSelected = false; }"
          "  ensureTraceFocus(filteredTraces(graph, detailMap(graph)[state.selected]));"
          "  const traceHits = focusedTraceReferenceIds(graph);"
+         "  const denseEdges = denseGraphP(graph);"
          "  svg.setAttribute('width', model.width);"
          "  svg.setAttribute('height', model.height);"
          "  svg.innerHTML = `<defs><marker id='arrow' markerWidth='10' markerHeight='8' refX='9' refY='4' orient='auto'><path d='M0,0 L10,4 L0,8 Z' fill='#8e99a6'></path></marker></defs>`;"
-         "  model.edges.forEach(edge => { const from = model.placed.get(edge.from); const to = model.placed.get(edge.to); const traceHit = traceHits.has(edge.from) && traceHits.has(edge.to); const dim = !(matches(from, graph) || matches(to, graph)); const path = document.createElementNS('http://www.w3.org/2000/svg', 'path'); path.setAttribute('class', `edge ${edge.relation} ${traceHit ? 'trace-hit' : ''} ${dim && !traceHit ? 'dim' : ''}`); path.setAttribute('d', edgePath(from, to)); path.setAttribute('marker-end', 'url(#arrow)'); svg.appendChild(path); const text = document.createElementNS('http://www.w3.org/2000/svg', 'text'); text.setAttribute('class', `edge-label ${traceHit ? 'trace-hit' : ''} ${dim && !traceHit ? 'dim' : ''}`); text.setAttribute('x', (from.x + to.x + from.w) / 2); text.setAttribute('y', (from.y + to.y + from.h) / 2 - 8); text.textContent = edge.relation; svg.appendChild(text); });"
+         "  model.edges.forEach(edge => { const from = model.placed.get(edge.from); const to = model.placed.get(edge.to); const traceHit = traceHits.has(edge.from) && traceHits.has(edge.to); const adjacent = edgeTouchesSelection(edge); const background = denseEdges && !(adjacent || traceHit); const dim = !(matches(from, graph) || matches(to, graph)); const path = document.createElementNS('http://www.w3.org/2000/svg', 'path'); path.setAttribute('class', `edge ${edge.relation} ${background ? 'background' : ''} ${adjacent ? 'adjacent' : ''} ${traceHit ? 'trace-hit' : ''} ${dim && !traceHit ? 'dim' : ''}`); path.setAttribute('d', edgePath(from, to)); if (!background) path.setAttribute('marker-end', 'url(#arrow)'); svg.appendChild(path); if (!background) { const text = document.createElementNS('http://www.w3.org/2000/svg', 'text'); text.setAttribute('class', `edge-label ${adjacent ? 'adjacent' : ''} ${traceHit ? 'trace-hit' : ''} ${dim && !traceHit ? 'dim' : ''}`); text.setAttribute('x', (from.x + to.x + from.w) / 2); text.setAttribute('y', (from.y + to.y + from.h) / 2 - 8); text.textContent = edge.relation; svg.appendChild(text); } });"
          "  model.nodes.forEach(node => { const traceHit = traceHits.has(node.id); const dim = !matches(node, graph); const g = document.createElementNS('http://www.w3.org/2000/svg', 'g'); g.setAttribute('class', `node ${state.selected === node.id ? 'selected' : ''} ${traceHit ? 'trace-hit' : ''} ${dim && !traceHit ? 'dim' : ''}`); g.setAttribute('transform', `translate(${node.x}, ${node.y})`); g.dataset.id = node.id; const rect = document.createElementNS('http://www.w3.org/2000/svg', 'rect'); rect.setAttribute('width', node.w); rect.setAttribute('height', node.h); rect.setAttribute('rx', 7); rect.setAttribute('ry', 7); rect.setAttribute('fill', colorFor(node, graph)); g.appendChild(rect); const label = document.createElementNS('http://www.w3.org/2000/svg', 'text'); label.setAttribute('x', 12); label.setAttribute('y', 23); const title = document.createElementNS('http://www.w3.org/2000/svg', 'tspan'); title.setAttribute('class', 'title'); title.textContent = short(nodeLabel(node)); label.appendChild(title); const detail = document.createElementNS('http://www.w3.org/2000/svg', 'tspan'); detail.setAttribute('x', 12); detail.setAttribute('dy', 20); detail.textContent = nodeDetail(node, graph); label.appendChild(detail); g.appendChild(label); g.addEventListener('click', () => selectNode(node.id, model)); svg.appendChild(g); });"
          "  renderBrowser(model, graph);"
          "  renderInspector(model, graph);"
@@ -1033,6 +1064,7 @@
          "  else selectReference('unit', target.detail.name, target.detail.kb);"
          "}"
          "function renderReviewTour() { const items = [['units', 'Units'], ['rules', 'Rules'], ['worlds', 'Worlds'], ['agenda', 'Agenda'], ['xref', 'Rule Xref'], ['kee-pictures', 'KEEpictures'], ['panels', 'Panels'], ['active-images', 'ActiveImages']]; reviewTour.innerHTML = `<h3>Review Tour</h3><div class='tour-buttons'>${items.map(([kind, label]) => `<button type='button' data-review-tour='${kind}' ${reviewTourAvailable(kind) ? '' : 'disabled'}>${label}</button>`).join('')}</div>`; }"
+         "function renderDesktopContext() { const session = DATA.session || {}; const notes = session.tourNotes || []; if (!(session.desktopTitle || session.desktopSubtitle || session.desktopNotice || notes.length)) { desktopContext.innerHTML = ''; return; } const subtitle = session.desktopSubtitle ? `<p>${esc(session.desktopSubtitle)}</p>` : ''; const notice = session.desktopNotice ? `<p class='desktop-notice'>${esc(session.desktopNotice)}</p>` : ''; const noteList = notes.length ? `<ul>${notes.map(note => `<li>${esc(note)}</li>`).join('')}</ul>` : ''; desktopContext.innerHTML = `<h3>${esc(session.desktopTitle || 'Session Context')}</h3>${subtitle}${notice}${noteList}`; }"
          "function desktopWindowHtml(label, meta, kind = null, session = null) { const active = session && state.sessionWindow === session ? ' active' : ''; const attrs = session ? `data-session-window='${session}'` : (kind ? `data-desktop-tour='${kind}' ${reviewTourAvailable(kind) ? '' : 'disabled'}` : 'disabled'); return `<button type='button' class='desktop-window${active}' ${attrs}><strong>${esc(label)}</strong><span>${esc(meta)}</span></button>`; }"
          "function renderDesktopRoster() { const items = [['Lisp Listener', 'evaluation', null, 'listener'], ['Typescript', 'transcript', null, 'typescript'], ['Prompt', 'messages', null, 'prompt'], ['KB Browser', 'current KB', 'units'], ['Unit Window', 'classes', 'units'], ['Slot Window', 'facets', 'units'], ['Worlds', 'assumptions', 'worlds'], ['Agenda', 'conflict set', 'agenda'], ['Rule Xref', 'references', 'xref'], ['KEEpictures', 'graphics', 'kee-pictures'], ['Image Panels', 'workflow', 'panels'], ['ActiveImages', 'two-way graphics', 'active-images']]; desktopRoster.innerHTML = `<h3>Desktop</h3><div class='desktop-windows'>${items.map(([label, meta, kind, session]) => desktopWindowHtml(label, meta, kind, session)).join('')}</div>`; }"
          "function sessionLines(kind) { return (DATA.session && DATA.session[kind]) || []; }"
@@ -1044,7 +1076,9 @@
          "function selectedPanel() { const panels = keePanels(); return panels.find(panel => panel.name === state.panelName) || panels[0] || null; }"
          "function panelSummary(panel) { const rows = []; if (panel.picture) rows.push(['Picture', panel.pictureLabel || panel.picture]); if (panel.viewport) rows.push(['Viewport', panel.viewport]); if (panel.windowpane) rows.push(['Windowpane', panel.windowpaneLabel || panel.windowpane]); if (panel.message) rows.push(['Message', panel.message]); return rows.map(([label, value]) => `<div class='detail-line'><span class='detail-label'>${esc(label)}</span><span class='code-text'>${esc(value)}</span></div>`).join(''); }"
          "function panelActionButtons(panel) { return `<div class='panel-actions'><button type='button' data-panel-action='open' ${panel.openP ? 'disabled' : ''}>Open</button><button type='button' data-panel-action='close' ${panel.openP ? '' : 'disabled'}>Close</button></div>`; }"
-         "function renderPanelBrowser() { const panels = keePanels(); if (!panels.length) return ''; const selected = selectedPanel(); state.panelName = selected.name; const tabs = panels.map(panel => `<button type='button' data-panel-name='${esc(panel.name)}' class='${panel.name === selected.name ? 'active' : ''}'>${esc(panel.label || panel.name)}</button>`).join(''); const stateLabel = selected.openP ? 'open' : 'closed'; const preview = selected.svg ? `<div class='kee-picture-preview'>${selected.svg}</div>` : ''; return `<section class='browser-section'><h3>Panels</h3><div class='picture-tabs'>${tabs}</div><div class='kee-panel'><div class='panel-head'><strong>${esc(selected.label || selected.name)}</strong><span class='panel-state ${selected.openP ? 'open' : ''}'>${stateLabel}</span></div>${selected.message ? `<p class='panel-message'>${esc(selected.message)}</p>` : ''}${panelSummary(selected)}${panelActionButtons(selected)}${preview}</div></section>`; }"
+         "function panelWindowCard(panel, selected) { const stateLabel = panel.openP ? 'open' : 'closed'; const active = panel.name === selected.name ? ' active' : ''; const open = panel.openP ? ' open' : ''; const meta = [panel.kind, panel.windowpaneLabel || panel.windowpane].filter(Boolean).join(' / '); return `<button type='button' data-panel-name='${esc(panel.name)}' class='panel-window-card${active}${open}'><span class='panel-window-titlebar'><strong>${esc(panel.label || panel.name)}</strong><span class='panel-state ${panel.openP ? 'open' : ''}'>${stateLabel}</span></span><span class='panel-window-body'><span>${esc(meta || 'image panel')}</span>${panel.message ? `<span>${esc(panel.message)}</span>` : ''}</span></button>`; }"
+         "function renderPanelWindowDeck(panels, selected) { return `<div class='panel-window-deck' aria-label='Image panel windows'>${panels.map(panel => panelWindowCard(panel, selected)).join('')}</div>`; }"
+         "function renderPanelBrowser() { const panels = keePanels(); if (!panels.length) return ''; const selected = selectedPanel(); state.panelName = selected.name; const tabs = panels.map(panel => `<button type='button' data-panel-name='${esc(panel.name)}' class='${panel.name === selected.name ? 'active' : ''}'>${esc(panel.label || panel.name)}</button>`).join(''); const stateLabel = selected.openP ? 'open' : 'closed'; const preview = selected.svg ? `<div class='kee-picture-preview'>${selected.svg}</div>` : ''; return `<section class='browser-section'><h3>Image Panel Windows</h3>${renderPanelWindowDeck(panels, selected)}<div class='picture-tabs'>${tabs}</div><div class='kee-panel'><div class='panel-head'><strong>${esc(selected.label || selected.name)}</strong><span class='panel-state ${selected.openP ? 'open' : ''}'>${stateLabel}</span></div>${selected.message ? `<p class='panel-message'>${esc(selected.message)}</p>` : ''}${panelSummary(selected)}${panelActionButtons(selected)}${preview}</div></section>`; }"
          "function renderPictureBrowser() { const panelHtml = renderPanelBrowser(); const pictures = keePictures(); if (!pictures.length) { pictureBrowser.innerHTML = panelHtml; return; } const selected = selectedPicture(); state.pictureName = selected.name; const tabs = pictures.map(picture => `<button type='button' data-picture-name='${esc(picture.name)}' class='${picture.name === selected.name ? 'active' : ''}'>${esc(picture.label || picture.name)}</button>`).join(''); pictureBrowser.innerHTML = `${panelHtml}<section class='browser-section'><h3>KEEpictures</h3><div class='picture-tabs'>${tabs}</div><div class='kee-picture-preview'>${selected.svg || ''}</div>${pictureViewportSummary(selected)}</section>`; }"
          "function canonicalUnitName(value) { return String(value ?? '').replace(/[^A-Za-z0-9]/g, '').toUpperCase(); }"
          "function activeBrowserUnitP(detail) { const names = [detail?.name, ...(detail?.classParents || []), ...(detail?.memberParents || [])].map(canonicalUnitName); return names.some(name => name.includes('ACTIVEIMAGE') || name.includes('ACTIVEVALUE')); }"
@@ -1077,7 +1111,7 @@
          "function panelTraceEvent(panel, openP, oldOpenP) { return { id: nextTraceId(), kind: openP ? 'PANEL-OPEN' : 'PANEL-CLOSE', agendaId: null, activationId: null, fireId: null, world: null, parent: null, rule: null, ruleClass: null, unit: panel.name, slot: null, panel: panel.name, picture: panel.picture || null, item: null, viewport: panel.viewport || null, windowpane: panel.windowpane || null, activeImage: null, button: null, x: null, y: null, value: null, methodKind: null, method: null, args: [], oldValues: [oldOpenP ? 'T' : null], newValues: [openP ? 'T' : null], bindings: [], conditions: [], action: openP ? 'OPEN-PANEL!' : 'CLOSE-PANEL!', proposition: null, fact: null, result: null, message: openP ? 'KEE image panel opened' : 'KEE image panel closed' }; }"
          "function setPanelLocal(name, openP) { const panel = keePanels().find(candidate => candidate.name === name); if (!panel) return; const oldOpenP = !!panel.openP; const newOpenP = !!openP; state.traceFamily = 'pictures'; state.traceScope = 'all'; state.traceKind = 'all'; state.traceQuery = ''; if (oldOpenP !== newOpenP) { panel.openP = newOpenP; const event = panelTraceEvent(panel, newOpenP, oldOpenP); (DATA.details.traces || (DATA.details.traces = [])).push(event); state.traceFocusId = event.id; } render(); }"
          "function renderHierarchyBrowser(model, graph) { const detail = selectedUnitDetail(graph); const topLevels = unitTopLevels(); const topNames = topLevels.map(unit => unit.name); const slotMeta = name => { const unit = unitDetails().find(candidate => candidate.name === name); const count = unit?.slots?.length ?? 0; return `${count} slots`; }; let html = hierarchySection('Top Level Units', topNames, DATA.units.kb, slotMeta); if (detail) { html += `<section class='browser-section'><h3>Current Unit</h3><div class='node-list compact'>${hierarchyButton(detail.name, detail.kb, `${(detail.slots || []).length} slots`)}</div></section>`; html += hierarchySection('Class Parents', detail.classParents, detail.kb); html += hierarchySection('Member Parents', detail.memberParents, detail.kb); html += hierarchySection('Subclass Children', detail.classChildren, detail.kb); html += hierarchySection('Member Children', detail.memberChildren, detail.kb); } else { html += `<section class='browser-section'><h3>Current Unit</h3><p class='empty'>No unit selected</p></section>`; } hierarchyBrowser.innerHTML = html; renderSlotBrowser(detail); renderNodeBrowser(model, graph); }"
-         "function renderBrowser(model, graph) { renderKbStrip(); renderReviewTour(); renderDesktopRoster(); renderSessionPane(); renderPictureBrowser(); if (graph.kind === 'unit') { renderHierarchyBrowser(model, graph); return; } hierarchyBrowser.innerHTML = ''; slotBrowser.innerHTML = ''; renderNodeBrowser(model, graph); }"
+         "function renderBrowser(model, graph) { renderKbStrip(); renderReviewTour(); renderDesktopContext(); renderDesktopRoster(); renderSessionPane(); renderPictureBrowser(); if (graph.kind === 'unit') { renderHierarchyBrowser(model, graph); return; } hierarchyBrowser.innerHTML = ''; slotBrowser.innerHTML = ''; renderNodeBrowser(model, graph); }"
          "function renderNodeBrowser(model, graph) {"
          "  const rows = model.nodes.filter(node => matches(node, graph));"
          "  nodeCount.textContent = `${rows.length}/${model.nodes.length}`;"

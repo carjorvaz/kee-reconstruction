@@ -57,7 +57,15 @@
           (list "Current KB: PUZZLE"
                 "View: Worlds"
                 (format nil "Selected: ~A" world-name)
-                (format nil "First nogood rule: ~A" rule-name)))))
+                (format nil "First nogood rule: ~A" rule-name))
+          :desktop-title "Reconstructed KEE desktop"
+          :desktop-subtitle
+          "Hamburg puzzle review session / Units, Worlds, KEEpictures, Image Panels"
+          :desktop-notice
+          "Clean-room reconstruction; not original IntelliCorp KEE or Common Windows."
+          :tour-notes
+          (list "Reviewer target: worlds, rules, KEEpicture, ActiveImage, panel traces"
+                "Best correction areas: desktop/window behavior and agenda tracing"))))
 
 (defun review-world-value (world unit-name slot-name fallback)
   (or (kee:with-world (world)

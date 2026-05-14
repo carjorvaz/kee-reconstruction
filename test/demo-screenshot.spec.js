@@ -17,7 +17,10 @@ test('capture generated demo screenshot', async ({ page }) => {
     await page.locator(`[data-review-tour="${tour}"]`).first().click();
   }
 
-  if (tour === 'kee-pictures') {
+  if (tour === 'panels') {
+    await page.locator('.panel-window-deck').first()
+      .evaluate(element => element.scrollIntoView({ block: 'start' }));
+  } else if (tour === 'kee-pictures') {
     await page.locator('#picture-browser').scrollIntoViewIfNeeded();
   }
 

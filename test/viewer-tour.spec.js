@@ -58,12 +58,12 @@ test('review tour jumps to reconstructed KEE surfaces', async ({ page }) => {
   await expect(page.locator('[data-desktop-tour="panels"]')).toBeEnabled();
   await page.locator('[data-review-tour="panels"]').click();
   await expect(page.locator('#picture-browser')).toContainText('Hamburg Review Image Panel');
-  await expect(page.locator('#picture-browser .panel-state')).toHaveText('open');
+  await expect(page.locator('#picture-browser .kee-panel .panel-state')).toHaveText('open');
   await page.locator('button[data-panel-action="close"]').click();
-  await expect(page.locator('#picture-browser .panel-state')).toHaveText('closed');
+  await expect(page.locator('#picture-browser .kee-panel .panel-state')).toHaveText('closed');
   await expect(page.locator('.inspector-pane')).toContainText('Panel closed');
   await page.locator('button[data-panel-action="open"]').click();
-  await expect(page.locator('#picture-browser .panel-state')).toHaveText('open');
+  await expect(page.locator('#picture-browser .kee-panel .panel-state')).toHaveText('open');
   await expect(page.locator('.inspector-pane')).toContainText('Panel opened');
 
   await expect(page.locator('[data-review-tour="active-images"]')).toBeEnabled();

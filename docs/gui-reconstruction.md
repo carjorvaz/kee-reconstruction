@@ -221,12 +221,14 @@ the NPS AUV mission-planning evidence:
   picture, viewport, windowpane, action, and old/new state
 - `kee.panel.report` exposes a structured panel report plus the linked
   picture SVG preview
-- the standalone viewer has a Panels Review Tour/Desktop target, panel tabs,
-  local open/close controls, open/closed state display, SVG previews, and
-  picture-family trace handling for `:panel-open` and `:panel-close`
+- the standalone viewer has a Panels Review Tour/Desktop target, an
+  image-panel window deck, panel tabs, local open/close controls, open/closed
+  state display, SVG previews, and picture-family trace handling for
+  `:panel-open` and `:panel-close`
 - `examples/auv-panel-workflow.lisp` now provides a small reviewer-facing
   workflow with mission-selection, parameter-entry, and monitoring panels,
-  using panel open/close messages and ActiveImage-backed mouse updates
+  using panel open/close messages, ActiveImage-backed mouse updates, and
+  explicit Symbolics/TI provenance cues in the generated desktop context
 
 ## Implemented ActiveImage Increment
 
@@ -260,12 +262,15 @@ The reconstruction now has a first trace layer for rule/world debugging:
   world detail
 - generated viewer pages can specify an initial view, selected node, and trace
   scope so demos open on historically meaningful review states
+- dense generated graphs de-emphasize background arrows and edge labels so
+  reviewer screenshots foreground the selected unit or world instead of a
+  tangled relation diagram
 - the browser pane includes Review Tour controls that jump to representative
   units, rules, worlds, agenda traces, rule cross-references, and ActiveImages
   when available
-- the browser pane includes a compact Desktop roster using recovered window
-  vocabulary such as Lisp Listener, Typescript, Prompt, KEEpictures, and
-  ActiveImages
+- the browser pane includes a compact reconstructed desktop context plus a
+  Desktop roster using recovered window vocabulary such as Lisp Listener,
+  Typescript, Prompt, KEEpictures, and ActiveImages
 - the Lisp Listener, Typescript, and Prompt entries switch a small transcript
   pane so reviewers can see the generated demo as a KEE work session rather
   than only as static graph state

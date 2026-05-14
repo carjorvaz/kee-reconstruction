@@ -9,7 +9,12 @@ test('AUV panel workflow exposes interactive reconstructed panels', async ({ pag
   await page.goto(pathToFileURL(viewerHtml).href);
 
   await expect(page.locator('#review-tour')).toBeVisible();
+  await expect(page.locator('#desktop-context')).toContainText('Reconstructed KEE desktop');
+  await expect(page.locator('#desktop-context')).toContainText('Symbolics 3675');
+  await expect(page.locator('#desktop-context')).toContainText('TI Micro-Explorer');
   await expect(page.locator('#current-kb')).toHaveText('AUV.WORKFLOW');
+  expect(await page.locator('svg#graph .edge.background').count()).toBeGreaterThan(0);
+  await expect(page.locator('svg#graph .edge-label')).toHaveCount(0);
   await expect(page.locator('.inspector-pane h2')).toHaveText('MISSION.STATE');
   await expect(page.locator('#slot-browser')).toContainText('MISSION.PROFILE');
   await expect(page.locator('#slot-browser')).toContainText('PIPELINE.INSPECT');
@@ -25,27 +30,28 @@ test('AUV panel workflow exposes interactive reconstructed panels', async ({ pag
   await expect(page.locator('[data-desktop-tour="panels"]')).toBeEnabled();
   await page.locator('[data-review-tour="panels"]').click();
 
+  await expect(page.locator('#picture-browser')).toContainText('Image Panel Windows');
   await expect(page.locator('#picture-browser')).toContainText('Mission Selection Panel');
   await expect(page.locator('#picture-browser')).toContainText('Choose the mission profile');
-  await expect(page.locator('#picture-browser .panel-state')).toHaveText('closed');
+  await expect(page.locator('#picture-browser .kee-panel .panel-state')).toHaveText('closed');
   await page.locator('button[data-panel-action="open"]').click();
-  await expect(page.locator('#picture-browser .panel-state')).toHaveText('open');
+  await expect(page.locator('#picture-browser .kee-panel .panel-state')).toHaveText('open');
   await expect(page.locator('.inspector-pane')).toContainText('Panel opened');
   await page.locator('button[data-panel-action="close"]').click();
-  await expect(page.locator('#picture-browser .panel-state')).toHaveText('closed');
+  await expect(page.locator('#picture-browser .kee-panel .panel-state')).toHaveText('closed');
   await expect(page.locator('.inspector-pane')).toContainText('Panel closed');
 
-  await page.locator('[data-panel-name="WORKFLOW.20.PARAMETERS.PANEL"]').click();
+  await page.locator('.panel-window-card[data-panel-name="WORKFLOW.20.PARAMETERS.PANEL"]').click();
   await expect(page.locator('#picture-browser')).toContainText('Parameter Entry Panel');
   await expect(page.locator('#picture-browser')).toContainText('Tune mission parameters');
-  await expect(page.locator('#picture-browser .panel-state')).toHaveText('closed');
+  await expect(page.locator('#picture-browser .kee-panel .panel-state')).toHaveText('closed');
   await expect(page.locator('#picture-browser')).toContainText('Max depth');
   await expect(page.locator('#picture-browser')).toContainText('Duration');
 
-  await page.locator('[data-panel-name="WORKFLOW.30.MONITORING.PANEL"]').click();
+  await page.locator('.panel-window-card[data-panel-name="WORKFLOW.30.MONITORING.PANEL"]').click();
   await expect(page.locator('#picture-browser')).toContainText('Mission Monitoring Panel');
   await expect(page.locator('#picture-browser')).toContainText('Watch the live mission state');
-  await expect(page.locator('#picture-browser .panel-state')).toHaveText('open');
+  await expect(page.locator('#picture-browser .kee-panel .panel-state')).toHaveText('open');
   await expect(page.locator('#picture-browser')).toContainText('Battery');
   await expect(page.locator('#picture-browser')).toContainText('Acoustic link');
   await expect(page.locator('.inspector-pane')).toContainText('Picture mouse');
