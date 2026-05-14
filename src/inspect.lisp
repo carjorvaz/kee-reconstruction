@@ -70,6 +70,29 @@
                                #'string<
                                :key #'symbol-name)))))
 
+(defun inspect.assumption (assumption)
+  (list :world (assumption.world assumption)
+        :parent (assumption.parent assumption)
+        :fact (assumption.fact assumption)
+        :rule (assumption.rule assumption)
+        :bindings (assumption.bindings assumption)
+        :conditions (assumption.conditions assumption)
+        :action (assumption.action assumption)
+        :agenda-id (assumption.agenda-id assumption)
+        :activation-id (assumption.activation-id assumption)
+        :fire-id (assumption.fire-id assumption)))
+
+(defun inspect.nogood (nogood)
+  (let ((justification (nogood.justification nogood)))
+    (list :world (nogood.world nogood)
+          :rule (justification.rule justification)
+          :bindings (justification.bindings justification)
+          :conditions (justification.conditions justification)
+          :action (justification.action justification)
+          :proposition (justification.proposition justification)
+          :environment (mapcar #'inspect.assumption
+                               (nogood.environment nogood)))))
+
 (defun inspect.world (world-designator)
   (let ((target-world (world world-designator)))
     (list :name (get.world.name target-world)
@@ -77,18 +100,10 @@
                        (get.world.name (world.parent target-world)))
           :inconsistent-p (world.inconsistent.p target-world)
           :facts (world.facts target-world)
-          :nogoods
-          (mapcar (lambda (nogood)
-                    (let ((justification (nogood.justification nogood)))
-                      (list :world (nogood.world nogood)
-                            :rule (justification.rule justification)
-                            :bindings (justification.bindings justification)
-                            :conditions (justification.conditions
-                                         justification)
-                            :action (justification.action justification)
-                            :proposition (justification.proposition
-                                          justification))))
-                  (world.nogoods target-world)))))
+          :environment (mapcar #'inspect.assumption
+                               (world.environment target-world))
+          :nogoods (mapcar #'inspect.nogood
+                            (world.nogoods target-world)))))
 
 (defun inspect.world.tree ()
   (sort

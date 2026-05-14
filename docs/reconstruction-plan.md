@@ -102,10 +102,13 @@ Status:
 - `IN.NEW.WORLD` can create reusable child worlds for hypotheses.
 - `world.facts` lists a world's local overlay facts.
 - generated worlds are deduplicated by effective fact signature.
+- generated branch worlds record first-pass assumption objects.
+- `world.environment` returns a world's cumulative assumptions, and nogoods
+  snapshot that environment.
 - The regression tests and `examples/hamburg-puzzle-mini.lisp` cover a
   training-slide-style constraint.
-- Full ATMS environments, assumptions, and dependency propagation are still
-  future work.
+- Full ATMS labels, nondeletion/deletion assumptions, retraction, and
+  dependency propagation are still future work.
 
 ## Phase 5: GUI Reconstruction
 
@@ -177,4 +180,4 @@ Status:
 Next GUI target:
 
 - Expand the recovered debugging tools beyond the first trace/xref view:
-  explicit ATMS-style environment and nogood dependency records.
+  ATMS-style labels with dependency-directed propagation and retraction.

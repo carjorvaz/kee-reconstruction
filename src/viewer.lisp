@@ -242,6 +242,25 @@
        (rule.references (list (getf report :name) (getf report :kb))))
       :json-null))
 
+(defun assumption-detail-json (assumption)
+  (list (cons "world" (detail-string (getf assumption :world)))
+        (cons "parent" (if (getf assumption :parent)
+                           (detail-string (getf assumption :parent))
+                           :json-null))
+        (cons "fact" (or (getf assumption :fact) :json-null))
+        (cons "rule" (if (getf assumption :rule)
+                         (detail-string (getf assumption :rule))
+                         :json-null))
+        (cons "bindings" (json-array (mapcar #'binding-detail-json
+                                              (getf assumption :bindings))))
+        (cons "conditions"
+              (detail-string-array (getf assumption :conditions)))
+        (cons "action" (or (getf assumption :action) :json-null))
+        (cons "agendaId" (or (getf assumption :agenda-id) :json-null))
+        (cons "activationId" (or (getf assumption :activation-id)
+                                 :json-null))
+        (cons "fireId" (or (getf assumption :fire-id) :json-null))))
+
 (defun nogood-detail-json (nogood)
   (list (cons "world" (detail-string (getf nogood :world)))
         (cons "rule" (detail-string (getf nogood :rule)))
@@ -249,7 +268,10 @@
                                               (getf nogood :bindings))))
         (cons "conditions" (detail-string-array (getf nogood :conditions)))
         (cons "action" (detail-string (getf nogood :action)))
-        (cons "proposition" (detail-string (getf nogood :proposition)))))
+        (cons "proposition" (detail-string (getf nogood :proposition)))
+        (cons "environment"
+              (json-array (mapcar #'assumption-detail-json
+                                   (getf nogood :environment))))))
 
 (defun world-detail-json (report)
   (list (cons "id" (world-detail-id report))
@@ -260,6 +282,8 @@
         (cons "inconsistentP" (json-bool (getf report :inconsistent-p)))
         (cons "facts" (json-array (mapcar #'fact-detail-json
                                            (getf report :facts))))
+        (cons "environment" (json-array (mapcar #'assumption-detail-json
+                                                 (getf report :environment))))
         (cons "nogoods" (json-array (mapcar #'nogood-detail-json
                                              (getf report :nogoods))))))
 
@@ -864,7 +888,9 @@
          "function worldAssumptionNames(name, rows = DATA.details.traces || []) { const parents = traceWorldParentByName(rows); const names = []; const seen = new Set(); for (let cursor = name; cursor && parents.has(cursor) && !seen.has(cursor); cursor = parents.get(cursor)) { names.push(cursor); seen.add(cursor); } return names.reverse(); }"
          "function branchTraceForWorld(name, rows = DATA.details.traces || []) { return lastTrace(rows, event => traceKind(event) === 'world-branch' && event.world === name); }"
          "function branchWriteTrace(branch, rows = DATA.details.traces || []) { const fact = traceFactParts(branch?.fact); return lastTrace(rows, event => traceKind(event) === 'world-slot-write' && event.world === branch?.world && (!fact || (event.unit === fact.unit && event.slot === fact.slot && sameTraceValues(event.newValues, fact.values)))); }"
-         "function worldAssumptions(detail) { const rows = DATA.details.traces || []; const parents = traceWorldParentByName(rows); return worldAssumptionNames(detail.name, rows).map(name => { const branch = branchTraceForWorld(name, rows); const write = branch && branchWriteTrace(branch, rows); const event = write || branch; return event ? { world: name, parent: branch?.parent || parents.get(name), label: branch?.fact ? traceFactLabel(branch.fact) : causalEffectLabel(event), event } : null; }).filter(Boolean); }"
+         "function assumptionRecordEvent(assumption, rows) { if (assumption.fireId) { const byFire = lastTrace(rows, event => event.fireId === assumption.fireId && event.world === assumption.world && ['world-slot-write', 'world-branch'].includes(traceKind(event))); if (byFire) return byFire; } return lastTrace(rows, event => traceKind(event) === 'world-branch' && event.world === assumption.world); }"
+         "function worldAssumptionsFromRecords(detail, rows) { return (detail.environment || []).map(assumption => { const event = assumptionRecordEvent(assumption, rows); return event ? { world: assumption.world, parent: assumption.parent, label: assumption.fact ? traceFactLabel(assumption.fact) : causalEffectLabel(event), event } : null; }).filter(Boolean); }"
+         "function worldAssumptions(detail) { const rows = DATA.details.traces || []; const records = worldAssumptionsFromRecords(detail, rows); if (records.length) return records; const parents = traceWorldParentByName(rows); return worldAssumptionNames(detail.name, rows).map(name => { const branch = branchTraceForWorld(name, rows); const write = branch && branchWriteTrace(branch, rows); const event = write || branch; return event ? { world: name, parent: branch?.parent || parents.get(name), label: branch?.fact ? traceFactLabel(branch.fact) : causalEffectLabel(event), event } : null; }).filter(Boolean); }"
          "function renderWorldAssumption(assumption, index) { const hop = `${index + 1}. ${assumption.parent || 'ROOT'} -> ${assumption.world}`; const label = `${hop} / ${assumption.label}`; return renderWhyTrail(label, assumption.event); }"
          "function renderWorldAssumptions(detail) { const assumptions = worldAssumptions(detail); if (!assumptions.length) return ''; return `<section class='detail-section'><h3>Assumptions</h3><div class='assumption-trails'>${assumptions.map(renderWorldAssumption).join('')}</div></section>`; }"
          "function renderWorldDetail(detail) {"

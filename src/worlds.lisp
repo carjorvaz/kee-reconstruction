@@ -5,6 +5,7 @@
   parent
   (values (make-hash-table :test #'equal))
   inconsistent-p
+  assumptions
   justifications
   nogoods)
 
@@ -19,10 +20,27 @@
   proposition)
 
 (defstruct (kee-nogood
-            (:constructor make-nogood (&key world justification))
+            (:constructor make-nogood (&key world justification environment))
             (:conc-name nogood.))
   world
-  justification)
+  justification
+  environment)
+
+(defstruct (kee-assumption
+            (:constructor make-assumption
+                (&key world parent fact rule bindings conditions action
+                      agenda-id activation-id fire-id))
+            (:conc-name assumption.))
+  world
+  parent
+  fact
+  rule
+  bindings
+  conditions
+  action
+  agenda-id
+  activation-id
+  fire-id)
 
 (defvar *worlds* (make-hash-table :test #'eq))
 (defvar *world-branches* (make-hash-table :test #'equal))
@@ -84,6 +102,13 @@
 
 (defun world.nogoods (world-designator)
   (copy-list (kee-world-nogoods (world world-designator))))
+
+(defun world.assumptions (world-designator)
+  (reverse (copy-list (kee-world-assumptions (world world-designator)))))
+
+(defun world.environment (world-designator)
+  (loop for ancestor in (world-ancestor-chain (world world-designator))
+        append (world.assumptions ancestor)))
 
 (defun world.facts (world-designator)
   (let ((world (world world-designator)))
@@ -205,6 +230,7 @@
     (or (gethash signature *world-fact-index*)
         (let ((new (create.world nil parent)))
           (setf (gethash signature *world-fact-index*) new)
+          (record-world-assumption new parent fact)
           (record.trace.event :world-branch
                               :world (kee-world-name new)
                               :parent (kee-world-name parent)
@@ -235,6 +261,34 @@
    :action *current-rule-action*
    :proposition proposition))
 
+(defun make-current-assumption (world parent fact)
+  (make-assumption
+   :world (kee-world-name world)
+   :parent (and parent (kee-world-name parent))
+   :fact (copy-tree fact)
+   :rule (and *current-rule-unit* (unit.name *current-rule-unit*))
+   :bindings (current-bindings-for-justification)
+   :conditions (copy-tree *current-rule-conditions*)
+   :action (copy-tree *current-rule-action*)
+   :agenda-id *current-trace-agenda-id*
+   :activation-id *current-trace-activation-id*
+   :fire-id *current-trace-fire-id*))
+
+(defun same-assumption-p (left right)
+  (and (equal (assumption.world left) (assumption.world right))
+       (equal (assumption.parent left) (assumption.parent right))
+       (equal (assumption.fact left) (assumption.fact right))
+       (equal (assumption.rule left) (assumption.rule right))
+       (equal (assumption.bindings left) (assumption.bindings right))))
+
+(defun record-world-assumption (world parent fact)
+  (let ((assumption (make-current-assumption world parent fact)))
+    (unless (some (lambda (existing)
+                    (same-assumption-p existing assumption))
+                  (kee-world-assumptions world))
+      (push assumption (kee-world-assumptions world)))
+    assumption))
+
 (defun same-justification-p (left right)
   (and (equal (justification.rule left) (justification.rule right))
        (equal (justification.bindings left) (justification.bindings right))
@@ -248,7 +302,8 @@
                 (kee-world-justifications world))
     (push justification (kee-world-justifications world))
     (push (make-nogood :world (kee-world-name world)
-                       :justification justification)
+                       :justification justification
+                       :environment (world.environment world))
           (kee-world-nogoods world))
     (record.trace.event :nogood
                         :world (kee-world-name world)

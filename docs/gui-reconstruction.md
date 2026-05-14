@@ -180,6 +180,8 @@ The reconstruction now has a first trace layer for rule/world debugging:
   local facts, nogoods, contradictions, and focused trace effects
 - selected world details summarize the alternative-world assumptions along the
   selected world's ancestry
+- world and nogood detail maps now embed first-pass explicit environment
+  records rather than depending only on trace reconstruction
 - focused traces highlight referenced units or worlds in the visible SVG graph,
   including world ancestry paths for focused world/problem traces
 - focused trace detail exposes clickable unit/world graph targets
@@ -214,4 +216,4 @@ The reconstruction now has a first static rule cross-referencer:
 
 Expand the debugging tools around the first trace and xref panes:
 
-- explicit ATMS-style environment and nogood dependency records
+- ATMS-style labels with dependency-directed propagation and retraction

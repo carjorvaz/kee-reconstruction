@@ -68,6 +68,8 @@
    #:world.facts
    #:world.justifications
    #:world.nogoods
+   #:world.assumptions
+   #:world.environment
    #:$worlds
    #:with-world
    #:in.new.world
@@ -83,6 +85,17 @@
    #:justification.proposition
    #:nogood.world
    #:nogood.justification
+   #:nogood.environment
+   #:assumption.world
+   #:assumption.parent
+   #:assumption.fact
+   #:assumption.rule
+   #:assumption.bindings
+   #:assumption.conditions
+   #:assumption.action
+   #:assumption.agenda-id
+   #:assumption.activation-id
+   #:assumption.fire-id
    #:parse
    #:external.form
    #:internal.form
