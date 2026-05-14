@@ -316,10 +316,10 @@ Current reconstruction:
   facts, nogoods, rule cross-references with operation/slot/target filters,
   trace events filterable by family, event kind, selected-node scope, and
   search text, previous/next trace jumps, focused trace detail, a compact trace
-  graph, graph/path highlighting for focused trace references,
-  focused-trace graph target buttons, a spatial trace map with speed/loop
-  replay controls and focused-branch emphasis, and navigable references to
-  visible units or worlds.
+  agenda/conflict-set pane, a compact trace graph, graph/path highlighting for
+  focused trace references, focused-trace graph target buttons, a spatial trace
+  map with speed/loop replay controls and focused-branch emphasis, and
+  navigable references to visible units or worlds.
 
 This is a reconstruction support layer rather than a recovered KEE API. It is
 intended to keep display logic separate from the object/rule/world core, so a

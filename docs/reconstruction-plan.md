@@ -147,8 +147,9 @@ Status:
   facets, facts, nogoods, and in-graph references, plus rule cross-reference
   panes with operation/slot/target filters, trace panes filterable by family,
   event kind, selected-node scope, and search text, previous/next trace jumps,
-  focused trace detail, graph/path highlighting for focused trace references,
-  and a compact trace graph with focused-trace graph target links.
+  focused trace detail, compact agenda/conflict-set panes, graph/path
+  highlighting for focused trace references, and a compact trace graph with
+  focused-trace graph target links.
 - The Trace pane includes a spatial trace map over recent filtered agenda,
   rule, world, nogood, and contradiction events, with adjacent focused path
   emphasis, focused-branch emphasis, and speed/loop replay controls.
@@ -172,4 +173,5 @@ Status:
 Next GUI target:
 
 - Expand the recovered debugging tools beyond the first trace/xref view:
-  a first agenda/conflict-set pane for RuleSystem debugging.
+  focused agenda controls for jumping among conflict-set candidates and fired
+  rules.
