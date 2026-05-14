@@ -174,6 +174,8 @@ The reconstruction now has a first trace layer for rule/world debugging:
 - agenda candidates show matched conditions and fired actions inline
 - fired agenda candidates show immediate downstream effects such as slot
   writes, generated branches, nogoods, and contradictions
+- a provenance-backed causality graph renders agenda -> match -> fire -> effect
+  flows
 - focused traces highlight referenced units or worlds in the visible SVG graph,
   including world ancestry paths for focused world/problem traces
 - focused trace detail exposes clickable unit/world graph targets
@@ -208,5 +210,4 @@ The reconstruction now has a first static rule cross-referencer:
 
 Expand the debugging tools around the first trace and xref panes:
 
-- causality graph over agenda activations, rule fires, and downstream world
-  effects
+- selected world/fact/problem why trails backed by agenda and fire provenance
