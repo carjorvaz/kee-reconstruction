@@ -24,6 +24,8 @@ required_files=(
 artifact_terms=(
   "IntelliCorp KEE source or binary distributions"
   "KEE 3.0/3.1/4.0 manuals as scans"
+  "NPS AUV mission-planning thesis"
+  "3.0-U-1"
   "K3.1-UG1"
   "K3.1-IRM-1"
   "K3.1-CRM-2"

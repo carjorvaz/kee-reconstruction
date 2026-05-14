@@ -27,7 +27,7 @@ Status meanings:
 | Rule cross-referencer | AIAI lists a rule cross-referencer. | `approximated` | Was it organized by rule, slot, unit, rule class, or all of these? | Add cross-reference views that match remembered organization. |
 | KEEworlds UI | Hamburg slides and patents describe worlds, assumptions, nondeletion/deletion assumptions, nogoods, and ATMS behavior. | `approximated` | How did users inspect worlds, assumptions, and contradictions? | Finish active nogood/retraction behavior and improve world-detail panes. |
 | TellAndAsk / RuleSystem syntax | Hamburg slides and NASA VEG reports show rule forms, `external.form`, `parse`, and `BELIEVE FALSE`. | `approximated` | Which syntax variants are missing or wrong? | Grow parser from the recovered examples outward. |
-| Lisp Machine feel | User goal includes TI Lisp Machine and KEE first-hand review. | `unknown` | What interaction style is TI-specific rather than generic KEE? | Add a dated notes section after expert feedback. |
+| Lisp Machine feel | User goal includes TI Lisp Machine and KEE first-hand review; NPS AUV evidence records Symbolics 3675 development and a planned TI Micro-Explorer delivery configuration. | `unknown` | What interaction style is TI-specific rather than generic KEE? | Add a dated notes section after expert feedback, separating Symbolics, TI Explorer/Micro-Explorer, and Unix KEE memories. |
 
 ## Current Demo Coverage
 

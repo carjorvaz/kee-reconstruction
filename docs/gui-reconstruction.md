@@ -46,6 +46,14 @@ Strongest recovered points:
   is awkward for topology and that graphical interfaces can create component
   instances and define interactions. Source: NASA CP `19880014804`,
   `https://ntrs.nasa.gov/api/citations/19880014804/downloads/19880014804.pdf`.
+- The NPS AUV mission-planning thesis describes a KEE application hosted on a
+  Symbolics 3675 Lisp machine, developed entirely in KEE. It used KEE graphics
+  image panels for mission selection, parameter entry, preview/monitoring
+  workflows, and mouse-driven control; the thesis also records a planned
+  delivery configuration using a Texas Instruments Micro-Explorer. Appendix
+  listings expose application-level KEE APIs and panel messages such as
+  `UNITMSG`, `PUT.VALUE`, `REMOVE.ALL.VALUES`, `ASSERT`, `open-panel!`, and
+  `close-panel!`. Source: NPS thesis, `https://hdl.handle.net/10945/23457`.
 - A 1993 Bielefeld evaluation reproduces the KEE architecture from the KEE
   User's Guide as Common Lisp plus TMS, Common Windows, Active Values,
   KEEworlds, Rulesystem, KEEpictures, ActiveImages, and object-oriented
@@ -99,6 +107,9 @@ Likely original or application-visible names:
 - Lisp Listener
 - Typescript Window
 - Prompt Window
+- image panels
+- User Prompt Panel, Select Mission Panel, Mission Status Panel, AUV Status
+  Panel
 - KEEspy
 
 Recovered or public-code object/message names already tracked:
@@ -134,6 +145,9 @@ The standalone browser should keep moving toward the recovered KEE structure:
 - Treat the desktop as a review target, not just a browser skin: the Bielefeld
   evaluation suggests a saved/reloadable desktop composed of smaller
   functional windows inside larger KEE windows.
+- Treat KEE graphics panels as workflow surfaces, not only pictures: the NPS
+  AUV evidence shows prompt panels, selection panels, status panels, and
+  ActiveImage-driven actions arranged around task phases.
 - Keep the Lisp Listener, Typescript, and Prompt visible as session surfaces
   when a demo needs to evoke interactive use. The current pane is an annotated
   transcript, not evidence of the original window implementation.

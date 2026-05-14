@@ -35,6 +35,7 @@ secondary descriptions.
 | ASKE thesis | KEE 3.1 application evidence for Common Windows interfaces with icons, interaction/display windows, notebook, rulemaker, context/class/rule display windows, and rule editing window. | https://oro.open.ac.uk/64573/1/27758423.pdf |
 | NASA TEXSYS/MTK conference paper | Application evidence for KEE v2/v3 on Symbolics, KEEpictures as flexible graphics, KEEworlds for temporal/hypothetical states, and graphical model-building. | https://ntrs.nasa.gov/api/citations/19880014804/downloads/19880014804.pdf |
 | NASA KATYDID / KEE-to-Ada paper | Primary NASA/IntelliCorp evidence for KEE delivery concerns: a KEE object-structure runtime library for Ada, knowledge-structure translation, rules translation, Lisp-to-Ada translation, and a knowledge-base dumper. Useful for reconstruction boundaries, though not original KEE source. | https://ntrs.nasa.gov/citations/19900018018 |
+| NPS AUV mission-planning thesis | Public KEE application evidence on a Symbolics 3675 Lisp machine, with mouse-driven KEE graphics panels, a KEE knowledge-base figure, Symbolics/SGI integration, appendix source listings, and a planned TI Micro-Explorer delivery configuration. | https://hdl.handle.net/10945/23457 |
 | Bielefeld hybrid expert-system tools evaluation | 1993 public evaluation with a KEE chapter. Records architecture from the KEE User's Guide, supported Unix platforms, desktop/window behavior, ActiveValues slot-operation triggers, and a useful KEE manual bibliography. | https://doczz.net/doc/5911786/evaluation-hybrider-expertensystemtools |
 | IBM System/370 bibliography, January 1990 | IBM publication catalog entries for IBM KEE manuals. Confirms IBM publication numbers, page counts, and concise descriptions for TellAndAsk, KEEpictures, KEEworlds, and RuleSystem3. | https://chiclassiccomp.org/docs/content/computing/IBM/Mainframe/AppSoftware/GC20-0370-7_System370-30xx-4300-9370BibliographySystem%26AppPrograms_Jan90.pdf |
 
@@ -44,6 +45,8 @@ No full scans found yet. These identifiers make the search precise.
 
 | Manual | Identifier | External evidence |
 | --- | --- | --- |
+| KEE Software Development System User's Manual, KEE 2.1 | unknown | Cambridge Knowledge Engineering Review bibliography cites this 1985 IntelliCorp manual. |
+| KEE Software Development System User's Manual, KEE 3.0 | `3.0-U-1` | Simulation literature and patent bibliographies cite the 1986 User's Manual; Xerox US5072412 cites July 25, 1986 pages 2-19 to 2-23. |
 | KEE User's Guide, KEE 3.1 | `K3.1-UG1` | Bielefeld bibliography. |
 | KEE Interface Reference Manual | `K3.1-IRM-1`, IBM `SC26-4545` | Bielefeld and IBM bibliography. |
 | KEE Core Reference Manual | `K3.1-CRM-2` | Bielefeld bibliography; also cited in later database/rule literature. |
@@ -65,6 +68,9 @@ No full scans found yet. These identifiers make the search precise.
 - KEE 3.0/3.1/4.0 manuals as scans.
 - NASA VEG files: `veg4.u`, `veg-methods.lisp`, and extension Lisp files.
 - The NASA GSFC Sun cartridge tape mentioned in the VEG reports.
+- Raw NPS AUV MPES files if separately recoverable from the thesis listing:
+  `mpexpert.u`, the `auv-mpes` desktop, `mission3.lisp`, `missions.lisp`, and
+  related Symbolics/IRIS communication files.
 - KEEtutor materials and puzzle files such as `3X3IMPLEM1.U`.
 - KATYDID translator/runtime source or generated Ada examples, if any public
   copies survived outside the NASA paper.
