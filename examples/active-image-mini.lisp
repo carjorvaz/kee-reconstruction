@@ -3,6 +3,7 @@
 (load (merge-pathnames "../src/active-images.lisp" *load-truename*))
 (load (merge-pathnames "../src/traces.lisp" *load-truename*))
 (load (merge-pathnames "../src/pictures.lisp" *load-truename*))
+(load (merge-pathnames "../src/panels.lisp" *load-truename*))
 
 (in-package #:cl-user)
 
@@ -49,7 +50,16 @@
   (kee:create.picture.windowpane 'sensor.window 'sensor.viewport
                                  :label "Sensor Window"
                                  :width 260
-                                 :height 150))
+                                 :height 150
+                                 :open-p nil)
+  (kee:create.kee.panel 'sensor.image.panel
+                        :kind :status
+                        :label "Sensor Image Panel"
+                        :message "Mouse edits write through the gauge"
+                        :picture 'sensor.panel
+                        :viewport 'sensor.viewport
+                        :windowpane 'sensor.window
+                        :open-p nil))
 
 (defun run ()
   (setup-active-image-mini)
@@ -66,6 +76,9 @@
           (kee:active.image.html 'temperature.gauge))
   (format t "~&Picture SVG: ~A~%"
           (kee:kee.picture.svg 'sensor.panel))
+  (kee:open.panel 'sensor.image.panel)
+  (format t "~&Panel Report: ~S~%"
+          (kee:kee.panel.report 'sensor.image.panel))
   (format t "~&Picture Trace: ~S~%"
           (first (last (kee:trace.events :kind :picture-mouse)))))
 

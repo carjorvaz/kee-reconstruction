@@ -47,6 +47,8 @@ Status:
 - First KEEpicture units exist as object-backed picture containers with
   rectangle, text, slot-value, and embedded ActiveImage items plus viewport,
   windowpane, mouse-event trace, and SVG preview support.
+- First image/workflow panel units exist over KEEpictures and windowpanes, with
+  reconstructed `open-panel!`/`close-panel!` message methods and panel traces.
 - First readable KB dumps exist for portable reconstructed KB state, motivated
   by KATYDID/VEG delivery evidence.
 
@@ -152,8 +154,9 @@ Status:
 - `kee.viewer.html` and `write.kee.viewer.html` generate a standalone HTML/SVG
   graph browser over the same data, including visible current-KB state,
   loaded-KB chips, top-level-unit selection, class/member hierarchy browsing,
-  synchronized slot display, embedded KEEpicture previews, embedded
-  ActiveImage controls with local static updates, a reconstructed Desktop
+  synchronized slot display, embedded KEEpicture previews, reconstructed
+  image-panel previews, embedded ActiveImage controls with local static
+  updates, a reconstructed Desktop
   roster with Listener/Typescript/Prompt transcript panes, a searchable node
   list, and clicked-node detail panes for
   slots, facets, facts, nogoods, and in-graph references, plus rule cross-reference
@@ -186,10 +189,11 @@ Status:
   hierarchy and generated worlds.
 - `examples/kee-graph-viewer.lisp` emits a browser-openable HTML graph view.
 - `examples/active-image-mini.lisp` demonstrates a slot-bound ActiveImage
-  gauge, an object-backed KEEpicture preview, and ActiveValue write hook
-  interaction.
+  gauge, an object-backed KEEpicture preview, a reconstructed image panel, and
+  ActiveValue write hook interaction.
 
 Next GUI target:
 
-- Expand the KEEpicture layer toward viewport/windowpane structure and
-  mouse-event traces before attempting a full editor.
+- Expand the panel/picture layer toward menu prompts, workflow-specific
+  actions, and remembered Common Windows behavior before attempting a full
+  editor.

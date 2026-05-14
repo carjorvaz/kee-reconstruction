@@ -86,6 +86,9 @@ redistribute with it.
 - `docs/assets/screenshots/hamburg-viewer-kee-picture.png` - generated
   screenshot of the KEEpicture Review Tour target with viewport/windowpane and
   embedded ActiveImage surfaces visible.
+- `docs/assets/screenshots/hamburg-viewer-panels.png` - generated screenshot
+  of the Panels Review Tour target with reconstructed image-panel state and
+  linked KEEpicture preview visible.
 - `docs/assets/dumps/delivery.kdump` - generated readable reconstructed KB dump
   for the delivery mini-example; useful for inspecting and loading the
   clean-room dump format.

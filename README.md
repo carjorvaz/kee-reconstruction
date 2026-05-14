@@ -7,6 +7,8 @@ Environment (KEE).
 
 ![Hamburg puzzle KEEpicture tour screenshot](docs/assets/screenshots/hamburg-viewer-kee-picture.png)
 
+![Hamburg puzzle Panels tour screenshot](docs/assets/screenshots/hamburg-viewer-panels.png)
+
 This is not original IntelliCorp KEE source. It is a clean-room reconstruction
 of selected behavior, built from public evidence and runnable experiments.
 
@@ -42,7 +44,7 @@ Then open `demo/hamburg-viewer.html` in a browser.
 The current demo is a standalone Hamburg puzzle viewer. It is not the original
 KEE GUI, but it gives a concrete surface for reviewing reconstructed units,
 slots, rule classes, generated worlds, trace events, assumptions, support
-labels, nogood explanations, KEEpictures, and ActiveImages.
+labels, nogood explanations, KEEpictures, image panels, and ActiveImages.
 
 Useful follow-up commands:
 
@@ -90,10 +92,13 @@ The first implementation target is `kee-core`:
 - first-pass KEEpicture units with contained rectangle, text, slot-value, and
   embedded ActiveImage items, reconstructed viewport/windowpane units,
   mouse-event traces, and SVG previews through `kee.picture.svg`
+- first-pass image/workflow panel units over KEEpictures and windowpanes, with
+  `open-panel!`, `close-panel!`, `open!`, and `close!` message methods,
+  panel open/close traces, and viewer panel previews
 - readable knowledge-base dumps with `dump.kb`, `write.kb.dump`,
   `read.kb.dump`, `load.kb.dump`, and file helpers, preserving units, parent
   links, local slots, facets, unit references, ActiveImage units, and
-  KEEpicture units
+  KEEpicture/panel units
 - value-class and cardinality facets such as `(one.of ...)`,
   `min.cardinality`, and `max.cardinality`
 - a tiny RuleSystem subset with rule units, `external.form`, `parse`,
@@ -121,7 +126,8 @@ The first implementation target is `kee-core`:
   class/member hierarchy browser, synchronized slot table, Review Tour
   controls, a reconstructed Desktop roster with Listener/Typescript/Prompt
   transcript panes, embedded KEEpicture previews, embedded ActiveImage
-  controls with local static-page updates, searchable node browser, and a
+  controls with local static-page updates, reconstructed image-panel previews,
+  searchable node browser, and a
   clickable inspector for slots, facets, facts, nogood explanations, and
   in-graph references, rule cross-reference panes with operation/slot/target
   filters, plus trace panes filterable by family, event kind, selected-node
@@ -171,13 +177,14 @@ hierarchy and generated worlds. The browser shell can also print DOT with
 the Hamburg puzzle. The browser shell can also print one with `(viewer 40)`.
 
 `examples/active-image-mini.lisp` creates a slot-bound ActiveImage gauge,
-embeds it in a small reconstructed KEEpicture, renders HTML/SVG fragments, and
-updates the target slot through the ActiveImage so ActiveValue write hooks
-still run.
+embeds it in a small reconstructed KEEpicture and image panel, renders
+HTML/SVG fragments, and updates the target slot through the ActiveImage so
+ActiveValue write hooks still run.
 
 `examples/kb-dump-mini.lisp` writes a readable reconstructed KB dump, reloads
-it, and checks that units, facets, ActiveImages, and KEEpicture items survived
-the round trip. `scripts/render-demo-dump.sh` regenerates the checked-in
+it, and checks that units, facets, ActiveImages, KEEpicture items, and image
+panels survived the round trip. `scripts/render-demo-dump.sh` regenerates the
+checked-in
 `docs/assets/dumps/delivery.kdump` artifact, which can be inspected directly or
 loaded from the browser shell, for example with
 `(load-dump "docs/assets/dumps/delivery.kdump" :replace t)`.

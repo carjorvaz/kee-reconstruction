@@ -69,6 +69,16 @@
    #:kee.picture.report
    #:kee.picture.svg
    #:write.kee.picture.svg
+   #:create.kee.panel
+   #:list.kee.panels
+   #:panel.open.p
+   #:open.panel
+   #:close.panel
+   #:kee.panel.report
+   #:open-panel!
+   #:close-panel!
+   #:open!
+   #:close!
    #:dump.kb
    #:load.kb.dump
    #:write.kb.dump

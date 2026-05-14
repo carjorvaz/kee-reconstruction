@@ -163,6 +163,8 @@ for these GUI areas in one place.
 - Exact KEE browser menus and pane layout from the KEE User's Guide.
 - Exact KEEpictures object hierarchy and constructor API.
 - Exact ActiveImages unit/slot layout and event names.
+- Exact image-panel constructor, backing Common Windows objects, and lifecycle
+  semantics behind `open-panel!` and `close-panel!`.
 - Exact Common Windows pane/window APIs used by KEE.
 - Exact desktop save/load model and window vocabulary across Lisp Machine,
   DEC Windows, and Unix/X11 versions.
@@ -201,6 +203,27 @@ The reconstruction now has a first object-backed KEEpicture primitive:
   demos
 - the standalone viewer embeds KEEpicture reports and shows picture previews
   when a KB has reconstructed picture units
+
+## Implemented Image Panel Increment
+
+The reconstruction now has a first image/workflow panel primitive inspired by
+the NPS AUV mission-planning evidence:
+
+- panels are ordinary KEE units under `kee.panels`
+- a panel can link to a KEEpicture, viewport, and windowpane
+- `create.kee.panel` can wrap a picture in a first viewport/windowpane pair
+  when a caller does not provide one
+- panel units install `open-panel!`, `close-panel!`, `open!`, and `close!`
+  message methods
+- opening or closing a panel updates both the panel's `open.p` state and the
+  linked windowpane's `open.p` state
+- panel open/close messages record structured trace events with panel,
+  picture, viewport, windowpane, action, and old/new state
+- `kee.panel.report` exposes a structured panel report plus the linked
+  picture SVG preview
+- the standalone viewer has a Panels Review Tour/Desktop target, panel tabs,
+  open/closed state display, SVG previews, and picture-family trace handling
+  for `:panel-open` and `:panel-close`
 
 ## Implemented ActiveImage Increment
 

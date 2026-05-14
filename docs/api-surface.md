@@ -30,7 +30,8 @@ This is inspired by public KATYDID evidence for knowledge-structure
 translation and a KEE knowledge-base dumper. It is not an original KEE dump
 format. The first implementation preserves portable KB data: units,
 class/member parents, local slots, facets, unit references, ActiveImage units,
-and KEEpicture units. It deliberately rejects live function objects.
+KEEpicture units, and reconstructed image panels. It deliberately rejects live
+function objects.
 
 ## Units
 
@@ -194,6 +195,46 @@ windowpane, and mouse/menu concepts are recovered from public descriptions and
 local vocabulary leads, but exact original constructor names, object hierarchy,
 editor behavior, and mouse event vocabulary still need manual or source
 evidence.
+
+## Image and Workflow Panels
+
+High confidence concept:
+
+- Public NPS AUV mission-planning evidence describes KEE image panels for
+  mission selection, parameter entry, preview/monitoring workflows, and
+  mouse-driven control.
+- The same listings expose KEE-style message vocabulary including
+  `open-panel!` and `close-panel!` beside ordinary `UNITMSG`, `PUT.VALUE`,
+  `REMOVE.ALL.VALUES`, and `ASSERT` use.
+- Source: NPS thesis, `https://hdl.handle.net/10945/23457`.
+
+Current reconstruction:
+
+- `create.kee.panel` creates a reconstructed image/workflow panel as an
+  ordinary unit under `kee.panels`.
+- A panel can point at a KEEpicture, viewport, and windowpane through
+  `panel.picture`, `panel.viewport`, and `panel.windowpane`.
+- If only a picture is supplied, the helper can create a first viewport and
+  windowpane wrapper.
+- Panel units install `open-panel!`, `close-panel!`, `open!`, and `close!`
+  message methods.
+- Opening or closing a panel updates the panel's `open.p` state and the linked
+  windowpane's `open.p` state.
+- `open.panel`, `close.panel`, `panel.open.p`, `list.kee.panels`, and
+  `kee.panel.report` expose the reconstructed panel model.
+- Panel open/close actions record `:panel-open` and `:panel-close` trace
+  events with panel, picture, viewport, windowpane, action, old/new values, and
+  message fields.
+- The standalone viewer embeds panel reports in `details.panels`, enables a
+  Panels Review Tour/Desktop target when panels exist, renders panel state and
+  SVG previews, and includes panel events in the picture trace family.
+
+Important uncertainty:
+
+The panel concept and message names are evidence-backed, but this is not an
+original IntelliCorp panel implementation. Exact constructor names, slot names,
+Common Windows backing objects, menu behavior, and lifecycle semantics still
+need manuals, source, or first-hand correction.
 
 ## ActiveImages
 
@@ -407,6 +448,7 @@ Recovered layers:
 
 - Common Windows
 - KEEpictures
+- image/workflow panels
 - ActiveImages
 
 Recovered behavior:
@@ -418,6 +460,8 @@ Recovered behavior:
   browsing, and slot-value display.
 - KEEpictures graphics were represented with units and could be animated by
   changing slot values.
+- Application-specific image panels wrapped graphics, menu/prompt flows, and
+  mouse-driven actions around task phases.
 - ActiveImages displayed slot values, could alert at predefined limits, and
   could update slot values through mouse interaction.
 - KEE debugging UI included an agenda/conflict-set viewer, dynamic graphic

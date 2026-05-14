@@ -14,6 +14,7 @@ required_files=(
   "docs/demo.md"
   "docs/assets/screenshots/hamburg-viewer-review.png"
   "docs/assets/screenshots/hamburg-viewer-kee-picture.png"
+  "docs/assets/screenshots/hamburg-viewer-panels.png"
   "docs/assets/dumps/delivery.kdump"
   "scripts/check-viewer.sh"
   "scripts/render-demo-dump.sh"
@@ -39,6 +40,7 @@ artifact_terms=(
   "3X3IMPLEM1.U"
   "docs/assets/screenshots/hamburg-viewer-review.png"
   "docs/assets/screenshots/hamburg-viewer-kee-picture.png"
+  "docs/assets/screenshots/hamburg-viewer-panels.png"
   "docs/assets/dumps/delivery.kdump"
 )
 
@@ -48,6 +50,7 @@ review_terms=(
   "Texas Instruments Lisp"
   "Common Windows"
   "KEEpictures"
+  "image panels"
   "ActiveImages"
   "KEEworlds"
 )

@@ -3,6 +3,7 @@
 (load (merge-pathnames "../src/active-images.lisp" *load-truename*))
 (load (merge-pathnames "../src/traces.lisp" *load-truename*))
 (load (merge-pathnames "../src/pictures.lisp" *load-truename*))
+(load (merge-pathnames "../src/panels.lisp" *load-truename*))
 (load (merge-pathnames "../src/worlds.lisp" *load-truename*))
 (load (merge-pathnames "../src/rules.lisp" *load-truename*))
 (load (merge-pathnames "../src/inspect.lisp" *load-truename*))
@@ -146,7 +147,17 @@
                                    'hamburg.review.viewport
                                    :label "Hamburg Review Window"
                                    :width 380
-                                   :height 240)
+                                   :height 240
+                                   :open-p nil)
+    (kee:create.kee.panel 'hamburg.review.image.panel
+                          :kind :status
+                          :label "Hamburg Review Image Panel"
+                          :message "Review the selected generated world"
+                          :picture 'hamburg.review.panel
+                          :viewport 'hamburg.review.viewport
+                          :windowpane 'hamburg.review.window
+                          :open-p nil)
+    (kee:open.panel 'hamburg.review.image.panel)
     (kee:picture.mouse.event 'hamburg.review.panel
                              'review.40.confidence.card
                              :mouse-left

@@ -40,6 +40,8 @@ reconstruction, and causality views in one place.
 - The KEEpictures tour target: a small reconstructed picture with viewport and
   windowpane metadata, an embedded writable ActiveImage, and a picture mouse
   trace.
+- The Panels tour target: a reconstructed image/workflow panel layered over a
+  KEEpicture/windowpane, with open/closed state and panel trace events.
 - `docs/assets/dumps/delivery.kdump`: a small readable clean-room KB dump for
   loading from the browser shell with the `load-dump` command.
 - The Trace pane: agenda passes, rule matches/fires, world branches, slot
@@ -51,7 +53,7 @@ reconstruction, and causality views in one place.
 ## What We Most Need Corrected
 
 - Which GUI elements feel unlike KEE's browser, Common Windows, KEEpictures,
-  ActiveImages, or tracing tools?
+  image panels, ActiveImages, or tracing tools?
 - Do the Lisp Listener, Typescript, and Prompt surfaces feel plausible as a
   first review cue, or do they suggest the wrong work rhythm?
 - Which API names, argument conventions, or idioms look wrong?

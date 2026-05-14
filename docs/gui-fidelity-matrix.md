@@ -18,6 +18,7 @@ Status meanings:
 | Slot/facet inspection | Patent and application reports emphasize local, inherited, and combined values plus facets. | `implemented` | Are the local/inherited/combined/facet columns historically plausible? | Adjust column labels, ordering, or facet expansion after reviewer feedback. |
 | Common Windows | ASKE and local Lisp history identify Common Windows as IntelliCorp/KEE UI substrate. | `missing` | Which Common Windows concepts were visible to application developers? | Collect API names and decide whether McCLIM or browser layout should model pane/window concepts. |
 | KEEpictures | AIAI and NASA TEXSYS/MTK describe mouse/menu graphics, graphical model-building, and slot-driven animation. | `approximated` | What did editing a KEEpicture look like? | Grow the object-backed picture model from viewport/windowpane and mouse-event traces toward editor behavior after reviewer feedback. |
+| Image/workflow panels | The NPS AUV thesis shows KEE image panels for mission selection, parameter entry, preview/monitoring workflows, and messages such as `open-panel!` and `close-panel!`. | `approximated` | Were panels ordinary KEE units, Common Windows objects, or application conventions layered over both? | Refine panel lifecycle, menu behavior, and screenshots after first-hand correction. |
 | ActiveImages | AIAI describes two-way graphics: object updates redraw graphics, mouse changes update objects. | `approximated` | Which widgets were common, and how were mouse edits represented in slots? | Expand from HTML widgets to object-backed picture items with event traces. |
 | ActiveValues | Hamburg slides and existing implementation support read/write/add/remove hooks. | `implemented` | Were hook names and ordering visible or mostly internal? | Add delete/copy/rename demons after evidence improves. |
 | Rule agenda/conflict-set viewer | AIAI explicitly lists an agenda viewer and debugging information. | `approximated` | What columns, controls, and ordering did the real agenda viewer use? | Replace compact reconstructed agenda with a more faithful table/pane if details emerge. |
@@ -42,8 +43,8 @@ world. It intentionally foregrounds:
 - trace map and causality graph
 
 The Review Tour controls in the viewer jump among units, rules, worlds, agenda
-traces, rule cross-references, and ActiveImages when those targets exist in the
-loaded demo.
+traces, rule cross-references, KEEpictures, image panels, and ActiveImages when
+those targets exist in the loaded demo.
 
 The compact Desktop roster now also switches between reconstructed Lisp
 Listener, Typescript, and Prompt transcript panes for the generated session.

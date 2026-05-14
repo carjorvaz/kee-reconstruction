@@ -3,6 +3,7 @@
 (load (merge-pathnames "../src/active-images.lisp" *load-truename*))
 (load (merge-pathnames "../src/traces.lisp" *load-truename*))
 (load (merge-pathnames "../src/pictures.lisp" *load-truename*))
+(load (merge-pathnames "../src/panels.lisp" *load-truename*))
 (load (merge-pathnames "../src/dump.lisp" *load-truename*))
 (load (merge-pathnames "../src/inspect.lisp" *load-truename*))
 
@@ -44,7 +45,20 @@
                            :x 12
                            :y 38
                            :width 140
-                           :height 42))
+                           :height 42)
+  (kee:create.picture.viewport 'delivery.viewport 'delivery.panel
+                               :label "Delivery View")
+  (kee:create.picture.windowpane 'delivery.window 'delivery.viewport
+                                 :label "Delivery Window"
+                                 :open-p nil)
+  (kee:create.kee.panel 'delivery.image.panel
+                        :kind :status
+                        :label "Delivery Image Panel"
+                        :message "Delivery status"
+                        :picture 'delivery.panel
+                        :viewport 'delivery.viewport
+                        :windowpane 'delivery.window
+                        :open-p nil))
 
 (defun run ()
   (setup-dump-mini)
@@ -62,6 +76,9 @@
                   (kee:get.value 'target.a 'status))
           (format t "Restored picture items: ~S~%"
                   (mapcar #'kee:unit.name
-                          (kee:picture.items 'delivery.panel)))))))
+                          (kee:picture.items 'delivery.panel)))
+          (format t "Restored panels: ~S~%"
+                  (mapcar #'kee:unit.name
+                          (kee:list.kee.panels 'delivery)))))))
 
 (run)

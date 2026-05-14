@@ -8,6 +8,7 @@
                (:file "src/active-images")
                (:file "src/traces")
                (:file "src/pictures")
+               (:file "src/panels")
                (:file "src/dump")
                (:file "src/worlds")
                (:file "src/rules")

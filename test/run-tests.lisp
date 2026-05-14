@@ -3,6 +3,7 @@
 (load (merge-pathnames "../src/active-images.lisp" *load-truename*))
 (load (merge-pathnames "../src/traces.lisp" *load-truename*))
 (load (merge-pathnames "../src/pictures.lisp" *load-truename*))
+(load (merge-pathnames "../src/panels.lisp" *load-truename*))
 (load (merge-pathnames "../src/dump.lisp" *load-truename*))
 (load (merge-pathnames "../src/worlds.lisp" *load-truename*))
 (load (merge-pathnames "../src/rules.lisp" *load-truename*))
@@ -194,7 +195,16 @@
     (kee:create.picture.windowpane 'sensor.window 'sensor.viewport
                                    :label "Sensor Window"
                                    :width 260
-                                   :height 150)
+                                   :height 150
+                                   :open-p nil)
+    (kee:create.kee.panel 'sensor.image.panel
+                          :kind :status
+                          :label "Sensor Image Panel"
+                          :message "Mouse edits update the sensor"
+                          :picture 'sensor.panel
+                          :viewport 'sensor.viewport
+                          :windowpane 'sensor.window
+                          :open-p nil)
     (check (equal (names (kee:list.kee.pictures 'veg))
                   '(sensor.panel)))
     (check (equal (names (kee:picture.items 'sensor.panel))
@@ -204,6 +214,30 @@
                   '(sensor.viewport)))
     (check (equal (names (kee:picture.windowpanes 'sensor.viewport))
                   '(sensor.window)))
+    (check (equal (names (kee:list.kee.panels 'veg))
+                  '(sensor.image.panel)))
+    (let ((panel-report (kee:kee.panel.report 'sensor.image.panel)))
+      (check (eq (getf panel-report :name) 'sensor.image.panel))
+      (check (eq (getf panel-report :kind) :status))
+      (check (eq (getf panel-report :picture) 'sensor.panel))
+      (check (eq (getf panel-report :viewport) 'sensor.viewport))
+      (check (eq (getf panel-report :windowpane) 'sensor.window))
+      (check (not (getf panel-report :open-p)))
+      (check (search "class='kee-picture'" (getf panel-report :svg))))
+    (kee:open.panel 'sensor.image.panel)
+    (check (kee:panel.open.p 'sensor.image.panel))
+    (check (kee:get.value 'sensor.window 'kee::open.p))
+    (kee:unitmsg 'sensor.image.panel 'kee:close-panel!)
+    (check (not (kee:panel.open.p 'sensor.image.panel)))
+    (check (not (kee:get.value 'sensor.window 'kee::open.p)))
+    (kee:unitmsg 'sensor.image.panel 'kee:open!)
+    (check (kee:panel.open.p 'sensor.image.panel))
+    (let ((event (first (last (kee:trace.events :kind :panel-open)))))
+      (check (eq (getf event :panel) 'sensor.image.panel))
+      (check (eq (getf event :picture) 'sensor.panel))
+      (check (eq (getf event :viewport) 'sensor.viewport))
+      (check (eq (getf event :windowpane) 'sensor.window))
+      (check (eq (getf event :action) 'kee:open!)))
     (let ((report (kee:kee.picture.report 'sensor.panel))
           (svg (kee:kee.picture.svg 'sensor.panel)))
       (check (eq (getf report :name) 'sensor.panel))
@@ -346,7 +380,16 @@
     (kee:create.picture.viewport 'delivery.viewport 'delivery.panel
                                  :label "Delivery View")
     (kee:create.picture.windowpane 'delivery.window 'delivery.viewport
-                                   :label "Delivery Window")
+                                   :label "Delivery Window"
+                                   :open-p nil)
+    (kee:create.kee.panel 'delivery.image.panel
+                          :kind :status
+                          :label "Delivery Image Panel"
+                          :message "Delivery status"
+                          :picture 'delivery.panel
+                          :viewport 'delivery.viewport
+                          :windowpane 'delivery.window
+                          :open-p nil)
     (let ((snapshot (kee:dump.kb 'delivery)))
       (check (eq (getf snapshot :format) :reconstructed-kee-kb))
       (check (eq (getf snapshot :kb) 'delivery))
@@ -381,6 +424,11 @@
                     '(delivery.viewport)))
       (check (equal (names (kee:picture.windowpanes 'delivery.viewport))
                     '(delivery.window)))
+      (check (equal (names (kee:list.kee.panels 'delivery))
+                    '(delivery.image.panel)))
+      (kee:open.panel 'delivery.image.panel)
+      (check (kee:panel.open.p 'delivery.image.panel))
+      (check (kee:get.value 'delivery.window 'kee::open.p))
       (check (search "Delivery KB"
                      (kee:kee.picture.svg 'delivery.panel)))))
   (let ((dump-path #p"/private/tmp/kee-delivery-test.dump"))
@@ -391,7 +439,11 @@
             (lambda ()
               (kee:load.kb.dump.file dump-path))))
     (kee:load.kb.dump.file dump-path :replace t)
-    (check (eq (kee:get.value 'target.a 'status) 'ready)))
+    (check (eq (kee:get.value 'target.a 'status) 'ready))
+    (check (equal (names (kee:list.kee.panels 'delivery))
+                  '(delivery.image.panel)))
+    (kee:open.panel 'delivery.image.panel)
+    (check (kee:panel.open.p 'delivery.image.panel)))
   (kee:goto.kb 'veg)
   (let ((tom-report (kee:inspect.unit 'tom))
         (sport-report (kee:inspect.slot 'tom 'sport))
@@ -474,6 +526,7 @@
     (check (search "\"details\"" viewer-html))
     (check (search "\"activeImages\"" viewer-html))
     (check (search "\"pictures\"" viewer-html))
+    (check (search "\"panels\"" viewer-html))
     (check (search "\"ruleReferences\"" viewer-html))
     (check (search "\"ruleReference\"" viewer-html))
     (check (search "\"traces\"" viewer-html))
@@ -497,6 +550,7 @@
     (check (search "data-review-tour" viewer-html))
     (check (search "['worlds', 'Worlds']" viewer-html))
     (check (search "['kee-pictures', 'KEEpictures']" viewer-html))
+    (check (search "['panels', 'Panels']" viewer-html))
     (check (search "selectReviewTour" viewer-html))
     (check (search "reviewTourTarget" viewer-html))
     (check (search "id='desktop-roster'" viewer-html))
@@ -510,14 +564,20 @@
     (check (search "renderPictureBrowser" viewer-html))
     (check (search "pictureViewportSummary" viewer-html))
     (check (search "data-picture-name" viewer-html))
+    (check (search "renderPanelBrowser" viewer-html))
+    (check (search "data-panel-name" viewer-html))
+    (check (search "Sensor Image Panel" viewer-html))
     (check (search "Sensor Panel" viewer-html))
     (check (search "TEMPERATURE.CARD" viewer-html))
     (check (search "Sensor View" viewer-html))
     (check (search "Sensor Window" viewer-html))
     (check (search "\"kind\":\"PICTURE-MOUSE\"" viewer-html))
+    (check (search "\"kind\":\"PANEL-OPEN\"" viewer-html))
+    (check (search "\"panel\":\"SENSOR.IMAGE.PANEL\"" viewer-html))
     (check (search "\"picture\":\"SENSOR.PANEL\"" viewer-html))
     (check (search "\"windowpane\":\"SENSOR.WINDOW\"" viewer-html))
     (check (search "Picture mouse" viewer-html))
+    (check (search "Panel opened" viewer-html))
     (check (search "pictures" viewer-html))
     (check (search "Top Level Units" viewer-html))
     (check (search "Slot Table" viewer-html))
