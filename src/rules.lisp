@@ -210,6 +210,9 @@ WHILE, THEN, THE/OF/IS patterns, BELIEVE FALSE, and LISP conditions/actions."
             (loop for bindings in bindings-list
                   append (evaluate-condition condition bindings))))))
 
+(defun current-trace-world-name ()
+  (and (current.world) (get.world.name (current.world))))
+
 (defun execute-action (action bindings)
   (cond ((and (consp action) (rule-symbol-p (first action) "LISP"))
          (evaluate-lisp-clause action bindings))
@@ -290,11 +293,22 @@ WHILE, THEN, THE/OF/IS patterns, BELIEVE FALSE, and LISP conditions/actions."
     (when parsed
       (let ((bindings-list (evaluate-conditions (getf parsed :conditions))))
         (dolist (bindings bindings-list)
+          (record.trace.event :rule-match
+                              :world (current-trace-world-name)
+                              :rule (unit.name rule-unit)
+                              :bindings bindings
+                              :conditions (getf parsed :conditions))
           (dolist (action (getf parsed :actions))
             (let ((*current-rule-unit* rule-unit)
                   (*current-rule-bindings* bindings)
                   (*current-rule-conditions* (getf parsed :conditions))
                   (*current-rule-action* action))
+              (record.trace.event :rule-fire
+                                  :world (current-trace-world-name)
+                                  :rule (unit.name rule-unit)
+                                  :bindings bindings
+                                  :conditions (getf parsed :conditions)
+                                  :action action)
               (execute-action action bindings))))
         (and bindings-list t)))))
 
@@ -325,6 +339,10 @@ WHILE, THEN, THE/OF/IS patterns, BELIEVE FALSE, and LISP conditions/actions."
                (with-world (world)
                  (dolist (rule-class classes)
                    (unless (world.inconsistent.p world)
+                     (record.trace.event :agenda
+                                         :world (get.world.name world)
+                                         :rule-class (unit.name (unit rule-class))
+                                         :message "forward-chain")
                      (forward.chain rule-class)))))
           until (equal before (list (length ($worlds)) *change-count*)))
     (consistent.worlds)))

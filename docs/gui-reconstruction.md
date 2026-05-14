@@ -150,11 +150,22 @@ The reconstruction now has a first ActiveImage primitive:
 - generated controls can update the standalone page's local JSON copy, while
   Lisp-side writes continue to use ordinary KEE mutators
 
+## Implemented Trace Increment
+
+The reconstruction now has a first trace layer for rule/world debugging:
+
+- `trace.events` returns structured chronological events
+- `clear.trace.events` clears the trace log and participates in `reset-kee`
+- recorded events include world creation, world slot writes, agenda passes,
+  rule matches/firings, generated branches, nogoods, and contradictions
+- the standalone viewer includes a Trace pane beside the selected unit or
+  world detail
+
 ## Next Build Target
 
-Add the first trace panes:
+Expand the first trace panes:
 
-- agenda/conflict-set display
-- text trace of rule firings and method calls
-- world graph trace showing generated worlds and contradictions
+- agenda/conflict-set filtering
+- textual method traces
+- graphical rule/world trace view
 - rule cross-reference entry points from units and nogoods

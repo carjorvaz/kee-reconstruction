@@ -1,5 +1,6 @@
 (load (merge-pathnames "../src/package.lisp" *load-truename*))
 (load (merge-pathnames "../src/core.lisp" *load-truename*))
+(load (merge-pathnames "../src/traces.lisp" *load-truename*))
 (load (merge-pathnames "../src/worlds.lisp" *load-truename*))
 
 (in-package #:cl-user)

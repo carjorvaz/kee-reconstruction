@@ -211,6 +211,8 @@ Current reconstruction:
 - `find.any` returns the first value of a slot in the current world
 - `run.world.agenda` runs rule classes across consistent worlds until the world
   set and values stabilize
+- `trace.events` records rule matches/firings and agenda passes as structured
+  events that the standalone viewer can display
 
 ## KEEworlds and ATMS
 
@@ -249,6 +251,8 @@ Current reconstruction:
   reason trail for contradictions
 - justifications currently record the rule name, variable bindings, conditions,
   action, and proposition
+- `trace.events` also records world creation, world slot writes, generated
+  branches, nogoods, and contradictions
 
 Important uncertainty:
 
@@ -284,7 +288,8 @@ Current reconstruction:
 - The standalone viewer embeds `inspect.unit` and `inspect.world` detail maps,
   so its Current KB strip, hierarchy browser, synchronized slot table,
   searchable node list, and clicked graph nodes can show slots, facets, world
-  facts, nogoods, and navigable references to visible units or worlds.
+  facts, nogoods, trace events, and navigable references to visible units or
+  worlds.
 
 This is a reconstruction support layer rather than a recovered KEE API. It is
 intended to keep display logic separate from the object/rule/world core, so a

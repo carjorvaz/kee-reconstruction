@@ -55,6 +55,9 @@
    #:set.active.image.value
    #:active.image.html
    #:write.active.image.html
+   #:trace.events
+   #:clear.trace.events
+   #:record.trace.event
    #:create.world
    #:world
    #:goto.world

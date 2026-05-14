@@ -142,7 +142,10 @@ Status:
   loaded-KB chips, top-level-unit selection, class/member hierarchy browsing,
   synchronized slot display, embedded ActiveImage controls with local static
   updates, a searchable node list, and clicked-node detail panes for slots,
-  facets, facts, nogoods, and in-graph references.
+  facets, facts, nogoods, and in-graph references, plus a first trace pane for
+  rule/world activity.
+- `trace.events` records world creation, world slot writes, agenda passes,
+  rule matches/firings, generated branches, nogoods, and contradictions.
 - `docs/gui-reconstruction.md` records the recovered browser, Common Windows,
   KEEpictures, ActiveImages, and trace/debugging evidence that should guide the
   next GUI increments.
@@ -156,5 +159,6 @@ Status:
 
 Next GUI target:
 
-- Add KEE-style trace panes for rules/worlds: agenda or conflict-set display,
-  text trace, and a first graph trace over rule firings and world changes.
+- Expand the trace pane toward the recovered debugging tools: agenda/conflict
+  filtering, rule cross-reference entry points from fired rules and nogoods,
+  and a graphical rule/world trace view.

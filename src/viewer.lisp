@@ -268,10 +268,49 @@
                (active-image-report-json (active.image.report image)))
              (list.active.images (getf unit-graph :kb))))))
 
+(defun trace-json-value (value)
+  (cond ((null value) :json-null)
+        ((or (stringp value) (numberp value)) value)
+        ((symbolp value) (detail-string value))
+        ((listp value) (json-array (mapcar #'trace-json-value value)))
+        (t (detail-string value))))
+
+(defun trace-json-array (values)
+  (json-array (mapcar #'trace-json-value values)))
+
+(defun trace-binding-json (binding)
+  (list (cons "variable" (detail-string (car binding)))
+        (cons "value" (trace-json-value (cdr binding)))))
+
+(defun trace-event-json (event)
+  (list (cons "id" (getf event :id))
+        (cons "kind" (detail-string (getf event :kind)))
+        (cons "world" (trace-json-value (getf event :world)))
+        (cons "parent" (trace-json-value (getf event :parent)))
+        (cons "rule" (trace-json-value (getf event :rule)))
+        (cons "ruleClass" (trace-json-value (getf event :rule-class)))
+        (cons "unit" (trace-json-value (getf event :unit)))
+        (cons "slot" (trace-json-value (getf event :slot)))
+        (cons "oldValues" (trace-json-array (getf event :old-values)))
+        (cons "newValues" (trace-json-array (getf event :new-values)))
+        (cons "bindings" (json-array (mapcar #'trace-binding-json
+                                              (getf event :bindings))))
+        (cons "conditions" (detail-string-array (getf event :conditions)))
+        (cons "action" (trace-json-value (getf event :action)))
+        (cons "proposition" (trace-json-value (getf event :proposition)))
+        (cons "fact" (trace-json-value (getf event :fact)))
+        (cons "message" (trace-json-value (getf event :message)))))
+
+(defun trace-detail-json (&key (limit 200))
+  (json-array
+   (when (fboundp 'trace.events)
+     (mapcar #'trace-event-json (trace.events :limit limit)))))
+
 (defun viewer-details-json (unit-graph world-graph)
   (list (cons "units" (unit-detail-map-json unit-graph))
         (cons "worlds" (world-detail-map-json world-graph))
-        (cons "activeImages" (active-image-detail-json unit-graph))))
+        (cons "activeImages" (active-image-detail-json unit-graph))
+        (cons "traces" (trace-detail-json))))
 
 (defun viewer-kbs-json (unit-graph)
   (detail-string-array
@@ -368,6 +407,11 @@
          ".active-image-bars { display: flex; align-items: end; gap: 4px; height: 60px; }"
          ".active-image-bar { flex: 1; min-width: 5px; background: var(--accent); border-radius: 2px 2px 0 0; }"
          ".active-image-plot { width: 100%; height: 88px; color: var(--accent); background: #ffffff; }"
+         ".trace-list { display: grid; gap: 8px; }"
+         ".trace-event { border: 1px solid var(--line); border-radius: 6px; padding: 8px; background: #fbfcfd; font-size: 12px; }"
+         ".trace-event strong { display: block; font-size: 13px; margin-bottom: 4px; }"
+         ".trace-event.bad { background: var(--bad-soft); border-color: #f1b4ad; }"
+         ".trace-meta { color: var(--muted); overflow-wrap: anywhere; }"
          ".meta { display: grid; grid-template-columns: 96px minmax(0, 1fr); gap: 6px 10px; font-size: 13px; }"
          ".meta dt { color: var(--muted); }"
          ".meta dd { margin: 0; min-width: 0; overflow-wrap: anywhere; }"
@@ -563,6 +607,11 @@
          "  const nogoods = detail.nogoods || [];"
          "  return `<section class='detail-section'><h3>Facts</h3>${facts.length ? facts.map(renderFact).join('') : `<p class='empty'>None</p>`}</section><section class='detail-section'><h3>Nogoods</h3>${nogoods.length ? nogoods.map(renderNogood).join('') : `<p class='empty'>None</p>`}</section>`;"
          "}"
+         "function traceTitle(event) { const kind = String(event.kind || '').toLowerCase(); if (kind === 'rule-fire') return `Rule fired: ${event.rule || 'NIL'}`; if (kind === 'rule-match') return `Rule matched: ${event.rule || 'NIL'}`; if (kind === 'agenda') return `Agenda: ${event.ruleClass || 'NIL'}`; if (kind === 'world-create') return `World created: ${event.world || 'NIL'}`; if (kind === 'world-branch') return `World branch: ${event.world || 'NIL'}`; if (kind === 'world-slot-write') return `World slot write: ${event.unit || 'NIL'}.${event.slot || 'NIL'}`; if (kind === 'nogood') return `Nogood: ${event.rule || 'NIL'}`; if (kind === 'contradiction') return `Contradiction: ${event.world || 'NIL'}`; return kind || 'Trace'; }"
+         "function traceBindings(event) { const bindings = event.bindings || []; return bindings.length ? bindings.map(binding => `${binding.variable}=${binding.value}`).join(', ') : ''; }"
+         "function traceMeta(event) { const parts = []; if (event.world) parts.push(`world ${event.world}`); if (event.parent) parts.push(`parent ${event.parent}`); if (event.rule && !String(event.kind).toLowerCase().includes('rule')) parts.push(`rule ${event.rule}`); if (event.action) parts.push(`action ${Array.isArray(event.action) ? event.action.join(' ') : event.action}`); if (event.proposition) parts.push(`proposition ${event.proposition}`); const bindings = traceBindings(event); if (bindings) parts.push(bindings); if (event.message) parts.push(event.message); return parts.join(' | '); }"
+         "function renderTraceEvent(event) { const bad = ['nogood', 'contradiction'].includes(String(event.kind || '').toLowerCase()); const meta = traceMeta(event); return `<div class='trace-event ${bad ? 'bad' : ''}'><strong>${esc(traceTitle(event))}</strong>${meta ? `<div class='trace-meta'>${esc(meta)}</div>` : ''}</div>`; }"
+         "function renderTracePane() { const traces = DATA.details.traces || []; const rows = traces.slice(-40).reverse(); return `<section class='detail-section'><h3>Trace</h3>${rows.length ? `<div class='trace-list'>${rows.map(renderTraceEvent).join('')}</div>` : `<p class='empty'>No trace events</p>`}</section>`; }"
          "function renderInspector(model, graph) {"
          "  const node = model.placed.get(state.selected) || model.nodes[0];"
          "  if (!node) { inspector.innerHTML = `<h2>Inspector</h2><p class='empty'>No nodes</p>`; return; }"
@@ -573,7 +622,7 @@
          "  const slotCount = detail?.slots?.length ?? (node.slots || []).length;"
          "  const parent = detail?.parent ? `<dt>Parent</dt><dd>${refButton('world', detail.parent)}</dd>` : '';"
          "  const summary = `<h2>${esc(title)}</h2><dl class='meta'><dt>ID</dt><dd>${esc(node.id)}</dd>${detail?.kb ? `<dt>KB</dt><dd>${esc(detail.kb)}</dd>` : ''}${parent}${graph.kind === 'world' ? `<dt>Facts</dt><dd>${node.factCount}</dd><dt>Nogoods</dt><dd>${node.nogoodCount}</dd><dt>Status</dt><dd>${node.inconsistentP ? 'inconsistent' : 'consistent'}</dd>` : `<dt>Slots</dt><dd>${slotCount}</dd>`}<dt>Incoming</dt><dd>${incoming.length}</dd><dt>Outgoing</dt><dd>${outgoing.length}</dd></dl>`;"
-         "  inspector.innerHTML = summary + (detail ? (graph.kind === 'unit' ? renderUnitDetail(detail) : renderWorldDetail(detail)) : '');"
+         "  inspector.innerHTML = summary + (detail ? (graph.kind === 'unit' ? renderUnitDetail(detail) : renderWorldDetail(detail)) : '') + renderTracePane();"
          "}"
          "browserPane.addEventListener('input', event => { const control = event.target.closest('[data-active-image-name]'); if (!control || control.type !== 'range') return; setActiveImageLocal(control.dataset.activeImageName, control.value); });"
          "browserPane.addEventListener('change', event => { const control = event.target.closest('[data-active-image-name]'); if (!control || control.type === 'range') return; setActiveImageLocal(control.dataset.activeImageName, control.value); });"

@@ -59,6 +59,9 @@
                      *current-world*))
          (new (%make-world world-name parent)))
     (setf (gethash world-name *worlds*) new)
+    (record.trace.event :world-create
+                        :world world-name
+                        :parent (and parent (kee-world-name parent)))
     new))
 
 (defun goto.world (world-designator)
@@ -164,6 +167,13 @@
                    (kee-world-values *current-world*))
           (copy-list values))
     (note-change old-values values)
+    (unless (equal old-values values)
+      (record.trace.event :world-slot-write
+                          :world (kee-world-name *current-world*)
+                          :unit (unit.name unit)
+                          :slot slot-name
+                          :old-values old-values
+                          :new-values values))
     values))
 
 (defun world-put-values (unit slot-name values)
@@ -195,6 +205,10 @@
     (or (gethash signature *world-fact-index*)
         (let ((new (create.world nil parent)))
           (setf (gethash signature *world-fact-index*) new)
+          (record.trace.event :world-branch
+                              :world (kee-world-name new)
+                              :parent (kee-world-name parent)
+                              :fact fact)
           new))))
 
 (defun true.in.world (world-designator unit-designator slot-name value)
@@ -236,6 +250,13 @@
     (push (make-nogood :world (kee-world-name world)
                        :justification justification)
           (kee-world-nogoods world))
+    (record.trace.event :nogood
+                        :world (kee-world-name world)
+                        :rule (justification.rule justification)
+                        :bindings (justification.bindings justification)
+                        :conditions (justification.conditions justification)
+                        :action (justification.action justification)
+                        :proposition (justification.proposition justification))
     (incf *change-count*)
     t))
 
@@ -252,6 +273,11 @@
            (record-world-justification world justification)
            (unless (kee-world-inconsistent-p world)
              (setf (kee-world-inconsistent-p world) t)
+             (record.trace.event :contradiction
+                                 :world (kee-world-name world)
+                                 :rule (justification.rule justification)
+                                 :bindings (justification.bindings justification)
+                                 :proposition proposition)
              (incf *change-count*))
            nil))
         (t (error "Unsupported BELIEVE proposition: ~S." proposition))))
