@@ -566,6 +566,8 @@
     (check (search "data-picture-name" viewer-html))
     (check (search "renderPanelBrowser" viewer-html))
     (check (search "data-panel-name" viewer-html))
+    (check (search "data-panel-action" viewer-html))
+    (check (search "setPanelLocal" viewer-html))
     (check (search "Sensor Image Panel" viewer-html))
     (check (search "Sensor Panel" viewer-html))
     (check (search "TEMPERATURE.CARD" viewer-html))

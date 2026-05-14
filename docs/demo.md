@@ -64,6 +64,10 @@ The Panels tour screenshot uses the reconstructed image/workflow panel target:
 KEE_DEMO_TOUR=panels nix develop --command scripts/screenshot-demo.sh docs/assets/screenshots/hamburg-viewer-panels.png
 ```
 
+The Panels tour also has static-page Open and Close controls. They update the
+generated page's local panel state and append reconstructed panel trace events
+for quick reviewer interaction.
+
 ## Interaction Check
 
 Run the browser-level viewer check:

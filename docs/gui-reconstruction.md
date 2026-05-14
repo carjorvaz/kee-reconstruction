@@ -222,8 +222,8 @@ the NPS AUV mission-planning evidence:
 - `kee.panel.report` exposes a structured panel report plus the linked
   picture SVG preview
 - the standalone viewer has a Panels Review Tour/Desktop target, panel tabs,
-  open/closed state display, SVG previews, and picture-family trace handling
-  for `:panel-open` and `:panel-close`
+  local open/close controls, open/closed state display, SVG previews, and
+  picture-family trace handling for `:panel-open` and `:panel-close`
 
 ## Implemented ActiveImage Increment
 

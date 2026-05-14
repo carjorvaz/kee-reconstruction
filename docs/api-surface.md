@@ -227,7 +227,9 @@ Current reconstruction:
   message fields.
 - The standalone viewer embeds panel reports in `details.panels`, enables a
   Panels Review Tour/Desktop target when panels exist, renders panel state and
-  SVG previews, and includes panel events in the picture trace family.
+  SVG previews, includes panel events in the picture trace family, and offers
+  local static-page Open/Close controls that append reconstructed panel trace
+  events.
 
 Important uncertainty:
 

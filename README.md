@@ -94,7 +94,8 @@ The first implementation target is `kee-core`:
   mouse-event traces, and SVG previews through `kee.picture.svg`
 - first-pass image/workflow panel units over KEEpictures and windowpanes, with
   `open-panel!`, `close-panel!`, `open!`, and `close!` message methods,
-  panel open/close traces, and viewer panel previews
+  panel open/close traces, and viewer panel previews with local open/close
+  controls
 - readable knowledge-base dumps with `dump.kb`, `write.kb.dump`,
   `read.kb.dump`, `load.kb.dump`, and file helpers, preserving units, parent
   links, local slots, facets, unit references, ActiveImage units, and
