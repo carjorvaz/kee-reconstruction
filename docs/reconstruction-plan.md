@@ -39,6 +39,8 @@ Status:
 
 - Initial implementation exists.
 - Method slots support before, primary, and after contributions.
+- `unitmsg` records textual method trace events for dispatch, contribution
+  calls, and returns.
 - ActiveValue read/write/add/remove hooks exist, with reconstructed event names.
 - First ActiveImage units exist as slot-bound display objects with simple HTML
   widget renderers and optional write-back through `put.value`.
@@ -146,7 +148,8 @@ Status:
   panes, filterable trace panes with clickable trace references, and a compact
   trace graph.
 - `trace.events` records world creation, world slot writes, agenda passes,
-  rule matches/firings, generated branches, nogoods, and contradictions.
+  rule matches/firings, method dispatch/calls/returns, generated branches,
+  nogoods, and contradictions.
 - `rule.references` and `rule.reference.index` provide a first static rule
   cross-referencer over TellAndAsk `THE`, Lisp slot accessors/mutators,
   `IN.NEW.WORLD`, and `BELIEVE`.
@@ -164,5 +167,5 @@ Status:
 Next GUI target:
 
 - Expand the recovered debugging tools beyond the first trace/xref view:
-  textual method traces, richer rule-reference filtering, and a more spatial
-  graphic trace over rule firings, generated worlds, and contradictions.
+  richer rule-reference filtering, trace controls for larger demos, and a more
+  spatial graphic trace over rule firings, generated worlds, and contradictions.

@@ -101,6 +101,12 @@ Current reconstruction:
 - local before/after contributions run before inherited before/after
   contributions
 - `add.method` is a reconstruction helper, not a recovered KEE primitive
+- `unitmsg` records reconstructed textual method traces:
+  - `:method-dispatch`
+  - `:method-call`
+  - `:method-return`
+- method trace events include the target unit, message slot, method kind,
+  method label, arguments, and return value where applicable
 
 Open behavior:
 

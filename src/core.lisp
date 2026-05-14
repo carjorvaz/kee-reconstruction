@@ -548,24 +548,64 @@ internally, but this first public helper does not expose them yet."
     (otherwise
      (callable-method contribution))))
 
+(defun record-core-trace-event (kind &rest entries)
+  (when (fboundp 'record.trace.event)
+    (apply (symbol-function 'record.trace.event) kind entries)))
+
+(defun method-contribution-designator (contribution)
+  (case (method-contribution-kind contribution)
+    ((before after wrapper) (second contribution))
+    (otherwise contribution)))
+
+(defun method-contribution-label (contribution)
+  (let ((designator (method-contribution-designator contribution)))
+    (cond ((symbolp designator) designator)
+          ((functionp designator) "FUNCTION")
+          ((and (consp designator) (eq (first designator) 'lambda))
+           "LAMBDA")
+          ((consp designator) (first designator))
+          (t designator))))
+
 (defun call-method-contribution (contribution target args)
   (let ((fn (method-callable contribution)))
     (unless fn
       (error "Method contribution ~S is not callable." contribution))
     (apply fn target args)))
 
+(defun traced-method-contribution (contribution target message args kind)
+  (record-core-trace-event :method-call
+                           :unit (unit.name target)
+                           :slot message
+                           :method-kind kind
+                           :method (method-contribution-label contribution)
+                           :args args)
+  (call-method-contribution contribution target args))
+
 (defun unitmsg (unit-designator message &rest args)
   (let* ((target (unit unit-designator))
          (methods (get.values target message)))
     (unless methods
       (error "Unit ~S has no method slot ~S." (unit.name target) message))
+    (record-core-trace-event :method-dispatch
+                             :unit (unit.name target)
+                             :slot message
+                             :message "unitmsg"
+                             :args args)
     (let ((result nil))
       (dolist (method (method-contributions-of-kind 'before methods))
-        (call-method-contribution method target args))
+        (traced-method-contribution method target message args :before))
       (dolist (method (method-contributions-of-kind 'primary methods))
-        (setf result (call-method-contribution method target args)))
+        (setf result
+              (traced-method-contribution method target message args
+                                          :primary)))
       (dolist (method (method-contributions-of-kind 'after methods))
-        (setf result (call-method-contribution method target args)))
+        (setf result
+              (traced-method-contribution method target message args
+                                          :after)))
+      (record-core-trace-event :method-return
+                               :unit (unit.name target)
+                               :slot message
+                               :result result)
       result)))
 
 (defun unitmsg* (unit-designator message args)

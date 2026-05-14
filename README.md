@@ -28,6 +28,8 @@ The first implementation target is `kee-core`:
 - KEE-style API names such as `create.unit`, `get.value`, `put.value`,
   `unit.parents`, `unit.children`, and `unitmsg`
 - method slots with `:before`, `:primary`, and `:after` contributions
+- textual method trace events for `unitmsg` dispatch, contribution calls, and
+  returns
 - first-pass ActiveValue hooks on slot read/write/add/remove
 - first-pass ActiveImage units bound to ordinary unit slots, with HTML
   fragments for button, gauge/thermometer, switch, histogram, and plot widgets

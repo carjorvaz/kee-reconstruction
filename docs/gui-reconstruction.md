@@ -163,6 +163,8 @@ The reconstruction now has a first trace layer for rule/world debugging:
 - trace panes can filter by event kind and selected-node scope
 - trace rows expose clickable unit/world references
 - a compact trace graph summarizes agenda/rule/world/contradiction flow
+- textual method traces now record `unitmsg` dispatch, before/primary/after
+  method contribution calls, and returns
 
 ## Implemented Rule Cross-Reference Increment
 
@@ -181,7 +183,8 @@ The reconstruction now has a first static rule cross-referencer:
 
 Expand the debugging tools around the first trace and xref panes:
 
-- textual method traces
 - a more spatial graphic trace view over rule firings, generated worlds, and
   contradictions
 - richer xref filtering by slot name, operation, and variable target
+- trace controls for isolating methods, rules, worlds, and contradictions more
+  quickly in larger demos

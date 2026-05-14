@@ -90,6 +90,13 @@
     (check (equal (reverse log)
                   '(child-before parent-before parent-primary
                     child-after parent-after)))
+    (check (find-if
+            (lambda (event)
+              (and (eq (getf event :kind) :method-call)
+                   (eq (getf event :unit) 'highlighted.drawable)
+                   (eq (getf event :slot) 'draw)
+                   (eq (getf event :method-kind) :primary)))
+            (kee:trace.events :kind :method-call)))
     (setf log nil)
     (kee:add.method 'highlighted.drawable 'draw :primary
                     (lambda (self)
@@ -289,6 +296,9 @@
     (check (search "\"traces\"" viewer-html))
     (check (search "TEMPERATURE.GAUGE" viewer-html))
     (check (search "RULE-FIRE" viewer-html))
+    (check (search "METHOD-CALL" viewer-html))
+    (check (search "\"methodKind\"" viewer-html))
+    (check (search "Method dispatch" viewer-html))
     (check (search "ADD.VALUE" viewer-html))
     (check (search "CURRENT.SAMPLE.WAVELENGTHS" viewer-html))
     (check (search "\"facets\"" viewer-html))
