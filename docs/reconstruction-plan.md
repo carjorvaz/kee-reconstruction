@@ -136,8 +136,8 @@ Status:
 - `unit.graph` and `world.graph` provide structured graph exports with DOT
   renderers for quick visual inspection.
 - `kee.viewer.html` and `write.kee.viewer.html` generate a standalone HTML/SVG
-  graph browser over the same data, including clicked-node detail panes for
-  slots, facets, facts, and nogoods.
+  graph browser over the same data, including a searchable node list and
+  clicked-node detail panes for slots, facets, facts, and nogoods.
 - `examples/kee-browser.lisp` and `examples/kee-browser-shell.lisp` exercise
   the browser against the Hamburg puzzle demo.
 - `examples/kee-graph-dot.lisp` emits DOT for the Hamburg puzzle unit

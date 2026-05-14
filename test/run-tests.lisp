@@ -235,7 +235,9 @@
     (check (search "\"details\"" viewer-html))
     (check (search "\"facets\"" viewer-html))
     (check (search "MAX.CARDINALITY" viewer-html))
-    (check (search "renderUnitDetail" viewer-html)))
+    (check (search "renderUnitDetail" viewer-html))
+    (check (search "id='node-list'" viewer-html))
+    (check (search "renderNodeBrowser" viewer-html)))
   (let ((loop-text
           (with-output-to-string (output)
             (with-input-from-string (input "(kbs) (quit)")

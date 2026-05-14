@@ -249,7 +249,8 @@ Current reconstruction:
 - `graph.viewer.html`, `kee.viewer.html`, `write.graph.viewer.html`, and
   `write.kee.viewer.html` render standalone HTML/SVG graph browsers.
 - The standalone viewer embeds `inspect.unit` and `inspect.world` detail maps,
-  so clicked graph nodes can show slots, facets, world facts, and nogoods.
+  so its searchable node list and clicked graph nodes can show slots, facets,
+  world facts, and nogoods.
 
 This is a reconstruction support layer rather than a recovered KEE API. It is
 intended to keep display logic separate from the object/rule/world core, so a
