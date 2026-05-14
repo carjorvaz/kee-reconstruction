@@ -11,7 +11,8 @@ KEEworlds-style branching, assumptions, support labels, nogoods, and rule trace
 explanations instead of a blank or generic hierarchy view. The Browser pane also
 includes Review Tour controls that jump to representative units, rules, worlds,
 agenda traces, rule cross-references, and ActiveImages when available. It also
-shows a compact Desktop roster using recovered KEE window vocabulary.
+shows a compact Desktop roster using recovered KEE window vocabulary, plus a
+small Listener/Typescript/Prompt transcript for the generated session.
 
 ## Run
 

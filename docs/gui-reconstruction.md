@@ -134,6 +134,9 @@ The standalone browser should keep moving toward the recovered KEE structure:
 - Treat the desktop as a review target, not just a browser skin: the Bielefeld
   evaluation suggests a saved/reloadable desktop composed of smaller
   functional windows inside larger KEE windows.
+- Keep the Lisp Listener, Typescript, and Prompt visible as session surfaces
+  when a demo needs to evoke interactive use. The current pane is an annotated
+  transcript, not evidence of the original window implementation.
 - Design tracing views around the recovered categories: rule agenda/conflict
   set, forward/backward/world graphic traces, text traces, and rule
   cross-reference.
@@ -206,6 +209,9 @@ The reconstruction now has a first trace layer for rule/world debugging:
 - the browser pane includes a compact Desktop roster using recovered window
   vocabulary such as Lisp Listener, Typescript, Prompt, KEEpictures, and
   ActiveImages
+- the Lisp Listener, Typescript, and Prompt entries switch a small transcript
+  pane so reviewers can see the generated demo as a KEE work session rather
+  than only as static graph state
 - trace panes can filter by event kind and selected-node scope
 - trace panes can also isolate method, rule, world, and problem event families
 - trace panes include search text plus previous/next jump controls, with the

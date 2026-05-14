@@ -519,9 +519,17 @@
                 (when trace-query
                   (cons "traceQuery" (detail-string trace-query))))))
 
-(defun viewer-json-object (unit-graph world-graph title initial)
+(defun viewer-session-json (session)
+  (labels ((lines (key)
+             (detail-string-array (getf session key))))
+    (list (cons "listener" (lines :listener))
+          (cons "typescript" (lines :typescript))
+          (cons "prompt" (lines :prompt)))))
+
+(defun viewer-json-object (unit-graph world-graph title initial session)
   (list (cons "title" title)
         (cons "initial" initial)
+        (cons "session" (viewer-session-json session))
         (cons "kbs" (viewer-kbs-json unit-graph))
         (cons "units" (graph-json-object unit-graph))
         (cons "worlds" (graph-json-object world-graph))
@@ -571,7 +579,7 @@
          ".node.selected rect { stroke: var(--accent); stroke-width: 2.5; }"
          ".node.trace-hit rect { stroke: var(--accent); stroke-width: 3; filter: drop-shadow(0 0 5px rgba(28,111,184,0.35)); }"
          ".dim { opacity: 0.22; }"
-         "aside { min-width: 0; overflow: hidden; padding: 14px; background: var(--panel); border-left: 1px solid var(--line); display: grid; grid-template-rows: minmax(260px, 52vh) minmax(0, 1fr); gap: 12px; }"
+         "aside { min-width: 0; overflow: hidden; padding: 14px; background: var(--panel); border-left: 1px solid var(--line); display: grid; grid-template-rows: minmax(300px, 60vh) minmax(0, 1fr); gap: 12px; }"
          "aside h2 { margin: 0 0 10px; font-size: 16px; line-height: 1.2; }"
          ".browser-pane, .inspector-pane { min-width: 0; min-height: 0; overflow: auto; }"
          ".browser-pane { display: flex; flex-direction: column; gap: 10px; }"
@@ -594,12 +602,17 @@
          ".tour-buttons button:disabled { color: var(--muted); cursor: default; opacity: 0.58; }"
          ".desktop-roster { display: grid; gap: 8px; padding-bottom: 10px; border-bottom: 1px solid var(--line); }"
          ".desktop-roster h3 { margin: 0; font-size: 12px; color: var(--muted); }"
-         ".desktop-windows { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px; }"
+         ".desktop-windows { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; }"
          ".desktop-window { min-width: 0; min-height: 42px; text-align: left; border: 1px solid var(--line); border-radius: 6px; background: #fbfcfd; color: var(--ink); padding: 6px 7px; font: inherit; cursor: pointer; }"
          ".desktop-window strong { display: block; font-size: 11px; line-height: 1.2; overflow-wrap: anywhere; }"
          ".desktop-window span { display: block; margin-top: 3px; color: var(--muted); font-size: 11px; line-height: 1.2; overflow-wrap: anywhere; }"
          ".desktop-window:hover { border-color: var(--accent); background: var(--accent-soft); }"
+         ".desktop-window.active { border-color: var(--accent); background: var(--accent-soft); }"
          ".desktop-window:disabled { color: var(--muted); cursor: default; opacity: 0.58; background: #f9fafb; }"
+         ".session-pane { display: grid; gap: 8px; padding-bottom: 10px; border-bottom: 1px solid var(--line); }"
+         ".session-pane h3 { margin: 0; font-size: 12px; color: var(--muted); }"
+         ".session-window { border: 1px solid var(--line); border-radius: 6px; background: #fbfcfd; padding: 8px; }"
+         ".session-window pre { margin: 0; white-space: pre-wrap; overflow-wrap: anywhere; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 11px; line-height: 1.45; }"
          ".browser-section { padding-top: 10px; border-top: 1px solid var(--line); }"
          ".browser-section h3 { margin: 0 0 8px; font-size: 12px; color: var(--muted); }"
          ".node-list { display: flex; flex-direction: column; gap: 5px; }"
@@ -766,6 +779,7 @@
          "</div>"
          "<section id='review-tour' class='review-tour' aria-label='Review tour'></section>"
          "<section id='desktop-roster' class='desktop-roster' aria-label='Desktop windows'></section>"
+         "<section id='session-pane' class='session-pane' aria-label='Session window'></section>"
          "<div id='hierarchy-browser' class='hierarchy-browser'></div>"
          "<div id='slot-browser'></div>"
          "<section class='browser-section graph-node-section'>"
@@ -793,12 +807,13 @@
          "const kbList = document.getElementById('kb-list');"
          "const reviewTour = document.getElementById('review-tour');"
          "const desktopRoster = document.getElementById('desktop-roster');"
+         "const sessionPane = document.getElementById('session-pane');"
          "const hierarchyBrowser = document.getElementById('hierarchy-browser');"
          "const slotBrowser = document.getElementById('slot-browser');"
          "const nodeList = document.getElementById('node-list');"
          "const nodeCount = document.getElementById('node-count');"
          "const search = document.getElementById('search');"
-         "const state = { view: INITIAL.view || 'units', selected: INITIAL.selected || null, query: '', zoom: 1, viewBox: null, focusSelected: !!INITIAL.selected, traceFamily: INITIAL.traceFamily || 'all', traceKind: INITIAL.traceKind || 'all', traceScope: INITIAL.traceScope || 'selected', traceQuery: INITIAL.traceQuery || '', traceFocusId: null, traceReplaySpeed: 'normal', traceReplayLoop: false, xrefOperation: 'all', xrefSlot: 'all', xrefTarget: 'all' };"
+         "const state = { view: INITIAL.view || 'units', selected: INITIAL.selected || null, query: '', zoom: 1, viewBox: null, focusSelected: !!INITIAL.selected, sessionWindow: 'listener', traceFamily: INITIAL.traceFamily || 'all', traceKind: INITIAL.traceKind || 'all', traceScope: INITIAL.traceScope || 'selected', traceQuery: INITIAL.traceQuery || '', traceFocusId: null, traceReplaySpeed: 'normal', traceReplayLoop: false, xrefOperation: 'all', xrefSlot: 'all', xrefTarget: 'all' };"
          "let traceReplayTimer = null;"
          "function esc(value) { return String(value ?? '').replace(/[&<>\"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;',\"'\":'&#39;'}[ch])); }"
          "function short(value, limit = 25) { const text = String(value ?? ''); return text.length > limit ? text.slice(0, limit - 3) + '...' : text; }"
@@ -897,8 +912,10 @@
          "  else selectReference('unit', target.detail.name, target.detail.kb);"
          "}"
          "function renderReviewTour() { const items = [['units', 'Units'], ['rules', 'Rules'], ['worlds', 'Worlds'], ['agenda', 'Agenda'], ['xref', 'Rule Xref'], ['active-images', 'ActiveImages']]; reviewTour.innerHTML = `<h3>Review Tour</h3><div class='tour-buttons'>${items.map(([kind, label]) => `<button type='button' data-review-tour='${kind}' ${reviewTourAvailable(kind) ? '' : 'disabled'}>${label}</button>`).join('')}</div>`; }"
-         "function desktopWindowHtml(label, meta, kind = null) { const attrs = kind ? `data-desktop-tour='${kind}' ${reviewTourAvailable(kind) ? '' : 'disabled'}` : 'disabled'; return `<button type='button' class='desktop-window' ${attrs}><strong>${esc(label)}</strong><span>${esc(meta)}</span></button>`; }"
-         "function renderDesktopRoster() { const items = [['Lisp Listener', 'evaluation'], ['Typescript', 'transcript'], ['Prompt', 'messages'], ['KB Browser', 'current KB', 'units'], ['Unit Window', 'classes', 'units'], ['Slot Window', 'facets', 'units'], ['Worlds', 'assumptions', 'worlds'], ['Agenda', 'conflict set', 'agenda'], ['Rule Xref', 'references', 'xref'], ['KEEpictures', 'graphics'], ['ActiveImages', 'two-way graphics', 'active-images']]; desktopRoster.innerHTML = `<h3>Desktop</h3><div class='desktop-windows'>${items.map(([label, meta, kind]) => desktopWindowHtml(label, meta, kind)).join('')}</div>`; }"
+         "function desktopWindowHtml(label, meta, kind = null, session = null) { const active = session && state.sessionWindow === session ? ' active' : ''; const attrs = session ? `data-session-window='${session}'` : (kind ? `data-desktop-tour='${kind}' ${reviewTourAvailable(kind) ? '' : 'disabled'}` : 'disabled'); return `<button type='button' class='desktop-window${active}' ${attrs}><strong>${esc(label)}</strong><span>${esc(meta)}</span></button>`; }"
+         "function renderDesktopRoster() { const items = [['Lisp Listener', 'evaluation', null, 'listener'], ['Typescript', 'transcript', null, 'typescript'], ['Prompt', 'messages', null, 'prompt'], ['KB Browser', 'current KB', 'units'], ['Unit Window', 'classes', 'units'], ['Slot Window', 'facets', 'units'], ['Worlds', 'assumptions', 'worlds'], ['Agenda', 'conflict set', 'agenda'], ['Rule Xref', 'references', 'xref'], ['KEEpictures', 'graphics'], ['ActiveImages', 'two-way graphics', 'active-images']]; desktopRoster.innerHTML = `<h3>Desktop</h3><div class='desktop-windows'>${items.map(([label, meta, kind, session]) => desktopWindowHtml(label, meta, kind, session)).join('')}</div>`; }"
+         "function sessionLines(kind) { return (DATA.session && DATA.session[kind]) || []; }"
+         "function renderSessionPane() { const labels = { listener: 'Lisp Listener', typescript: 'Typescript', prompt: 'Prompt' }; const lines = sessionLines(state.sessionWindow); sessionPane.innerHTML = `<h3>${esc(labels[state.sessionWindow] || 'Session')}</h3><div class='session-window'><pre>${esc(lines.length ? lines.join('\\n') : 'No session transcript')}</pre></div>`; }"
          "function canonicalUnitName(value) { return String(value ?? '').replace(/[^A-Za-z0-9]/g, '').toUpperCase(); }"
          "function activeBrowserUnitP(detail) { const names = [detail?.name, ...(detail?.classParents || []), ...(detail?.memberParents || [])].map(canonicalUnitName); return names.some(name => name.includes('ACTIVEIMAGE') || name.includes('ACTIVEVALUE')); }"
          "function unitDetails() { return Object.values(DATA.details.units || {}).filter(detail => detail.kb === DATA.units.kb); }"
@@ -927,7 +944,7 @@
          "function updateActiveImageTarget(image, value) { (DATA.details.activeImages || []).forEach(other => { if (other.targetKb === image.targetKb && other.targetUnit === image.targetUnit && other.targetSlot === image.targetSlot && other.targetFacet === image.targetFacet) { other.value = value; other.values = [value]; } }); if (image.targetFacet) return; const detail = DATA.details.units[referenceId('unit', image.targetUnit, image.targetKb)]; const slot = detail && (detail.slots || []).find(candidate => candidate.name === image.targetSlot); if (slot) { slot.localValues = [value]; slot.combinedValues = [value]; } }"
          "function setActiveImageLocal(name, rawValue) { const image = activeImageByName(name); if (!image || !image.writableP) return; const value = coerceActiveImageInput(image, rawValue); updateActiveImageTarget(image, value); render(); }"
          "function renderHierarchyBrowser(model, graph) { const detail = selectedUnitDetail(graph); const topLevels = unitTopLevels(); const topNames = topLevels.map(unit => unit.name); const slotMeta = name => { const unit = unitDetails().find(candidate => candidate.name === name); const count = unit?.slots?.length ?? 0; return `${count} slots`; }; let html = hierarchySection('Top Level Units', topNames, DATA.units.kb, slotMeta); if (detail) { html += `<section class='browser-section'><h3>Current Unit</h3><div class='node-list compact'>${hierarchyButton(detail.name, detail.kb, `${(detail.slots || []).length} slots`)}</div></section>`; html += hierarchySection('Class Parents', detail.classParents, detail.kb); html += hierarchySection('Member Parents', detail.memberParents, detail.kb); html += hierarchySection('Subclass Children', detail.classChildren, detail.kb); html += hierarchySection('Member Children', detail.memberChildren, detail.kb); } else { html += `<section class='browser-section'><h3>Current Unit</h3><p class='empty'>No unit selected</p></section>`; } hierarchyBrowser.innerHTML = html; renderSlotBrowser(detail); renderNodeBrowser(model, graph); }"
-         "function renderBrowser(model, graph) { renderKbStrip(); renderReviewTour(); renderDesktopRoster(); if (graph.kind === 'unit') { renderHierarchyBrowser(model, graph); return; } hierarchyBrowser.innerHTML = ''; slotBrowser.innerHTML = ''; renderNodeBrowser(model, graph); }"
+         "function renderBrowser(model, graph) { renderKbStrip(); renderReviewTour(); renderDesktopRoster(); renderSessionPane(); if (graph.kind === 'unit') { renderHierarchyBrowser(model, graph); return; } hierarchyBrowser.innerHTML = ''; slotBrowser.innerHTML = ''; renderNodeBrowser(model, graph); }"
          "function renderNodeBrowser(model, graph) {"
          "  const rows = model.nodes.filter(node => matches(node, graph));"
          "  nodeCount.textContent = `${rows.length}/${model.nodes.length}`;"
@@ -1090,7 +1107,7 @@
          "}"
          "browserPane.addEventListener('input', event => { const control = event.target.closest('[data-active-image-name]'); if (!control || control.type !== 'range') return; setActiveImageLocal(control.dataset.activeImageName, control.value); });"
          "browserPane.addEventListener('change', event => { const control = event.target.closest('[data-active-image-name]'); if (!control || control.type === 'range') return; setActiveImageLocal(control.dataset.activeImageName, control.value); });"
-         "browserPane.addEventListener('click', event => { const tourControl = event.target.closest('[data-review-tour], [data-desktop-tour]'); if (tourControl) { selectReviewTour(tourControl.dataset.reviewTour || tourControl.dataset.desktopTour); return; } const activeControl = event.target.closest('button[data-active-image-name]'); if (activeControl) { const image = activeImageByName(activeControl.dataset.activeImageName); if (image && image.writableP) setActiveImageLocal(image.name, activeControl.classList.contains('active-image-switch') ? (activeImageOnP(image.value) ? 'OFF' : 'ON') : (image.value ?? 'TRUE')); return; } const ref = event.target.closest('[data-ref-kind]'); if (!ref) return; selectReference(ref.dataset.refKind, ref.dataset.refName, ref.dataset.refKb || null); });"
+         "browserPane.addEventListener('click', event => { const sessionControl = event.target.closest('[data-session-window]'); if (sessionControl) { state.sessionWindow = sessionControl.dataset.sessionWindow; render(); return; } const tourControl = event.target.closest('[data-review-tour], [data-desktop-tour]'); if (tourControl) { selectReviewTour(tourControl.dataset.reviewTour || tourControl.dataset.desktopTour); return; } const activeControl = event.target.closest('button[data-active-image-name]'); if (activeControl) { const image = activeImageByName(activeControl.dataset.activeImageName); if (image && image.writableP) setActiveImageLocal(image.name, activeControl.classList.contains('active-image-switch') ? (activeImageOnP(image.value) ? 'OFF' : 'ON') : (image.value ?? 'TRUE')); return; } const ref = event.target.closest('[data-ref-kind]'); if (!ref) return; selectReference(ref.dataset.refKind, ref.dataset.refName, ref.dataset.refKb || null); });"
          "inspector.addEventListener('input', event => { const traceSearch = event.target.closest('[data-trace-search]'); if (!traceSearch) return; stopTraceReplay(); const cursor = traceSearch.selectionStart; state.traceQuery = traceSearch.value; state.traceFocusId = null; render(); const replacement = inspector.querySelector('[data-trace-search]'); if (replacement) { replacement.focus(); replacement.setSelectionRange(cursor, cursor); } });"
          "inspector.addEventListener('change', event => { const traceMapSpeed = event.target.closest('[data-trace-map-speed]'); if (traceMapSpeed) { state.traceReplaySpeed = traceMapSpeed.value; restartTraceReplay(); render(); return; } const traceMapLoop = event.target.closest('[data-trace-map-loop]'); if (traceMapLoop) { state.traceReplayLoop = traceMapLoop.checked; restartTraceReplay(); render(); return; } const traceControl = event.target.closest('[data-trace-control]'); if (traceControl) { stopTraceReplay(); if (traceControl.dataset.traceControl === 'family') state.traceFamily = traceControl.value; if (traceControl.dataset.traceControl === 'kind') state.traceKind = traceControl.value; if (traceControl.dataset.traceControl === 'scope') state.traceScope = traceControl.value; render(); return; } const xrefControl = event.target.closest('[data-xref-control]'); if (!xrefControl) return; if (xrefControl.dataset.xrefControl === 'operation') state.xrefOperation = xrefControl.value; if (xrefControl.dataset.xrefControl === 'slot') state.xrefSlot = xrefControl.value; if (xrefControl.dataset.xrefControl === 'target') state.xrefTarget = xrefControl.value; render(); });"
          "inspector.addEventListener('click', event => { const traceMapStep = event.target.closest('[data-trace-map-step]'); if (traceMapStep) { stopTraceReplay(); stepTraceMap(traceMapStep.dataset.traceMapStep === 'next' ? 1 : -1); return; } const traceMapPlay = event.target.closest('[data-trace-map-play]'); if (traceMapPlay) { toggleTraceReplay(); return; } const agendaJump = event.target.closest('[data-agenda-jump]'); if (agendaJump) { stopTraceReplay(); jumpAgenda(agendaJump.dataset.agendaJump === 'next' ? 1 : -1, agendaJump.dataset.agendaMode || 'all'); return; } const traceJump = event.target.closest('[data-trace-jump]'); if (traceJump) { stopTraceReplay(); jumpTrace(traceJump.dataset.traceJump === 'next' ? 1 : -1); return; } const ref = event.target.closest('[data-ref-kind]'); if (ref) { stopTraceReplay(); selectReference(ref.dataset.refKind, ref.dataset.refName, ref.dataset.refKb || null); return; } const traceEvent = event.target.closest('[data-trace-id]'); if (!traceEvent) return; stopTraceReplay(); state.traceFocusId = Number(traceEvent.dataset.traceId); render(); });"
@@ -1108,7 +1125,8 @@
 (defun write.graph.viewer.html
     (stream &key unit-graph world-graph (title "KEE Graph Browser")
               initial-view initial-selection initial-trace-family
-              initial-trace-kind initial-trace-scope initial-trace-query)
+              initial-trace-kind initial-trace-scope initial-trace-query
+              session)
   "Write a standalone HTML/SVG viewer for structured KEE graphs."
   (write-viewer-head stream title)
   (write-json-value
@@ -1122,7 +1140,8 @@
                          :trace-family initial-trace-family
                          :trace-kind initial-trace-kind
                          :trace-scope initial-trace-scope
-                         :trace-query initial-trace-query)))
+                         :trace-query initial-trace-query)
+    session))
   (write-viewer-script stream)
   (values))
 
@@ -1130,7 +1149,8 @@
                                (title "KEE Graph Browser")
                                initial-view initial-selection
                                initial-trace-family initial-trace-kind
-                               initial-trace-scope initial-trace-query)
+                               initial-trace-scope initial-trace-query
+                               session)
   "Return a standalone HTML/SVG viewer for structured KEE graphs."
   (with-output-to-string (stream)
     (write.graph.viewer.html stream
@@ -1142,12 +1162,14 @@
                              :initial-trace-family initial-trace-family
                              :initial-trace-kind initial-trace-kind
                              :initial-trace-scope initial-trace-scope
-                             :initial-trace-query initial-trace-query)))
+                             :initial-trace-query initial-trace-query
+                             :session session)))
 
 (defun write.kee.viewer.html
     (stream &key kb units worlds world-limit (title "KEE Graph Browser")
               initial-view initial-selection initial-trace-family
-              initial-trace-kind initial-trace-scope initial-trace-query)
+              initial-trace-kind initial-trace-scope initial-trace-query
+              session)
   "Write a standalone HTML/SVG viewer for the current KEE image."
   (write.graph.viewer.html stream
                            :unit-graph (unit.graph :kb kb :units units)
@@ -1159,13 +1181,15 @@
                            :initial-trace-family initial-trace-family
                            :initial-trace-kind initial-trace-kind
                            :initial-trace-scope initial-trace-scope
-                           :initial-trace-query initial-trace-query))
+                           :initial-trace-query initial-trace-query
+                           :session session))
 
 (defun kee.viewer.html (&key kb units worlds world-limit
                              (title "KEE Graph Browser")
                              initial-view initial-selection
                              initial-trace-family initial-trace-kind
-                             initial-trace-scope initial-trace-query)
+                             initial-trace-scope initial-trace-query
+                             session)
   "Return a standalone HTML/SVG viewer for the current KEE image."
   (with-output-to-string (stream)
     (write.kee.viewer.html stream
@@ -1179,4 +1203,5 @@
                            :initial-trace-family initial-trace-family
                            :initial-trace-kind initial-trace-kind
                            :initial-trace-scope initial-trace-scope
-                           :initial-trace-query initial-trace-query)))
+                           :initial-trace-query initial-trace-query
+                           :session session)))

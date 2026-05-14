@@ -148,8 +148,9 @@ Status:
   graph browser over the same data, including visible current-KB state,
   loaded-KB chips, top-level-unit selection, class/member hierarchy browsing,
   synchronized slot display, embedded ActiveImage controls with local static
-  updates, a searchable node list, and clicked-node detail panes for slots,
-  facets, facts, nogoods, and in-graph references, plus rule cross-reference
+  updates, a reconstructed Desktop roster with Listener/Typescript/Prompt
+  transcript panes, a searchable node list, and clicked-node detail panes for
+  slots, facets, facts, nogoods, and in-graph references, plus rule cross-reference
   panes with operation/slot/target filters, trace panes filterable by family,
   event kind, selected-node scope, and search text, previous/next trace jumps,
   focused trace detail, compact agenda/conflict-set panes with candidate and

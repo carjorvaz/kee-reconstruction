@@ -297,6 +297,7 @@
     (check (search "unit:VEG/TOM" viewer-html))
     (check (search "function render" viewer-html))
     (check (search "\"initial\"" viewer-html))
+    (check (search "\"session\"" viewer-html))
     (check (search "const INITIAL" viewer-html))
     (check (search "INITIAL.view" viewer-html))
     (check (search "\"kbs\"" viewer-html))
@@ -330,6 +331,9 @@
     (check (search "renderDesktopRoster" viewer-html))
     (check (search "Lisp Listener" viewer-html))
     (check (search "KEEpictures" viewer-html))
+    (check (search "id='session-pane'" viewer-html))
+    (check (search "renderSessionPane" viewer-html))
+    (check (search "data-session-window" viewer-html))
     (check (search "Top Level Units" viewer-html))
     (check (search "Slot Table" viewer-html))
     (check (search "slotFacetText" viewer-html))
@@ -424,10 +428,16 @@
                                :world-limit 0
                                :initial-view "worlds"
                                :initial-selection "world:TOM-GOLF-HEIGHTS"
-                               :initial-trace-scope "selected")))
+                               :initial-trace-scope "selected"
+                               :session '(:listener ("CL-USER> (SETUP)")
+                                          :typescript ("Typescript sample")
+                                          :prompt ("Prompt sample")))))
     (check (search "\"view\":\"worlds\"" initial-html))
     (check (search "\"selected\":\"world:TOM-GOLF-HEIGHTS\"" initial-html))
-    (check (search "\"traceScope\":\"selected\"" initial-html)))
+    (check (search "\"traceScope\":\"selected\"" initial-html))
+    (check (search "\"listener\":[\"CL-USER\\u003E (SETUP)\"]" initial-html))
+    (check (search "\"typescript\":[\"Typescript sample\"]" initial-html))
+    (check (search "\"prompt\":[\"Prompt sample\"]" initial-html)))
   (let ((loop-text
           (with-output-to-string (output)
             (with-input-from-string (input "(kbs) (quit)")

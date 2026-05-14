@@ -26,6 +26,36 @@
                             (symbol-name (kee:get.world.name world)))))
       (first (kee:$worlds))))
 
+(defun demo-review-rule (world)
+  (let ((justification (first (kee:why.false world))))
+    (and justification
+         (kee:justification.rule justification))))
+
+(defun demo-session (world)
+  (let* ((world-name (symbol-name (kee:get.world.name world)))
+         (rule (demo-review-rule world))
+         (rule-name (if rule (symbol-name rule) "NIL"))
+         (facts (length (kee:world.facts world)))
+         (nogoods (length (kee:world.nogoods world))))
+    (list :listener
+          (list "CL-USER> (SETUP)"
+                "PUZZLE"
+                "CL-USER> (KEE:CREATE.WORLD 'HYPOTHESIS-ROOT)"
+                "HYPOTHESIS-ROOT"
+                "CL-USER> (KEE:RUN.WORLD.AGENDA '(CONSTRAINT.RULES HYPOTHESIS.RULES) :MAX-ITERATIONS 20)"
+                "20")
+          :typescript
+          (list "Generated Hamburg puzzle viewer"
+                "Complete consistent worlds: 12"
+                (format nil "Review world: ~A" world-name)
+                (format nil "~A facts ~D / nogoods ~D"
+                        world-name facts nogoods))
+          :prompt
+          (list "Current KB: PUZZLE"
+                "View: Worlds"
+                (format nil "Selected: ~A" world-name)
+                (format nil "First nogood rule: ~A" rule-name)))))
+
 (let* ((review-world (demo-review-world))
        (review-world-id (format nil "world:~A"
                                 (symbol-name
@@ -36,4 +66,5 @@
                              :title "Hamburg Puzzle"
                              :initial-view "worlds"
                              :initial-selection review-world-id
-                             :initial-trace-scope "selected"))
+                             :initial-trace-scope "selected"
+                             :session (demo-session review-world)))
