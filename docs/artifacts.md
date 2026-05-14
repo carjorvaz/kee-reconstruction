@@ -34,6 +34,7 @@ secondary descriptions.
 | AIAI user-interface paper | Describes KEEpictures and ActiveImages as a two-way graphical specification mechanism: mouse changes update objects and object updates reflect in graphics. | https://www.aiai.ed.ac.uk/publications/documents/1992/92-bcs-user-interfaces.pdf |
 | ASKE thesis | KEE 3.1 application evidence for Common Windows interfaces with icons, interaction/display windows, notebook, rulemaker, context/class/rule display windows, and rule editing window. | https://oro.open.ac.uk/64573/1/27758423.pdf |
 | NASA TEXSYS/MTK conference paper | Application evidence for KEE v2/v3 on Symbolics, KEEpictures as flexible graphics, KEEworlds for temporal/hypothetical states, and graphical model-building. | https://ntrs.nasa.gov/api/citations/19880014804/downloads/19880014804.pdf |
+| NASA KATYDID / KEE-to-Ada paper | Primary NASA/IntelliCorp evidence for KEE delivery concerns: a KEE object-structure runtime library for Ada, knowledge-structure translation, rules translation, Lisp-to-Ada translation, and a knowledge-base dumper. Useful for reconstruction boundaries, though not original KEE source. | https://ntrs.nasa.gov/citations/19900018018 |
 | Bielefeld hybrid expert-system tools evaluation | 1993 public evaluation with a KEE chapter. Records architecture from the KEE User's Guide, supported Unix platforms, desktop/window behavior, ActiveValues slot-operation triggers, and a useful KEE manual bibliography. | https://doczz.net/doc/5911786/evaluation-hybrider-expertensystemtools |
 | IBM System/370 bibliography, January 1990 | IBM publication catalog entries for IBM KEE manuals. Confirms IBM publication numbers, page counts, and concise descriptions for TellAndAsk, KEEpictures, KEEworlds, and RuleSystem3. | https://chiclassiccomp.org/docs/content/computing/IBM/Mainframe/AppSoftware/GC20-0370-7_System370-30xx-4300-9370BibliographySystem%26AppPrograms_Jan90.pdf |
 
@@ -41,22 +42,22 @@ secondary descriptions.
 
 No full scans found yet. These identifiers make the search precise.
 
-| Manual | Identifier |
-| --- | --- |
-| KEE User's Guide, KEE 3.1 | `K3.1-UG1` |
-| KEE Interface Reference Manual | `K3.1-IRM-1`, IBM `SC26-4545` |
-| KEE Core Reference Manual | `K3.1-CRM-2` |
-| TellAndAsk Reference Manual | `3.1-TAA-2`, IBM `SC26-4549` |
-| RuleSystem3 Reference Manual | `K3.1-RS3-2`, IBM `SC26-4548` |
-| Rule Compiler Reference Manual | `K3.1-RC-4` |
-| KEEworlds Reference Manual | `K3.1-KW-3`, IBM `SC26-4547` |
-| ActiveImages3 Reference Manual | `3.0-R-A3` |
-| KEEpictures Reference Manual | `K3.1-KP-2`, IBM `SC26-4546` |
-| Common Windows Manual | `CWM-2` |
-| System Indices | `K3.1-SI-1` |
-| KEE 4.0 UNIX release notes | `K4.0-RN-UNIX-1` |
-| Using KEE 4.0 on UNIX | `K4.0-UK-UNIX-1` |
-| KEEtutor modules | `KT-Mods1&2-Sun-3` |
+| Manual | Identifier | External evidence |
+| --- | --- | --- |
+| KEE User's Guide, KEE 3.1 | `K3.1-UG1` | Bielefeld bibliography. |
+| KEE Interface Reference Manual | `K3.1-IRM-1`, IBM `SC26-4545` | Bielefeld and IBM bibliography. |
+| KEE Core Reference Manual | `K3.1-CRM-2` | Bielefeld bibliography; also cited in later database/rule literature. |
+| TellAndAsk Reference Manual | `3.1-TAA-2`, IBM `SC26-4549` | IBM bibliography lists a 212-page programmer manual for the TellAndAsk language. |
+| RuleSystem3 Reference Manual | `K3.1-RS3-2`, IBM `SC26-4548` | IBM bibliography lists a 188-page programmer manual for forward/backward chaining and debugging. |
+| Rule Compiler Reference Manual | `K3.1-RC-4` | Bielefeld bibliography. |
+| KEEworlds Reference Manual | `K3.1-KW-3`, IBM `SC26-4547` | IBM bibliography lists a 208-page programmer manual for KEEworlds and ATMS. |
+| ActiveImages3 Reference Manual | `3.0-R-A3` | Bielefeld bibliography. |
+| KEEpictures Reference Manual | `K3.1-KP-2`, IBM `SC26-4546` | IBM bibliography lists a 390-page programmer manual for the object-oriented KEEpictures graphics toolkit. |
+| Common Windows Manual | `CWM-2` | Bielefeld bibliography; local Common Windows citation trails also identify an IntelliCorp 1986 manual. |
+| System Indices | `K3.1-SI-1` | Bielefeld bibliography. |
+| KEE 4.0 UNIX release notes | `K4.0-RN-UNIX-1` | Bielefeld bibliography. |
+| Using KEE 4.0 on UNIX | `K4.0-UK-UNIX-1` | Bielefeld bibliography. |
+| KEEtutor modules | `KT-Mods1&2-Sun-3` | Bielefeld bibliography. |
 
 ## High-Value Missing Artifacts
 
@@ -65,6 +66,8 @@ No full scans found yet. These identifiers make the search precise.
 - NASA VEG files: `veg4.u`, `veg-methods.lisp`, and extension Lisp files.
 - The NASA GSFC Sun cartridge tape mentioned in the VEG reports.
 - KEEtutor materials and puzzle files such as `3X3IMPLEM1.U`.
+- KATYDID translator/runtime source or generated Ada examples, if any public
+  copies survived outside the NASA paper.
 
 ## Repository-Held Artifacts
 
@@ -110,6 +113,10 @@ These are not original KEE distributions, but they are useful leads in
 - `forums/comp.lang.lisp/derived/threads/1998/common-windows-4ee975ab0b388b6d.md`
   quotes the KEE for Symbolics manual set about the 1986 IntelliCorp Common
   Windows Manual, its designers, and its Interlisp-D/ZetaLisp lineage.
+- `books/derived/text/object-oriented-programming-the-clos-perspective.pymupdf.txt`
+  cites the IntelliCorp Common Windows Manual, 1986.
+- `code/mcclim/Documentation/Guided-Tour/guided-tour.bib` and the Quicklisp
+  mirror of the same file cite the IntelliCorp Common Windows Manual, 1986.
 - `articles/gabriel/dreamsongs.com-derived/pdf-text/Files/HOPL2-Uncut.pymupdf.txt`
   identifies Common Windows as a window system produced by IntelliCorp.
 - `articles/lisp-pointers-derived/pdf-extracts/text/pub__scheme__doc__lisp-pointers__v1i3__p43-foderaro.pymupdf.txt`
