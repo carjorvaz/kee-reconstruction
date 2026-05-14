@@ -9,11 +9,11 @@ test('AUV panel workflow exposes interactive reconstructed panels', async ({ pag
   await page.goto(pathToFileURL(viewerHtml).href);
 
   await expect(page.locator('#review-tour')).toBeVisible();
-  await expect(page.locator('#desktop-context')).toContainText('Reconstructed KEE desktop');
+  await expect(page.locator('#desktop-context')).toContainText('KEE desktop');
   await expect(page.locator('#desktop-context')).toContainText('Symbolics 3675');
   await expect(page.locator('#desktop-context')).toContainText('TI Micro-Explorer');
   await expect(page.locator('#current-kb')).toHaveText('AUV.WORKFLOW');
-  await expect(page.locator('[data-edge-mode="off"]')).toHaveClass(/active/);
+  await expect(page.locator('[data-edge-mode="selected"]')).toHaveClass(/active/);
   expect(await page.locator('svg#graph .edge.background').count()).toBeGreaterThan(0);
   await expect(page.locator('svg#graph .edge-label')).toHaveCount(0);
   await page.locator('[data-edge-mode="all"]').click();

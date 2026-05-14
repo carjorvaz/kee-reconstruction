@@ -45,8 +45,10 @@ window deck with Symbolics/TI provenance cues.
 - The Browser pane: Current KB state, Review Tour controls, the reconstructed
   desktop context, Desktop roster, and Listener/Typescript/Prompt transcript
   panes.
-- The graph header: relation edges default off in dense demos; use Selected or
-  All only when you want to inspect graph structure.
+- The Inspector pane below it: selected unit/world detail, slots, facts,
+  nogoods, traces, and explanation trails.
+- The graph header: dense demos default to Selected relation edges; use Edges
+  Off for a cleaner object browser or All when you want the full structure.
 - The KEEpictures tour target: a small reconstructed picture with viewport and
   windowpane metadata, an embedded writable ActiveImage, and a picture mouse
   trace.

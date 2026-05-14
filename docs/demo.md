@@ -15,8 +15,9 @@ agenda traces, rule cross-references, KEEpictures, panels, and ActiveImages when
 available. It also shows a compact reconstructed desktop context, a Desktop
 roster using recovered KEE window vocabulary, and a small
 Listener/Typescript/Prompt transcript for the generated session. Dense graph
-views default relation edges off; the header's edge controls can show selected
-or all relations when structural browsing matters.
+views default to selected-node relation edges; the header's edge controls can
+hide edges or show all relations when structural browsing matters. The graph
+uses wider columns and haloed edge labels to keep relation arrows readable.
 
 ## Run
 
