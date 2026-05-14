@@ -137,7 +137,8 @@ Status:
   renderers for quick visual inspection.
 - `kee.viewer.html` and `write.kee.viewer.html` generate a standalone HTML/SVG
   graph browser over the same data, including a searchable node list and
-  clicked-node detail panes for slots, facets, facts, and nogoods.
+  clicked-node detail panes for slots, facets, facts, nogoods, and in-graph
+  references.
 - `examples/kee-browser.lisp` and `examples/kee-browser-shell.lisp` exercise
   the browser against the Hamburg puzzle demo.
 - `examples/kee-graph-dot.lisp` emits DOT for the Hamburg puzzle unit

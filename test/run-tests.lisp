@@ -237,7 +237,9 @@
     (check (search "MAX.CARDINALITY" viewer-html))
     (check (search "renderUnitDetail" viewer-html))
     (check (search "id='node-list'" viewer-html))
-    (check (search "renderNodeBrowser" viewer-html)))
+    (check (search "renderNodeBrowser" viewer-html))
+    (check (search "selectReference" viewer-html))
+    (check (search "data-ref-kind" viewer-html)))
   (let ((loop-text
           (with-output-to-string (output)
             (with-input-from-string (input "(kbs) (quit)")
