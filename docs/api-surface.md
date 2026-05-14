@@ -155,6 +155,10 @@ Current reconstruction:
   fragments for `:button`, `:gauge`, `:thermometer`, `:switch`,
   `:histogram`, `:plot`, and fallback value widgets.
 - `list.active.images` lists ActiveImage units in a KB.
+- The standalone viewer embeds ActiveImage reports in `details.activeImages`
+  and renders controls next to the selected target unit's slot table. These
+  generated controls update the static page's local JSON copy; Lisp-side
+  writes still go through `set.active.image.value`.
 
 Important uncertainty:
 

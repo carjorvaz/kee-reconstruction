@@ -145,12 +145,16 @@ The reconstruction now has a first ActiveImage primitive:
   ActiveValue hooks
 - `active.image.html` renders small HTML fragments for early browser and
   documentation experiments
+- the standalone viewer embeds ActiveImage reports and shows slot-bound
+  controls beside the selected unit's slot table
+- generated controls can update the standalone page's local JSON copy, while
+  Lisp-side writes continue to use ordinary KEE mutators
 
 ## Next Build Target
 
-Embed ActiveImage widgets into the standalone viewer:
+Add the first trace panes:
 
-- include ActiveImage units in the viewer JSON detail map
-- show slot-bound controls beside the selected unit's slot table
-- support local in-page writes for generated HTML demos
-- preserve the ordinary KEE mutator path for Lisp-side writes
+- agenda/conflict-set display
+- text trace of rule firings and method calls
+- world graph trace showing generated worlds and contradictions
+- rule cross-reference entry points from units and nogoods

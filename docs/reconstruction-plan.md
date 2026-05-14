@@ -140,8 +140,9 @@ Status:
 - `kee.viewer.html` and `write.kee.viewer.html` generate a standalone HTML/SVG
   graph browser over the same data, including visible current-KB state,
   loaded-KB chips, top-level-unit selection, class/member hierarchy browsing,
-  synchronized slot display, a searchable node list, and clicked-node detail
-  panes for slots, facets, facts, nogoods, and in-graph references.
+  synchronized slot display, embedded ActiveImage controls with local static
+  updates, a searchable node list, and clicked-node detail panes for slots,
+  facets, facts, nogoods, and in-graph references.
 - `docs/gui-reconstruction.md` records the recovered browser, Common Windows,
   KEEpictures, ActiveImages, and trace/debugging evidence that should guide the
   next GUI increments.
@@ -155,5 +156,5 @@ Status:
 
 Next GUI target:
 
-- Embed ActiveImage widgets into the standalone viewer so selected units can
-  show live slot-bound controls beside the hierarchy and slot table.
+- Add KEE-style trace panes for rules/worlds: agenda or conflict-set display,
+  text trace, and a first graph trace over rule firings and world changes.

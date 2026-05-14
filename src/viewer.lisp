@@ -233,9 +233,45 @@
               (cons (getf node :id) (world-detail-json report))))
           (getf world-graph :nodes)))
 
+(defun active-image-json-value (value)
+  (cond ((null value) :json-null)
+        ((or (stringp value) (numberp value)) value)
+        ((symbolp value) (detail-string value))
+        (t (detail-string value))))
+
+(defun active-image-json-array (values)
+  (json-array (mapcar #'active-image-json-value values)))
+
+(defun active-image-report-json (report)
+  (list (cons "name" (detail-string (getf report :name)))
+        (cons "kb" (detail-string (getf report :kb)))
+        (cons "targetUnit" (detail-string (getf report :target-unit)))
+        (cons "targetKb" (detail-string (getf report :target-kb)))
+        (cons "targetSlot" (detail-string (getf report :target-slot)))
+        (cons "targetFacet" (active-image-json-value
+                              (getf report :target-facet)))
+        (cons "widget" (string-downcase
+                        (detail-string (getf report :widget))))
+        (cons "label" (detail-string (getf report :label)))
+        (cons "values" (active-image-json-array (getf report :values)))
+        (cons "value" (active-image-json-value (getf report :value)))
+        (cons "choices" (active-image-json-array (getf report :choices)))
+        (cons "min" (active-image-json-value (getf report :min)))
+        (cons "max" (active-image-json-value (getf report :max)))
+        (cons "writableP" (json-bool (getf report :writable-p)))))
+
+(defun active-image-detail-json (unit-graph)
+  (json-array
+   (when (and (fboundp 'list.active.images)
+              (fboundp 'active.image.report))
+     (mapcar (lambda (image)
+               (active-image-report-json (active.image.report image)))
+             (list.active.images (getf unit-graph :kb))))))
+
 (defun viewer-details-json (unit-graph world-graph)
   (list (cons "units" (unit-detail-map-json unit-graph))
-        (cons "worlds" (world-detail-map-json world-graph))))
+        (cons "worlds" (world-detail-map-json world-graph))
+        (cons "activeImages" (active-image-detail-json unit-graph))))
 
 (defun viewer-kbs-json (unit-graph)
   (detail-string-array
@@ -322,6 +358,16 @@
          ".slot-table th { color: var(--muted); font-weight: 600; }"
          ".slot-table th:nth-child(1) { width: 34%; }"
          ".slot-table th:nth-child(2) { width: 22%; }"
+         ".active-image-list { display: grid; gap: 8px; }"
+         ".active-image { border: 1px solid var(--line); border-radius: 6px; padding: 8px; background: #fbfcfd; font-size: 12px; }"
+         ".active-image strong, .active-image label { display: block; margin-bottom: 6px; font-size: 13px; }"
+         ".active-image input, .active-image select, .active-image button { width: 100%; font: inherit; }"
+         ".active-image output { display: block; margin-top: 5px; color: var(--muted); }"
+         ".active-image-switch { text-align: left; cursor: pointer; }"
+         ".active-image-switch.is-on { background: var(--good-soft); border-color: #b8d9b4; }"
+         ".active-image-bars { display: flex; align-items: end; gap: 4px; height: 60px; }"
+         ".active-image-bar { flex: 1; min-width: 5px; background: var(--accent); border-radius: 2px 2px 0 0; }"
+         ".active-image-plot { width: 100%; height: 88px; color: var(--accent); background: #ffffff; }"
          ".meta { display: grid; grid-template-columns: 96px minmax(0, 1fr); gap: 6px 10px; font-size: 13px; }"
          ".meta dt { color: var(--muted); }"
          ".meta dd { margin: 0; min-width: 0; overflow-wrap: anywhere; }"
@@ -464,7 +510,23 @@
          "function hierarchyButton(name, kb, meta = '') { const id = referenceId('unit', name, kb); const active = state.selected === id ? ' active' : ''; const label = `<span class='node-row-title'>${esc(name)}</span>${meta ? `<span class='node-row-meta'>${esc(meta)}</span>` : ''}`; return referenceExists('unit', name, kb) ? `<button type='button' class='node-row hierarchy-row${active}' data-ref-kind='unit' data-ref-name='${esc(name)}' data-ref-kb='${esc(kb || '')}'>${label}</button>` : `<div class='node-row static'>${label}</div>`; }"
          "function hierarchySection(title, names, kb, metaFn = null) { const rows = (names || []).filter(Boolean); const body = rows.length ? rows.map(name => hierarchyButton(name, kb, metaFn ? metaFn(name) : '')).join('') : `<p class='empty'>None</p>`; return `<section class='browser-section'><h3>${esc(title)}</h3><div class='node-list compact'>${body}</div></section>`; }"
          "function slotText(values) { return (values || []).join(', ') || 'NIL'; }"
-         "function renderSlotBrowser(detail) { if (!detail) { slotBrowser.innerHTML = `<section class='browser-section'><h3>Slot Table</h3><p class='empty'>No unit selected</p></section>`; return; } const slots = detail.slots || []; slotBrowser.innerHTML = `<section class='browser-section'><h3>Slot Table</h3>${slots.length ? `<table class='slot-table'><thead><tr><th>Slot</th><th>Kind</th><th>Values</th></tr></thead><tbody>${slots.map(slot => `<tr><td><span class='code-text'>${esc(slot.name)}</span></td><td>${esc(slot.kind || 'NIL')}</td><td><span class='code-text'>${esc(slotText(slot.combinedValues))}</span></td></tr>`).join('')}</tbody></table>` : `<p class='empty'>None</p>`}</section>`; }"
+         "function activeImagesForUnit(detail) { return (DATA.details.activeImages || []).filter(image => image.targetKb === detail.kb && image.targetUnit === detail.name); }"
+         "function activeImageByName(name) { return (DATA.details.activeImages || []).find(image => image.name === name); }"
+         "function activeImageNumber(value, fallback = 0) { const number = Number(value); return Number.isFinite(number) ? number : fallback; }"
+         "function activeImageAttrs(image) { return `data-active-image-name='${esc(image.name)}'`; }"
+         "function activeImageValueText(image) { return (image.values || []).length ? (image.values || []).join(', ') : 'NIL'; }"
+         "function activeImageOnP(value) { const text = String(value ?? '').toUpperCase(); return !!text && !['NIL', 'FALSE', 'OFF', 'NO', '0'].includes(text); }"
+         "function renderActiveImageChoice(image) { const choices = image.choices || []; if (!(image.writableP && choices.length)) return ''; return `<select ${activeImageAttrs(image)}>${choices.map(choice => `<option value='${esc(choice)}' ${String(choice) === String(image.value ?? '') ? 'selected' : ''}>${esc(choice)}</option>`).join('')}</select>`; }"
+         "function renderActiveImageMeter(image, className) { const value = activeImageNumber(image.value, 0); const min = activeImageNumber(image.min, 0); const max = activeImageNumber(image.max, Math.max(100, value)); const control = image.writableP ? `<input type='range' min='${min}' max='${max}' value='${value}' ${activeImageAttrs(image)}><output>${esc(image.value ?? 'NIL')}</output>` : `<meter min='${min}' max='${max}' value='${value}'>${esc(image.value ?? 'NIL')}</meter><output>${esc(image.value ?? 'NIL')}</output>`; return `<div class='active-image ${className}'><label>${esc(image.label || image.name)}</label>${control}</div>`; }"
+         "function renderActiveImageHistogram(image) { const numbers = (image.values || []).map(Number).filter(Number.isFinite); if (!numbers.length) return renderActiveImageValue(image); const max = Math.max(...numbers, 1); const bars = numbers.map(value => `<span class='active-image-bar' style='height:${Math.max(0, Math.min(100, (value / max) * 100))}%' title='${esc(value)}'></span>`).join(''); return `<div class='active-image active-image-histogram' ${activeImageAttrs(image)}><strong>${esc(image.label || image.name)}</strong><div class='active-image-bars'>${bars}</div></div>`; }"
+         "function renderActiveImagePlot(image) { const numbers = (image.values || []).map(Number).filter(Number.isFinite); if (numbers.length < 2) return renderActiveImageValue(image); const min = Math.min(...numbers); const max = Math.max(...numbers); const span = max === min ? 1 : max - min; const points = numbers.map((value, index) => `${numbers.length === 1 ? 0 : (index / (numbers.length - 1)) * 100},${100 - ((value - min) / span) * 100}`).join(' '); return `<div class='active-image'><strong>${esc(image.label || image.name)}</strong><svg class='active-image-plot' viewBox='0 0 100 100' role='img' aria-label='${esc(image.label || image.name)}' ${activeImageAttrs(image)}><polyline points='${points}' fill='none' stroke='currentColor' stroke-width='3'></polyline></svg></div>`; }"
+         "function renderActiveImageValue(image) { const choices = renderActiveImageChoice(image); if (choices) return `<div class='active-image'><strong>${esc(image.label || image.name)}</strong>${choices}</div>`; const value = esc(activeImageValueText(image)); const control = image.writableP ? `<input class='active-image-value-input' type='text' value='${value}' ${activeImageAttrs(image)}>` : `<span class='code-text'>${value}</span>`; return `<div class='active-image active-image-value'><strong>${esc(image.label || image.name)}</strong>${control}</div>`; }"
+         "function renderActiveImage(image) { const widget = String(image.widget || 'value').toLowerCase(); if (widget === 'gauge') return renderActiveImageMeter(image, 'active-image-gauge'); if (widget === 'thermometer') return renderActiveImageMeter(image, 'active-image-thermometer'); if (widget === 'switch') { const on = activeImageOnP(image.value); return `<button type='button' class='active-image active-image-switch ${on ? 'is-on' : 'is-off'}' aria-pressed='${on ? 'true' : 'false'}' ${activeImageAttrs(image)} ${image.writableP ? '' : 'disabled'}>${esc(image.label || image.name)}: ${on ? 'ON' : 'OFF'}</button>`; } if (widget === 'button') return `<button type='button' class='active-image active-image-button' ${activeImageAttrs(image)} ${image.writableP ? '' : 'disabled'}>${esc(image.label || image.name)}</button>`; if (widget === 'histogram') return renderActiveImageHistogram(image); if (widget === 'plot') return renderActiveImagePlot(image); return renderActiveImageValue(image); }"
+         "function renderActiveImageSection(detail) { const images = activeImagesForUnit(detail); return images.length ? `<section class='browser-section'><h3>ActiveImages</h3><div class='active-image-list'>${images.map(renderActiveImage).join('')}</div></section>` : ''; }"
+         "function renderSlotBrowser(detail) { if (!detail) { slotBrowser.innerHTML = `<section class='browser-section'><h3>Slot Table</h3><p class='empty'>No unit selected</p></section>`; return; } const slots = detail.slots || []; const slotTable = `<section class='browser-section'><h3>Slot Table</h3>${slots.length ? `<table class='slot-table'><thead><tr><th>Slot</th><th>Kind</th><th>Values</th></tr></thead><tbody>${slots.map(slot => `<tr><td><span class='code-text'>${esc(slot.name)}</span></td><td>${esc(slot.kind || 'NIL')}</td><td><span class='code-text'>${esc(slotText(slot.combinedValues))}</span></td></tr>`).join('')}</tbody></table>` : `<p class='empty'>None</p>`}</section>`; slotBrowser.innerHTML = slotTable + renderActiveImageSection(detail); }"
+         "function coerceActiveImageInput(image, value) { if ([image.value, image.min, image.max].some(item => typeof item === 'number')) { const number = Number(value); if (Number.isFinite(number)) return number; } return value; }"
+         "function updateActiveImageTarget(image, value) { (DATA.details.activeImages || []).forEach(other => { if (other.targetKb === image.targetKb && other.targetUnit === image.targetUnit && other.targetSlot === image.targetSlot && other.targetFacet === image.targetFacet) { other.value = value; other.values = [value]; } }); if (image.targetFacet) return; const detail = DATA.details.units[referenceId('unit', image.targetUnit, image.targetKb)]; const slot = detail && (detail.slots || []).find(candidate => candidate.name === image.targetSlot); if (slot) { slot.localValues = [value]; slot.combinedValues = [value]; } }"
+         "function setActiveImageLocal(name, rawValue) { const image = activeImageByName(name); if (!image || !image.writableP) return; const value = coerceActiveImageInput(image, rawValue); updateActiveImageTarget(image, value); render(); }"
          "function renderHierarchyBrowser(model, graph) { const detail = selectedUnitDetail(graph); const topLevels = unitTopLevels(); const topNames = topLevels.map(unit => unit.name); const slotMeta = name => { const unit = unitDetails().find(candidate => candidate.name === name); const count = unit?.slots?.length ?? 0; return `${count} slots`; }; let html = hierarchySection('Top Level Units', topNames, DATA.units.kb, slotMeta); if (detail) { html += `<section class='browser-section'><h3>Current Unit</h3><div class='node-list compact'>${hierarchyButton(detail.name, detail.kb, `${(detail.slots || []).length} slots`)}</div></section>`; html += hierarchySection('Class Parents', detail.classParents, detail.kb); html += hierarchySection('Member Parents', detail.memberParents, detail.kb); html += hierarchySection('Subclass Children', detail.classChildren, detail.kb); html += hierarchySection('Member Children', detail.memberChildren, detail.kb); } else { html += `<section class='browser-section'><h3>Current Unit</h3><p class='empty'>No unit selected</p></section>`; } hierarchyBrowser.innerHTML = html; renderSlotBrowser(detail); renderNodeBrowser(model, graph); }"
          "function renderBrowser(model, graph) { renderKbStrip(); if (graph.kind === 'unit') { renderHierarchyBrowser(model, graph); return; } hierarchyBrowser.innerHTML = ''; slotBrowser.innerHTML = ''; renderNodeBrowser(model, graph); }"
          "function renderNodeBrowser(model, graph) {"
@@ -513,7 +575,9 @@
          "  const summary = `<h2>${esc(title)}</h2><dl class='meta'><dt>ID</dt><dd>${esc(node.id)}</dd>${detail?.kb ? `<dt>KB</dt><dd>${esc(detail.kb)}</dd>` : ''}${parent}${graph.kind === 'world' ? `<dt>Facts</dt><dd>${node.factCount}</dd><dt>Nogoods</dt><dd>${node.nogoodCount}</dd><dt>Status</dt><dd>${node.inconsistentP ? 'inconsistent' : 'consistent'}</dd>` : `<dt>Slots</dt><dd>${slotCount}</dd>`}<dt>Incoming</dt><dd>${incoming.length}</dd><dt>Outgoing</dt><dd>${outgoing.length}</dd></dl>`;"
          "  inspector.innerHTML = summary + (detail ? (graph.kind === 'unit' ? renderUnitDetail(detail) : renderWorldDetail(detail)) : '');"
          "}"
-         "browserPane.addEventListener('click', event => { const ref = event.target.closest('[data-ref-kind]'); if (!ref) return; selectReference(ref.dataset.refKind, ref.dataset.refName, ref.dataset.refKb || null); });"
+         "browserPane.addEventListener('input', event => { const control = event.target.closest('[data-active-image-name]'); if (!control || control.type !== 'range') return; setActiveImageLocal(control.dataset.activeImageName, control.value); });"
+         "browserPane.addEventListener('change', event => { const control = event.target.closest('[data-active-image-name]'); if (!control || control.type === 'range') return; setActiveImageLocal(control.dataset.activeImageName, control.value); });"
+         "browserPane.addEventListener('click', event => { const activeControl = event.target.closest('button[data-active-image-name]'); if (activeControl) { const image = activeImageByName(activeControl.dataset.activeImageName); if (image && image.writableP) setActiveImageLocal(image.name, activeControl.classList.contains('active-image-switch') ? (activeImageOnP(image.value) ? 'OFF' : 'ON') : (image.value ?? 'TRUE')); return; } const ref = event.target.closest('[data-ref-kind]'); if (!ref) return; selectReference(ref.dataset.refKind, ref.dataset.refName, ref.dataset.refKb || null); });"
          "inspector.addEventListener('click', event => { const ref = event.target.closest('[data-ref-kind]'); if (!ref) return; selectReference(ref.dataset.refKind, ref.dataset.refName, ref.dataset.refKb || null); });"
          "document.querySelectorAll('[data-tab]').forEach(button => button.addEventListener('click', () => { setView(button.dataset.tab); state.selected = null; state.viewBox = null; render(); }));"
          "search.addEventListener('input', () => { state.query = search.value; render(); });"
