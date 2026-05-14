@@ -22,4 +22,5 @@ node --check "$tmpdir/kee-viewer.js"
 "$repo_root/scripts/check-viewer.sh"
 
 sbcl --script examples/veg-rule-mini.lisp
+sbcl --script examples/active-image-mini.lisp
 sbcl --script examples/hamburg-puzzle-mini.lisp

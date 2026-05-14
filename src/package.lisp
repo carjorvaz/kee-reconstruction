@@ -55,6 +55,13 @@
    #:set.active.image.value
    #:active.image.html
    #:write.active.image.html
+   #:create.kee.picture
+   #:list.kee.pictures
+   #:create.picture.item
+   #:picture.items
+   #:kee.picture.report
+   #:kee.picture.svg
+   #:write.kee.picture.svg
    #:trace.events
    #:clear.trace.events
    #:record.trace.event

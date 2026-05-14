@@ -1,6 +1,7 @@
 (load (merge-pathnames "../src/package.lisp" *load-truename*))
 (load (merge-pathnames "../src/core.lisp" *load-truename*))
 (load (merge-pathnames "../src/active-images.lisp" *load-truename*))
+(load (merge-pathnames "../src/pictures.lisp" *load-truename*))
 (load (merge-pathnames "../src/traces.lisp" *load-truename*))
 (load (merge-pathnames "../src/worlds.lisp" *load-truename*))
 (load (merge-pathnames "../src/rules.lisp" *load-truename*))
@@ -158,7 +159,49 @@
     (kee:set.active.image.value 'temperature.gauge 42)
     (check (eql (kee:get.value 'sensor.1 'temperature) 42))
     (check (equal (reverse events)
-                  '((meter-write sensor.1 temperature (21) (42))))))
+                  '((meter-write sensor.1 temperature (21) (42)))))
+    (kee:create.kee.picture 'sensor.panel
+                            :width 240
+                            :height 120
+                            :label "Sensor Panel")
+    (kee:create.picture.item 'sensor.panel 'panel.frame :rectangle
+                             :x 8
+                             :y 8
+                             :width 224
+                             :height 104
+                             :fill "#FFFFFF")
+    (kee:create.picture.item 'sensor.panel 'panel.title :text
+                             :x 18
+                             :y 28
+                             :text "KEEpicture sensor panel")
+    (kee:create.picture.item 'sensor.panel 'temperature.card :active-image
+                             :active-image 'temperature.gauge
+                             :x 18
+                             :y 40
+                             :width 150
+                             :height 58)
+    (kee:create.picture.item 'sensor.panel 'temperature.value :value
+                             :target-unit 'sensor.1
+                             :target-slot 'temperature
+                             :label "Slot value"
+                             :x 18
+                             :y 108)
+    (check (equal (names (kee:list.kee.pictures 'veg))
+                  '(sensor.panel)))
+    (check (equal (names (kee:picture.items 'sensor.panel))
+                  '(panel.frame panel.title temperature.card
+                    temperature.value)))
+    (let ((report (kee:kee.picture.report 'sensor.panel))
+          (svg (kee:kee.picture.svg 'sensor.panel)))
+      (check (eq (getf report :name) 'sensor.panel))
+      (check (= (length (getf report :items)) 4))
+      (check (search "class='kee-picture'" svg))
+      (check (search "KEEpicture sensor panel" svg))
+      (check (search "data-picture-item='TEMPERATURE.CARD'" svg))
+      (check (search "Temperature" svg))
+      (check (search "42" svg)))
+    (kee:set.active.image.value 'temperature.gauge 55)
+    (check (search "55" (kee:kee.picture.svg 'sensor.panel))))
   (kee:create.unit 'technique.selection.rules 'veg 'entities 'classes)
   (kee:put.value 'technique.selection.rules 'kee:parse #'kee:parse)
   (let ((wave (kee:create.unit 'wavelength.1 'veg nil nil)))
@@ -303,6 +346,7 @@
     (check (search "\"kbs\"" viewer-html))
     (check (search "\"details\"" viewer-html))
     (check (search "\"activeImages\"" viewer-html))
+    (check (search "\"pictures\"" viewer-html))
     (check (search "\"ruleReferences\"" viewer-html))
     (check (search "\"ruleReference\"" viewer-html))
     (check (search "\"traces\"" viewer-html))
@@ -325,6 +369,7 @@
     (check (search "Review Tour" viewer-html))
     (check (search "data-review-tour" viewer-html))
     (check (search "['worlds', 'Worlds']" viewer-html))
+    (check (search "['kee-pictures', 'KEEpictures']" viewer-html))
     (check (search "selectReviewTour" viewer-html))
     (check (search "reviewTourTarget" viewer-html))
     (check (search "id='desktop-roster'" viewer-html))
@@ -334,6 +379,11 @@
     (check (search "id='session-pane'" viewer-html))
     (check (search "renderSessionPane" viewer-html))
     (check (search "data-session-window" viewer-html))
+    (check (search "id='picture-browser'" viewer-html))
+    (check (search "renderPictureBrowser" viewer-html))
+    (check (search "data-picture-name" viewer-html))
+    (check (search "Sensor Panel" viewer-html))
+    (check (search "TEMPERATURE.CARD" viewer-html))
     (check (search "Top Level Units" viewer-html))
     (check (search "Slot Table" viewer-html))
     (check (search "slotFacetText" viewer-html))

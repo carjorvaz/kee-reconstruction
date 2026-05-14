@@ -139,6 +139,39 @@ Important uncertainty:
 These operation slot names are reconstruction names. The concept is recovered;
 the exact original KEE operation names still need manual evidence.
 
+## KEEpictures
+
+High confidence concept:
+
+- KEEpictures were mouse/menu graphics represented with KEE units.
+- KEEpictures could animate by changing slot values.
+- ActiveImages were interactive KEEpictures that connected graphics back to
+  object state.
+
+Current reconstruction:
+
+- `create.kee.picture` creates a reconstructed KEEpicture as an ordinary unit
+  under `kee.pictures`.
+- `create.picture.item` creates contained picture item units under
+  `kee.picture.items` and the owning picture.
+- Current item kinds are `:rectangle`, `:text`, `:value`, and `:active-image`.
+- `:value` items read a target unit/slot binding.
+- `:active-image` items reference an existing ActiveImage unit, so picture
+  previews can display the current slot-bound ActiveImage value.
+- `list.kee.pictures`, `picture.items`, and `kee.picture.report` expose the
+  structured picture model.
+- `kee.picture.svg` and `write.kee.picture.svg` render small SVG previews.
+- The standalone viewer embeds picture reports in `details.pictures`, enables
+  the KEEpictures Review Tour/Desktop target when pictures exist, and renders
+  SVG previews in the Browser pane.
+
+Important uncertainty:
+
+This is a deliberately small picture-object model. The KEEpictures concept is
+recovered from public descriptions, but exact original constructor names,
+object hierarchy, editor behavior, and mouse event vocabulary still need
+manual or source evidence.
+
 ## ActiveImages
 
 High confidence concept:

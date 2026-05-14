@@ -6,6 +6,7 @@
   :components ((:file "src/package")
                (:file "src/core")
                (:file "src/active-images")
+               (:file "src/pictures")
                (:file "src/traces")
                (:file "src/worlds")
                (:file "src/rules")

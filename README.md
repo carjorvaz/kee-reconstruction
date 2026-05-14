@@ -85,6 +85,8 @@ The first implementation target is `kee-core`:
 - first-pass ActiveImage units bound to ordinary unit slots, with HTML
   fragments for button, gauge/thermometer, switch, histogram, and plot widgets
   plus optional write-back through `put.value`
+- first-pass KEEpicture units with contained rectangle, text, slot-value, and
+  embedded ActiveImage items, plus SVG previews through `kee.picture.svg`
 - value-class and cardinality facets such as `(one.of ...)`,
   `min.cardinality`, and `max.cardinality`
 - a tiny RuleSystem subset with rule units, `external.form`, `parse`,
@@ -111,11 +113,12 @@ The first implementation target is `kee-core`:
   `write.kee.viewer.html`, with visible current-KB state, loaded-KB chips, a
   class/member hierarchy browser, synchronized slot table, Review Tour
   controls, a reconstructed Desktop roster with Listener/Typescript/Prompt
-  transcript panes, embedded ActiveImage controls with local static-page
-  updates, searchable node browser, and a clickable inspector for slots,
-  facets, facts, nogood explanations, and in-graph references, rule
-  cross-reference panes with operation/slot/target filters, plus trace panes
-  filterable by family, event kind, selected-node scope, and search text, with
+  transcript panes, embedded KEEpicture previews, embedded ActiveImage
+  controls with local static-page updates, searchable node browser, and a
+  clickable inspector for slots, facets, facts, nogood explanations, and
+  in-graph references, rule cross-reference panes with operation/slot/target
+  filters, plus trace panes filterable by family, event kind, selected-node
+  scope, and search text, with
   previous/next trace jumps, focused trace detail, a compact
   agenda/conflict-set pane with candidate/fired-rule jump controls plus
   condition/action/effect drilldowns, a provenance-backed causality graph,
@@ -159,8 +162,9 @@ hierarchy and generated worlds. The browser shell can also print DOT with
 the Hamburg puzzle. The browser shell can also print one with `(viewer 40)`.
 
 `examples/active-image-mini.lisp` creates a slot-bound ActiveImage gauge,
-renders it as a small HTML fragment, and updates the target slot through the
-ActiveImage so ActiveValue write hooks still run.
+embeds it in a small reconstructed KEEpicture, renders HTML/SVG fragments, and
+updates the target slot through the ActiveImage so ActiveValue write hooks
+still run.
 
 ## Running Tests
 

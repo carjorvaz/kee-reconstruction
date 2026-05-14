@@ -171,6 +171,20 @@ prototype level:
   inherited, combined, and facet values
 - keeps graph focus synchronized with hierarchy selection
 
+## Implemented KEEpicture Increment
+
+The reconstruction now has a first object-backed KEEpicture primitive:
+
+- KEEpictures are ordinary KEE units under `kee.pictures`
+- picture items are ordinary KEE units contained by their owning picture
+- supported item kinds are rectangle, text, slot-value display, and embedded
+  ActiveImage reference
+- `kee.picture.report` exposes a structured picture and current item values
+- `kee.picture.svg` renders a small SVG preview for examples and reviewer
+  demos
+- the standalone viewer embeds KEEpicture reports and shows picture previews
+  when a KB has reconstructed picture units
+
 ## Implemented ActiveImage Increment
 
 The reconstruction now has a first ActiveImage primitive:

@@ -44,6 +44,9 @@ Status:
 - ActiveValue read/write/add/remove hooks exist, with reconstructed event names.
 - First ActiveImage units exist as slot-bound display objects with simple HTML
   widget renderers and optional write-back through `put.value`.
+- First KEEpicture units exist as object-backed picture containers with
+  rectangle, text, slot-value, and embedded ActiveImage items plus SVG preview
+  rendering.
 
 ## Phase 2: ActiveValues and Methods
 
@@ -147,9 +150,10 @@ Status:
 - `kee.viewer.html` and `write.kee.viewer.html` generate a standalone HTML/SVG
   graph browser over the same data, including visible current-KB state,
   loaded-KB chips, top-level-unit selection, class/member hierarchy browsing,
-  synchronized slot display, embedded ActiveImage controls with local static
-  updates, a reconstructed Desktop roster with Listener/Typescript/Prompt
-  transcript panes, a searchable node list, and clicked-node detail panes for
+  synchronized slot display, embedded KEEpicture previews, embedded
+  ActiveImage controls with local static updates, a reconstructed Desktop
+  roster with Listener/Typescript/Prompt transcript panes, a searchable node
+  list, and clicked-node detail panes for
   slots, facets, facts, nogoods, and in-graph references, plus rule cross-reference
   panes with operation/slot/target filters, trace panes filterable by family,
   event kind, selected-node scope, and search text, previous/next trace jumps,
@@ -180,9 +184,10 @@ Status:
   hierarchy and generated worlds.
 - `examples/kee-graph-viewer.lisp` emits a browser-openable HTML graph view.
 - `examples/active-image-mini.lisp` demonstrates a slot-bound ActiveImage
-  gauge and ActiveValue write hook interaction.
+  gauge, an object-backed KEEpicture preview, and ActiveValue write hook
+  interaction.
 
 Next GUI target:
 
-- Expand the recovered debugging tools beyond the first trace/xref view:
-  ATMS-style labels with dependency-directed propagation and retraction.
+- Expand the KEEpicture layer toward viewport/windowpane structure and
+  mouse-event traces before attempting a full editor.
