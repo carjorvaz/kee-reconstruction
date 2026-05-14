@@ -3,6 +3,7 @@
 (load (merge-pathnames "../src/active-images.lisp" *load-truename*))
 (load (merge-pathnames "../src/traces.lisp" *load-truename*))
 (load (merge-pathnames "../src/pictures.lisp" *load-truename*))
+(load (merge-pathnames "../src/dump.lisp" *load-truename*))
 (load (merge-pathnames "../src/worlds.lisp" *load-truename*))
 (load (merge-pathnames "../src/rules.lisp" *load-truename*))
 (load (merge-pathnames "../src/inspect.lisp" *load-truename*))
@@ -311,6 +312,78 @@
   (kee:create.unit 'constraint.rules 'veg 'entities 'classes)
   (check (equal (kee:list.kbs) '(veg)))
   (check (member 'tom (names (kee:list.units 'veg))))
+  (kee:create.kb 'delivery)
+  (kee:create.unit 'classes 'delivery nil nil)
+  (kee:create.unit 'entities 'delivery nil nil)
+  (kee:create.unit 'targets 'delivery 'entities 'classes)
+  (kee:create.slot 'targets 'status 'member '(pending)
+                   nil nil nil '((kee:value.class
+                                  (kee:one.of pending ready done))))
+  (let ((target (kee:create.unit 'target.a 'delivery nil 'targets)))
+    (kee:put.value target 'status 'ready)
+    (kee:create.unit 'dashboard 'delivery nil nil)
+    (kee:add.value 'dashboard 'primary.target target)
+    (kee:create.active.image 'target.status.image target 'status
+                             :widget :value
+                             :label "Target status"
+                             :choices '(pending ready done)
+                             :writable-p t)
+    (kee:create.kee.picture 'delivery.panel
+                            :kb 'delivery
+                            :label "Delivery Panel"
+                            :width 220
+                            :height 100)
+    (kee:create.picture.item 'delivery.panel 'delivery.00.title :text
+                             :x 12
+                             :y 24
+                             :text "Delivery KB")
+    (kee:create.picture.item 'delivery.panel 'delivery.10.status :active-image
+                             :active-image 'target.status.image
+                             :x 12
+                             :y 38
+                             :width 140
+                             :height 42)
+    (kee:create.picture.viewport 'delivery.viewport 'delivery.panel
+                                 :label "Delivery View")
+    (kee:create.picture.windowpane 'delivery.window 'delivery.viewport
+                                   :label "Delivery Window")
+    (let ((snapshot (kee:dump.kb 'delivery)))
+      (check (eq (getf snapshot :format) :reconstructed-kee-kb))
+      (check (eq (getf snapshot :kb) 'delivery))
+      (let ((dump-text (with-output-to-string (stream)
+                         (kee:write.kb.dump stream 'delivery))))
+        (check (search ":KEE-DUMP-UNIT-REF" dump-text))
+        (check (eq (getf (kee:read.kb.dump
+                          (make-string-input-stream dump-text))
+                         :kb)
+                   'delivery)))
+      (check (signals-error-p
+              (lambda ()
+                (kee:load.kb.dump snapshot))))
+      (kee:load.kb.dump snapshot :replace t)
+      (check (eq (kee:kb.name (kee:kb 'delivery)) 'delivery))
+      (check (equal (names (kee:unit.parents 'target.a 'member))
+                    '(targets)))
+      (check (eq (kee:get.value 'target.a 'status) 'ready))
+      (check (equal (kee:slot.facet.values 'target.a 'status
+                                           'kee:value.class)
+                    '((kee:one.of pending ready done))))
+      (check (eq (kee:unit.name
+                  (kee:get.value 'dashboard 'primary.target))
+                 'target.a))
+      (check (equal (names (kee:list.active.images 'delivery))
+                    '(target.status.image)))
+      (check (search "READY"
+                     (kee:active.image.html 'target.status.image)))
+      (check (equal (names (kee:list.kee.pictures 'delivery))
+                    '(delivery.panel)))
+      (check (equal (names (kee:picture.viewports 'delivery.panel))
+                    '(delivery.viewport)))
+      (check (equal (names (kee:picture.windowpanes 'delivery.viewport))
+                    '(delivery.window)))
+      (check (search "Delivery KB"
+                     (kee:kee.picture.svg 'delivery.panel)))))
+  (kee:goto.kb 'veg)
   (let ((tom-report (kee:inspect.unit 'tom))
         (sport-report (kee:inspect.slot 'tom 'sport))
         (browser-text (with-output-to-string (stream)

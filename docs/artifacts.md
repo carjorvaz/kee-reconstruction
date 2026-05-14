@@ -86,6 +86,9 @@ redistribute with it.
   demo and screenshot.
 - `docs/expert-review.md` - prompts for collecting first-hand review from KEE
   and Lisp Machine users.
+- `examples/kb-dump-mini.lisp` - generated reconstruction example inspired by
+  KATYDID/VEG delivery evidence; demonstrates readable KB dump/load, not an
+  original KEE file format.
 
 ## Local Corpus Leads
 

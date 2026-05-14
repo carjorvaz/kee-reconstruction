@@ -16,6 +16,20 @@ Likely object accessors:
 
 - `kb.name`
 
+Current reconstruction additions:
+
+- `dump.kb` returns a readable s-expression dump of one reconstructed KB.
+- `write.kb.dump` writes that dump to a stream.
+- `read.kb.dump` reads one dump form from a stream.
+- `load.kb.dump` reconstructs the KB, with `:replace t` for overwriting an
+  existing KB of the same name.
+
+This is inspired by public KATYDID evidence for knowledge-structure
+translation and a KEE knowledge-base dumper. It is not an original KEE dump
+format. The first implementation preserves portable KB data: units,
+class/member parents, local slots, facets, unit references, ActiveImage units,
+and KEEpicture units. It deliberately rejects live function objects.
+
 ## Units
 
 High confidence:

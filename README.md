@@ -90,6 +90,9 @@ The first implementation target is `kee-core`:
 - first-pass KEEpicture units with contained rectangle, text, slot-value, and
   embedded ActiveImage items, reconstructed viewport/windowpane units,
   mouse-event traces, and SVG previews through `kee.picture.svg`
+- readable knowledge-base dumps with `dump.kb`, `write.kb.dump`,
+  `read.kb.dump`, and `load.kb.dump`, preserving units, parent links, local
+  slots, facets, unit references, ActiveImage units, and KEEpicture units
 - value-class and cardinality facets such as `(one.of ...)`,
   `min.cardinality`, and `max.cardinality`
 - a tiny RuleSystem subset with rule units, `external.form`, `parse`,
@@ -168,6 +171,10 @@ the Hamburg puzzle. The browser shell can also print one with `(viewer 40)`.
 embeds it in a small reconstructed KEEpicture, renders HTML/SVG fragments, and
 updates the target slot through the ActiveImage so ActiveValue write hooks
 still run.
+
+`examples/kb-dump-mini.lisp` writes a readable reconstructed KB dump, reloads
+it, and checks that units, facets, ActiveImages, and KEEpicture items survived
+the round trip.
 
 ## Running Tests
 

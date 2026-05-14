@@ -69,6 +69,10 @@
    #:kee.picture.report
    #:kee.picture.svg
    #:write.kee.picture.svg
+   #:dump.kb
+   #:load.kb.dump
+   #:write.kb.dump
+   #:read.kb.dump
    #:trace.events
    #:clear.trace.events
    #:record.trace.event

@@ -47,6 +47,8 @@ Status:
 - First KEEpicture units exist as object-backed picture containers with
   rectangle, text, slot-value, and embedded ActiveImage items plus viewport,
   windowpane, mouse-event trace, and SVG preview support.
+- First readable KB dumps exist for portable reconstructed KB state, motivated
+  by KATYDID/VEG delivery evidence.
 
 ## Phase 2: ActiveValues and Methods
 
