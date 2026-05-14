@@ -1004,7 +1004,7 @@
          "}"
          "function colorFor(node, graph) { if (graph.kind === 'world') return node.inconsistentP ? '#ffe7e4' : '#eef7ed'; return (node.slots && node.slots.length) ? '#e8f2fb' : '#ffffff'; }"
          "function edgePath(from, to) { const x1 = from.x + from.w; const y1 = from.y + from.h / 2; const x2 = to.x; const y2 = to.y + to.h / 2; const mid = x1 + Math.max(40, (x2 - x1) / 2); return `M ${x1} ${y1} C ${mid} ${y1}, ${mid} ${y2}, ${x2} ${y2}`; }"
-         "function denseGraphP(graph) { return graph.edges.length > Math.max(30, graph.nodes.length * 1.15); }"
+         "function denseGraphP(graph) { return graph.edges.length > 24; }"
          "function edgeTouchesSelection(edge) { return !!state.selected && (edge.from === state.selected || edge.to === state.selected); }"
          "function setViewBox(width, height) { state.viewBox = { x: 0, y: 0, w: width / state.zoom, h: height / state.zoom }; svg.setAttribute('viewBox', `${state.viewBox.x} ${state.viewBox.y} ${state.viewBox.w} ${state.viewBox.h}`); }"
          "function clamp(value, min, max) { return Math.max(min, Math.min(max, value)); }"
