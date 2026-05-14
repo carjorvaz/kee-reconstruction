@@ -171,7 +171,8 @@ The reconstruction now has a first trace layer for rule/world debugging:
 - a spatial trace map lays out recent agenda/rule/world/problem events in
   lanes
 - focused trace-map events emphasize adjacent chronological path segments
-- trace-map replay controls step or play through filtered map events
+- trace-map replay controls step or play through filtered map events, with
+  speed, loop, and current-position controls for larger demos
 - a compact trace graph summarizes agenda/rule/world/contradiction flow
 - textual method traces now record `unitmsg` dispatch, before/primary/after
   method contribution calls, and returns
@@ -195,4 +196,5 @@ The reconstruction now has a first static rule cross-referencer:
 
 Expand the debugging tools around the first trace and xref panes:
 
-- richer trace-map replay controls for larger demos
+- richer branch/path emphasis over rule firings, generated worlds, and
+  contradictions

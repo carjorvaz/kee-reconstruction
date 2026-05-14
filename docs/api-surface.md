@@ -317,8 +317,8 @@ Current reconstruction:
   trace events filterable by family, event kind, selected-node scope, and
   search text, previous/next trace jumps, focused trace detail, a compact trace
   graph, graph highlighting for focused trace references, focused-trace graph
-  target buttons, a spatial trace map with replay controls, and navigable
-  references to visible units or worlds.
+  target buttons, a spatial trace map with speed/loop replay controls, and
+  navigable references to visible units or worlds.
 
 This is a reconstruction support layer rather than a recovered KEE API. It is
 intended to keep display logic separate from the object/rule/world core, so a
