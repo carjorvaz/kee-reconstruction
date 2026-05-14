@@ -37,6 +37,9 @@ reconstruction, and causality views in one place.
   worlds, local world facts, support labels, assumptions, and nogoods.
 - The Browser pane: Current KB state, Review Tour controls, the reconstructed
   Desktop roster, and Listener/Typescript/Prompt transcript panes.
+- The KEEpictures tour target: a small reconstructed picture with viewport and
+  windowpane metadata, an embedded writable ActiveImage, and a picture mouse
+  trace.
 - The Trace pane: agenda passes, rule matches/fires, world branches, slot
   writes, contradictions, label retractions, why trails, and trace map.
 - `examples/hamburg-puzzle-mini.lisp`: the small KEE 3.0 training-slide-style

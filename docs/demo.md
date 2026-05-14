@@ -3,16 +3,18 @@
 The most useful current demo is the standalone Hamburg puzzle viewer. It is not
 the historical KEE GUI, but it exercises reconstructed KEE concepts in one
 place: units, slots, rule classes, generated worlds, trace events, fact labels,
-world assumptions, and nogood explanations.
+world assumptions, nogood explanations, a reconstructed KEEpicture, and
+slot-bound ActiveImages.
 
 The generated page opens on the Worlds tab with an inconsistent generated world
 selected. This is intentional: it gives reviewers a concrete first view of
 KEEworlds-style branching, assumptions, support labels, nogoods, and rule trace
 explanations instead of a blank or generic hierarchy view. The Browser pane also
 includes Review Tour controls that jump to representative units, rules, worlds,
-agenda traces, rule cross-references, and ActiveImages when available. It also
-shows a compact Desktop roster using recovered KEE window vocabulary, plus a
-small Listener/Typescript/Prompt transcript for the generated session.
+agenda traces, rule cross-references, KEEpictures, and ActiveImages when
+available. It also shows a compact Desktop roster using recovered KEE window
+vocabulary, plus a small Listener/Typescript/Prompt transcript for the
+generated session.
 
 ## Run
 
@@ -48,6 +50,12 @@ The command writes:
 
 ```text
 docs/assets/screenshots/hamburg-viewer-review.png
+```
+
+The KEEpicture tour screenshot uses the same generated demo:
+
+```sh
+KEE_DEMO_TOUR=kee-pictures nix develop --command scripts/screenshot-demo.sh docs/assets/screenshots/hamburg-viewer-kee-picture.png
 ```
 
 ## Interaction Check

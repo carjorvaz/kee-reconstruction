@@ -46,6 +46,17 @@ test('review tour jumps to reconstructed KEE surfaces', async ({ page }) => {
   await expect(page.locator('[data-tab="units"]')).toHaveClass(/active/);
   await expect(page.locator('.inspector-pane')).toContainText('Rule Xref');
 
-  await expect(page.locator('[data-review-tour="active-images"]')).toBeDisabled();
-  await expect(page.locator('[data-desktop-tour="active-images"]')).toBeDisabled();
+  await expect(page.locator('[data-review-tour="kee-pictures"]')).toBeEnabled();
+  await expect(page.locator('[data-desktop-tour="kee-pictures"]')).toBeEnabled();
+  await page.locator('[data-review-tour="kee-pictures"]').click();
+  await expect(page.locator('#picture-browser')).toContainText('Hamburg Review Panel');
+  await expect(page.locator('#picture-browser')).toContainText('Hamburg Review View');
+  await expect(page.locator('#picture-browser')).toContainText('Hamburg Review Window');
+  await expect(page.locator('.inspector-pane')).toContainText('Picture mouse');
+
+  await expect(page.locator('[data-review-tour="active-images"]')).toBeEnabled();
+  await expect(page.locator('[data-desktop-tour="active-images"]')).toBeEnabled();
+  await page.locator('[data-review-tour="active-images"]').click();
+  await expect(page.locator('#slot-browser')).toContainText('ActiveImages');
+  await expect(page.locator('#slot-browser')).toContainText('Review confidence');
 });

@@ -73,7 +73,10 @@ redistribute with it.
 
 - `docs/assets/screenshots/hamburg-viewer-review.png` - generated screenshot of
   the current standalone Hamburg puzzle viewer, including the reconstructed
-  Desktop roster and session transcript pane.
+  Desktop roster, session transcript pane, and GUI reconstruction surfaces.
+- `docs/assets/screenshots/hamburg-viewer-kee-picture.png` - generated
+  screenshot of the KEEpicture Review Tour target with viewport/windowpane and
+  embedded ActiveImage surfaces visible.
 - `docs/reviewer-packet.md` - short guided path for first-hand KEE and Lisp
   Machine reviewers.
 - `docs/demo.md` - reproducible commands for generating the interactive HTML

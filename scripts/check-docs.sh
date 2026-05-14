@@ -13,7 +13,9 @@ required_files=(
   "docs/gui-fidelity-matrix.md"
   "docs/demo.md"
   "docs/assets/screenshots/hamburg-viewer-review.png"
+  "docs/assets/screenshots/hamburg-viewer-kee-picture.png"
   "scripts/check-viewer.sh"
+  "test/demo-screenshot.spec.js"
   "test/viewer-tour.spec.js"
 )
 
@@ -32,6 +34,7 @@ artifact_terms=(
   "K4.0-UK-UNIX-1"
   "3X3IMPLEM1.U"
   "docs/assets/screenshots/hamburg-viewer-review.png"
+  "docs/assets/screenshots/hamburg-viewer-kee-picture.png"
 )
 
 review_terms=(

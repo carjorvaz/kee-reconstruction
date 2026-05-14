@@ -5,6 +5,8 @@ Environment (KEE).
 
 ![Hamburg puzzle reviewer-view screenshot](docs/assets/screenshots/hamburg-viewer-review.png)
 
+![Hamburg puzzle KEEpicture tour screenshot](docs/assets/screenshots/hamburg-viewer-kee-picture.png)
+
 This is not original IntelliCorp KEE source. It is a clean-room reconstruction
 of selected behavior, built from public evidence and runnable experiments.
 
@@ -40,7 +42,7 @@ Then open `demo/hamburg-viewer.html` in a browser.
 The current demo is a standalone Hamburg puzzle viewer. It is not the original
 KEE GUI, but it gives a concrete surface for reviewing reconstructed units,
 slots, rule classes, generated worlds, trace events, assumptions, support
-labels, and nogood explanations.
+labels, nogood explanations, KEEpictures, and ActiveImages.
 
 Useful follow-up commands:
 
