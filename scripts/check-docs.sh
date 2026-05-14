@@ -17,9 +17,11 @@ required_files=(
   "docs/assets/screenshots/hamburg-viewer-panels.png"
   "docs/assets/screenshots/auv-panel-workflow.png"
   "docs/assets/dumps/delivery.kdump"
+  "scripts/check-auv-panel-demo.sh"
   "scripts/check-viewer.sh"
   "scripts/render-auv-panel-demo.sh"
   "scripts/render-demo-dump.sh"
+  "test/auv-panel-workflow.spec.js"
   "test/demo-screenshot.spec.js"
   "test/viewer-tour.spec.js"
 )

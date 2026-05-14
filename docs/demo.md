@@ -101,6 +101,15 @@ nix develop --command scripts/check-viewer.sh
 It renders the demo into a temporary file, opens it with Playwright, and checks
 the Review Tour controls, slot table, rule cross-reference, and agenda panes.
 
+Run the AUV panel workflow browser check:
+
+```sh
+nix develop --command scripts/check-auv-panel-demo.sh
+```
+
+It renders the AUV workflow page, clicks through the three panel tabs, exercises
+Open/Close, and checks that panel and picture traces are visible.
+
 ## KB Dump
 
 The checked-in readable dump artifact is regenerated from the mini delivery KB:

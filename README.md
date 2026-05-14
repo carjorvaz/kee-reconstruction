@@ -53,6 +53,7 @@ Useful follow-up commands:
 ```sh
 nix develop --command scripts/screenshot-demo.sh
 nix develop --command scripts/check-viewer.sh
+nix develop --command scripts/check-auv-panel-demo.sh
 nix develop --command scripts/render-auv-panel-demo.sh
 nix develop --command scripts/smoke.sh
 ```

@@ -28,6 +28,7 @@ rg -F --quiet "Parameter Entry Panel" "$tmpdir/auv-panel-workflow.html"
 rg -F --quiet "Mission Monitoring Panel" "$tmpdir/auv-panel-workflow.html"
 rg -F --quiet "\"kind\":\"PANEL-CLOSE\"" "$tmpdir/auv-panel-workflow.html"
 "$repo_root/scripts/check-viewer.sh"
+"$repo_root/scripts/check-auv-panel-demo.sh"
 "$repo_root/scripts/render-demo-dump.sh" "$tmpdir/delivery.kdump"
 cmp -s "$tmpdir/delivery.kdump" "$repo_root/docs/assets/dumps/delivery.kdump"
 
