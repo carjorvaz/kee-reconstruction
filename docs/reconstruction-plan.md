@@ -136,9 +136,10 @@ Status:
 - `unit.graph` and `world.graph` provide structured graph exports with DOT
   renderers for quick visual inspection.
 - `kee.viewer.html` and `write.kee.viewer.html` generate a standalone HTML/SVG
-  graph browser over the same data, including a searchable node list and
-  clicked-node detail panes for slots, facets, facts, nogoods, and in-graph
-  references.
+  graph browser over the same data, including visible current-KB state,
+  loaded-KB chips, top-level-unit selection, class/member hierarchy browsing,
+  synchronized slot display, a searchable node list, and clicked-node detail
+  panes for slots, facets, facts, nogoods, and in-graph references.
 - `docs/gui-reconstruction.md` records the recovered browser, Common Windows,
   KEEpictures, ActiveImages, and trace/debugging evidence that should guide the
   next GUI increments.
@@ -150,5 +151,7 @@ Status:
 
 Next GUI target:
 
-- Add a KB/hierarchy browser pane with visible current-KB state, top-level-unit
-  selection, class/member up/down navigation, and synchronized slot display.
+- Add the first ActiveImage abstraction: bind display objects to unit slots,
+  render simple button/gauge/switch/thermometer widgets, and let configured
+  widgets push ordinary `put.value` updates back into the reconstructed KEE
+  object layer.

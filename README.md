@@ -43,9 +43,10 @@ The first implementation target is `kee-core`:
 - structured unit/world graph exports and Graphviz DOT renderers, including
   `unit.graph`, `world.graph`, `unit.graph.dot`, and `world.graph.dot`
 - standalone HTML/SVG graph viewer generation through `kee.viewer.html` and
-  `write.kee.viewer.html`, with a searchable node browser and a clickable
-  inspector for slots, facets, facts, nogood explanations, and in-graph
-  references
+  `write.kee.viewer.html`, with visible current-KB state, loaded-KB chips, a
+  class/member hierarchy browser, synchronized slot table, searchable node
+  browser, and a clickable inspector for slots, facets, facts, nogood
+  explanations, and in-graph references
 
 Later phases broaden RuleSystem/TellAndAsk, grow the KEEworlds/ATMS model, and
 add the Common Windows / KEEpictures / ActiveImages GUI layer.

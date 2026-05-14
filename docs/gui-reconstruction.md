@@ -93,11 +93,11 @@ Recovered or public-code object/message names already tracked:
 
 ## Reconstruction Implications
 
-The next browser should become more KEE-like in structure:
+The standalone browser should keep moving toward the recovered KEE structure:
 
-- Add a first-class KB selector and visible current-KB state.
-- Add a hierarchy pane that can browse class/subclass/member trees up and down,
-  with top-level-unit selection when reaching a tree boundary.
+- Keep the first-class visible current-KB state and loaded-KB list.
+- Keep a hierarchy pane that can browse class/subclass/member trees up and
+  down, with top-level-unit selection when reaching a tree boundary.
 - Keep slot values inspectable beside the hierarchy, rather than hiding them
   only inside clicked graph nodes.
 - Preserve the graph view, but treat it as one pane among browser, slot, rule,
@@ -120,16 +120,25 @@ The next browser should become more KEE-like in structure:
 - Whether any original KEE distribution or manual scans survive outside the
   public references and secondary bibliographies found so far.
 
+## Implemented Browser Increment
+
+The standalone HTML/SVG viewer now implements the NASA VEG browser target at a
+prototype level:
+
+- shows `Current KB`
+- lists loaded KBs as chips
+- lists top-level units, excluding ActiveImage and ActiveValue-like units
+- browses class parents, member parents, subclass children, and member
+  children
+- keeps a slot table synchronized with the selected unit
+- keeps graph focus synchronized with hierarchy selection
+
 ## Next Build Target
 
-Implement a KB/hierarchy browser mode in the standalone viewer:
+Implement the first ActiveImage abstraction:
 
-- show `Current KB`
-- list loaded KBs
-- list top-level units, excluding ActiveImage and ActiveValue-like units
-- browse up/down class/member hierarchy
-- keep a slot table synchronized with the selected unit
-- keep graph focus synchronized with hierarchy selection
-
-This is closer to the NASA VEG browser evidence than adding more graph-only
-features.
+- bind a display object to `(unit slot facet?)`
+- render simple evidence-backed widgets: button, gauge/thermometer, switch,
+  histogram/plot
+- allow configured widgets to update slots through ordinary KEE mutators
+- route those updates through the existing ActiveValue hooks
