@@ -34,6 +34,8 @@ secondary descriptions.
 | AIAI user-interface paper | Describes KEEpictures and ActiveImages as a two-way graphical specification mechanism: mouse changes update objects and object updates reflect in graphics. | https://www.aiai.ed.ac.uk/publications/documents/1992/92-bcs-user-interfaces.pdf |
 | ASKE thesis | KEE 3.1 application evidence for Common Windows interfaces with icons, interaction/display windows, notebook, rulemaker, context/class/rule display windows, and rule editing window. | https://oro.open.ac.uk/64573/1/27758423.pdf |
 | NASA TEXSYS/MTK conference paper | Application evidence for KEE v2/v3 on Symbolics, KEEpictures as flexible graphics, KEEworlds for temporal/hypothetical states, and graphical model-building. | https://ntrs.nasa.gov/api/citations/19880014804/downloads/19880014804.pdf |
+| Bielefeld hybrid expert-system tools evaluation | 1993 public evaluation with a KEE chapter. Records architecture from the KEE User's Guide, supported Unix platforms, desktop/window behavior, ActiveValues slot-operation triggers, and a useful KEE manual bibliography. | https://doczz.net/doc/5911786/evaluation-hybrider-expertensystemtools |
+| IBM System/370 bibliography, January 1990 | IBM publication catalog entries for IBM KEE manuals. Confirms IBM publication numbers, page counts, and concise descriptions for TellAndAsk, KEEpictures, KEEworlds, and RuleSystem3. | https://chiclassiccomp.org/docs/content/computing/IBM/Mainframe/AppSoftware/GC20-0370-7_System370-30xx-4300-9370BibliographySystem%26AppPrograms_Jan90.pdf |
 
 ## Manual Targets
 
@@ -51,6 +53,7 @@ No full scans found yet. These identifiers make the search precise.
 | ActiveImages3 Reference Manual | `3.0-R-A3` |
 | KEEpictures Reference Manual | `K3.1-KP-2`, IBM `SC26-4546` |
 | Common Windows Manual | `CWM-2` |
+| System Indices | `K3.1-SI-1` |
 | KEE 4.0 UNIX release notes | `K4.0-RN-UNIX-1` |
 | Using KEE 4.0 on UNIX | `K4.0-UK-UNIX-1` |
 | KEEtutor modules | `KT-Mods1&2-Sun-3` |
@@ -85,12 +88,24 @@ These are not original KEE distributions, but they are useful leads in
 - `forums/comp.lang.lisp/derived/threads/1992/request-for-info-on-intellicorp-s-kee-tm-97b30a6e2467ffab.md`
   reports that KEE was strong for UI prototyping but difficult for producing a
   standard production-style UI.
+- `forums/comp.lang.lisp/derived/threads/1991/lisp-programming-in-kee-toolkit-for-graphics-c-integration-a25c92aa4b91613e.md`
+  asks about KEE on a DEC VAXStation 3100 under DEC Windows, KeePictures, and
+  VMS or Ultrix C integration.
+- `forums/comp.lang.lisp/derived/threads/1989/kee-commonlisp-profiler-46798607fe8af73a.md`
+  identifies KEEspy as a paid IntelliCorp profiler derived from an in-house
+  Lisp Machine profiling tool.
+- `forums/comp.lang.lisp/derived/threads/1993/lucid-kee-under-solaris-2-2-7d09a7e8d669b896.md`
+  includes an IntelliCorp reply about KEE 4.1 alpha on Lucid Lisp 4.1Beta
+  under Solaris 2.1 and KEE 4.1 for SunOS 4.1.3 on LCL 4.1.
 - `forums/comp.lang.lisp/derived/threads/1995/faq-lisp-window-systems-and-guis-7-7-872bbbc758d59cc9.md`
   records that KEE 4.0 shipped with Common Windows on Lucid Lisp for Sun, HP,
   and IBM workstations.
 - `forums/comp.lang.lisp/derived/threads/1995/q-how-reliable-is-kee-on-solaris-2-x-2b90f4f1ed8fca02.md`
   includes an IntelliCorp reply about KEE 4.1 on Harlequin/Lucid Lisp 4.1.2
   under Solaris 2.3.
+- `forums/comp.lang.lisp/derived/threads/1998/common-windows-4ee975ab0b388b6d.md`
+  quotes the KEE for Symbolics manual set about the 1986 IntelliCorp Common
+  Windows Manual, its designers, and its Interlisp-D/ZetaLisp lineage.
 - `articles/gabriel/dreamsongs.com-derived/pdf-text/Files/HOPL2-Uncut.pymupdf.txt`
   identifies Common Windows as a window system produced by IntelliCorp.
 - `articles/lisp-pointers-derived/pdf-extracts/text/pub__scheme__doc__lisp-pointers__v1i3__p43-foderaro.pymupdf.txt`

@@ -46,6 +46,15 @@ Strongest recovered points:
   is awkward for topology and that graphical interfaces can create component
   instances and define interactions. Source: NASA CP `19880014804`,
   `https://ntrs.nasa.gov/api/citations/19880014804/downloads/19880014804.pdf`.
+- A 1993 Bielefeld evaluation reproduces the KEE architecture from the KEE
+  User's Guide as Common Lisp plus TMS, Common Windows, Active Values,
+  KEEworlds, Rulesystem, KEEpictures, ActiveImages, and object-oriented
+  programming. It describes a desktop made of larger windows containing Lisp
+  Listener, Typescript, Prompt, knowledge-base, unit, and slot windows; users
+  could configure, save, and reload desktops with KEEpictures and ActiveImages.
+  It also says ActiveValues/demons could trigger on nine slot operations,
+  including read, write, delete, copy, and rename. Source:
+  `https://doczz.net/doc/5911786/evaluation-hybrider-expertensystemtools`.
 - Common Windows was an IntelliCorp-produced/specification window system. The
   local corpus has Lisp-history and Lisp FAQ evidence that KEE 4.0 shipped with
   a Common Windows implementation for Lucid Lisp on Sun, HP, and IBM
@@ -53,6 +62,16 @@ Strongest recovered points:
   `/persist/lisp-corpus/articles/gabriel/dreamsongs.com-derived/pdf-text/Files/HOPL2-Uncut.pymupdf.txt`
   and
   `/persist/lisp-corpus/forums/comp.lang.lisp/derived/threads/1995/faq-lisp-window-systems-and-guis-7-7-872bbbc758d59cc9.md`.
+- A 1998 comp.lang.lisp thread quotes the KEE for Symbolics manual set about
+  the 1986 IntelliCorp Common Windows Manual: principal designers at
+  IntelliCorp and lineage from Interlisp-D and ZetaLisp window systems. Local
+  corpus source:
+  `/persist/lisp-corpus/forums/comp.lang.lisp/derived/threads/1998/common-windows-4ee975ab0b388b6d.md`.
+- A 1991 comp.lang.lisp question asks about KEE on a DEC VAXStation 3100 under
+  DEC Windows, KeePictures, and VMS or Ultrix C integration, which broadens the
+  platform/graphics lead beyond Symbolics, TI, and Unix workstations. Local
+  corpus source:
+  `/persist/lisp-corpus/forums/comp.lang.lisp/derived/threads/1991/lisp-programming-in-kee-toolkit-for-graphics-c-integration-a25c92aa4b91613e.md`.
 - A 1992 comp.lang.lisp report praises KEE for rapid UI prototyping while
   warning that production, standard-style user interfaces were difficult. Local
   corpus source:
@@ -76,6 +95,11 @@ Likely original or application-visible names:
 - Context Display Window, Class Display Window, Rule Editing Window
 - Notebook
 - Current KB
+- Desktop
+- Lisp Listener
+- Typescript Window
+- Prompt Window
+- KEEspy
 
 Recovered or public-code object/message names already tracked:
 
@@ -107,6 +131,9 @@ The standalone browser should keep moving toward the recovered KEE structure:
   new value back through ordinary KEE mutators.
 - Start with simple ActiveImage widgets that match the evidence: button,
   gauge/thermometer, switch, histogram/plot.
+- Treat the desktop as a review target, not just a browser skin: the Bielefeld
+  evaluation suggests a saved/reloadable desktop composed of smaller
+  functional windows inside larger KEE windows.
 - Design tracing views around the recovered categories: rule agenda/conflict
   set, forward/backward/world graphic traces, text traces, and rule
   cross-reference.
@@ -120,6 +147,10 @@ for these GUI areas in one place.
 - Exact KEEpictures object hierarchy and constructor API.
 - Exact ActiveImages unit/slot layout and event names.
 - Exact Common Windows pane/window APIs used by KEE.
+- Exact desktop save/load model and window vocabulary across Lisp Machine,
+  DEC Windows, and Unix/X11 versions.
+- Whether KEEspy was commonly available to users or mostly an IntelliCorp
+  support/profiling tool.
 - Whether any original KEE distribution or manual scans survive outside the
   public references and secondary bibliographies found so far.
 

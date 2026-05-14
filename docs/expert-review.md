@@ -16,8 +16,12 @@ KEEworlds areas.
 - What did a normal KEE work session feel like?
 - Which browser panes, menus, inspectors, or graphical tools were used every
   day?
+- Did the everyday KEE desktop look like a saved arrangement of Lisp Listener,
+  Typescript, Prompt, knowledge-base, unit, slot, KEEpicture, and ActiveImage
+  windows?
 - How did KEEpictures and ActiveImages behave when objects changed?
 - What did rule tracing, agenda/conflict-set views, and explanations look like?
+- Do you remember KEEspy or other profiling/debugging tools around KEE?
 - How visible were worlds, assumptions, nogoods, and contradictions in the UI?
 - Which API names or idioms here feel right, wrong, or missing?
 - Did Texas Instruments Lisp Machine usage differ materially from Symbolics,
