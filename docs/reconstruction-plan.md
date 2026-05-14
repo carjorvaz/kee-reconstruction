@@ -147,7 +147,7 @@ Status:
   facets, facts, nogoods, and in-graph references, plus rule cross-reference
   panes with operation/slot/target filters, trace panes filterable by family,
   event kind, selected-node scope, and search text, previous/next trace jumps,
-  and a compact trace graph.
+  focused trace detail, and a compact trace graph.
 - `trace.events` records world creation, world slot writes, agenda passes,
   rule matches/firings, method dispatch/calls/returns, generated branches,
   nogoods, and contradictions.
@@ -168,5 +168,5 @@ Status:
 Next GUI target:
 
 - Expand the recovered debugging tools beyond the first trace/xref view:
-  a more inspector-like trace detail drilldown and a more spatial graphic trace
-  over rule firings, generated worlds, and contradictions.
+  richer trace-to-graph highlighting and a more spatial graphic trace over rule
+  firings, generated worlds, and contradictions.

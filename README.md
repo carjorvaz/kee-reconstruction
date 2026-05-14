@@ -60,8 +60,8 @@ The first implementation target is `kee-core`:
   and a clickable inspector for slots, facets, facts, nogood explanations, and
   in-graph references, rule cross-reference panes with operation/slot/target
   filters, plus trace panes filterable by family, event kind, selected-node
-  scope, and search text, with previous/next trace jumps, clickable trace
-  references, and a compact trace graph
+  scope, and search text, with previous/next trace jumps, focused trace detail,
+  clickable trace references, and a compact trace graph
 
 Later phases broaden RuleSystem/TellAndAsk, grow the KEEworlds/ATMS model, and
 add the Common Windows / KEEpictures / ActiveImages GUI layer.

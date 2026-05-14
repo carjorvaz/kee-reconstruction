@@ -315,8 +315,8 @@ Current reconstruction:
   searchable node list, and clicked graph nodes can show slots, facets, world
   facts, nogoods, rule cross-references with operation/slot/target filters,
   trace events filterable by family, event kind, selected-node scope, and
-  search text, previous/next trace jumps, a compact trace graph, and navigable
-  references to visible units or worlds.
+  search text, previous/next trace jumps, focused trace detail, a compact trace
+  graph, and navigable references to visible units or worlds.
 
 This is a reconstruction support layer rather than a recovered KEE API. It is
 intended to keep display logic separate from the object/rule/world core, so a
