@@ -26,6 +26,10 @@ secondary descriptions.
 | US4675829A | IntelliCorp patent for KEE-style slot inheritance using local, inherited, and combined values. | https://patents.google.com/patent/US4675829A/en |
 | US4918621A | IntelliCorp patent for representing a DAG of worlds using an ATMS. | https://patents.google.com/patent/US4918621A |
 | SimKit WSC 1989 paper | Describes an application framework built in/on KEE, especially the graphics/model-builder pattern. | https://repository.lib.ncsu.edu/items/461ffbbe-1936-47f6-8f33-66309300547b |
+| AIAI expert-system toolkit survey | Describes KEE's development environment: schema/KB browser, mouse/menu KEEpictures graphics, ActiveImages, TellAndAsk, agenda viewer, graphic traces, textual traces, and rule cross-referencer. | https://www.aiai.ed.ac.uk/publications/documents/1990-PRE/88-esmed-toolkits.pdf |
+| AIAI user-interface paper | Describes KEEpictures and ActiveImages as a two-way graphical specification mechanism: mouse changes update objects and object updates reflect in graphics. | https://www.aiai.ed.ac.uk/publications/documents/1992/92-bcs-user-interfaces.pdf |
+| ASKE thesis | KEE 3.1 application evidence for Common Windows interfaces with icons, interaction/display windows, notebook, rulemaker, context/class/rule display windows, and rule editing window. | https://oro.open.ac.uk/64573/1/27758423.pdf |
+| NASA TEXSYS/MTK conference paper | Application evidence for KEE v2/v3 on Symbolics, KEEpictures as flexible graphics, KEEworlds for temporal/hypothetical states, and graphical model-building. | https://ntrs.nasa.gov/api/citations/19880014804/downloads/19880014804.pdf |
 
 ## Manual Targets
 
@@ -54,3 +58,23 @@ No full scans found yet. These identifiers make the search precise.
 - NASA VEG files: `veg4.u`, `veg-methods.lisp`, and extension Lisp files.
 - The NASA GSFC Sun cartridge tape mentioned in the VEG reports.
 - KEEtutor materials and puzzle files such as `3X3IMPLEM1.U`.
+
+## Local Corpus Leads
+
+These are not original KEE distributions, but they are useful leads in
+`/persist/lisp-corpus`:
+
+- `forums/comp.lang.lisp/derived/threads/1992/request-for-info-on-intellicorp-s-kee-tm-97b30a6e2467ffab.md`
+  reports that KEE was strong for UI prototyping but difficult for producing a
+  standard production-style UI.
+- `forums/comp.lang.lisp/derived/threads/1995/faq-lisp-window-systems-and-guis-7-7-872bbbc758d59cc9.md`
+  records that KEE 4.0 shipped with Common Windows on Lucid Lisp for Sun, HP,
+  and IBM workstations.
+- `forums/comp.lang.lisp/derived/threads/1995/q-how-reliable-is-kee-on-solaris-2-x-2b90f4f1ed8fca02.md`
+  includes an IntelliCorp reply about KEE 4.1 on Harlequin/Lucid Lisp 4.1.2
+  under Solaris 2.3.
+- `articles/gabriel/dreamsongs.com-derived/pdf-text/Files/HOPL2-Uncut.pymupdf.txt`
+  identifies Common Windows as a window system produced by IntelliCorp.
+- `articles/lisp-pointers-derived/pdf-extracts/text/pub__scheme__doc__lisp-pointers__v1i3__p43-foderaro.pymupdf.txt`
+  discusses IntelliCorp's Common Windows specification in the context of X,
+  NeWS, color, and networked window systems.

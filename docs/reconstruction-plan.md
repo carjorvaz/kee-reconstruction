@@ -139,8 +139,16 @@ Status:
   graph browser over the same data, including a searchable node list and
   clicked-node detail panes for slots, facets, facts, nogoods, and in-graph
   references.
+- `docs/gui-reconstruction.md` records the recovered browser, Common Windows,
+  KEEpictures, ActiveImages, and trace/debugging evidence that should guide the
+  next GUI increments.
 - `examples/kee-browser.lisp` and `examples/kee-browser-shell.lisp` exercise
   the browser against the Hamburg puzzle demo.
 - `examples/kee-graph-dot.lisp` emits DOT for the Hamburg puzzle unit
   hierarchy and generated worlds.
 - `examples/kee-graph-viewer.lisp` emits a browser-openable HTML graph view.
+
+Next GUI target:
+
+- Add a KB/hierarchy browser pane with visible current-KB state, top-level-unit
+  selection, class/member up/down navigation, and synchronized slot display.

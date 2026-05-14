@@ -9,6 +9,10 @@ This project is deliberately split into two tracks:
 - `src/` and `test/`: a Common Lisp reconstruction, starting with the KEE
   object/slot/message core.
 
+`docs/gui-reconstruction.md` tracks the recovered KEE browser, Common Windows,
+KEEpictures, ActiveImages, and trace/debugging evidence that guides the GUI
+work.
+
 The rule here is simple: public evidence first, implementation second. When
 the original behavior is unknown, we record the uncertainty instead of quietly
 inventing history.

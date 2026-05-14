@@ -264,6 +264,23 @@ Recovered layers:
 - KEEpictures
 - ActiveImages
 
+Recovered behavior:
+
+- KEE provided a schema/knowledge-base browser as part of the development
+  environment.
+- Application browser evidence from NASA VEG includes a KB menu, visible
+  current-KB state, top-level-unit selection, class/subclass/member hierarchy
+  browsing, and slot-value display.
+- KEEpictures graphics were represented with units and could be animated by
+  changing slot values.
+- ActiveImages displayed slot values, could alert at predefined limits, and
+  could update slot values through mouse interaction.
+- KEE debugging UI included an agenda/conflict-set viewer, dynamic graphic
+  traces for rules and worlds, textual rule/method traces, and a rule
+  cross-referencer.
+- Common Windows was the underlying GUI toolkit for KEE 4.0 on Unix and for
+  at least one documented KEE 3.1 application.
+
 Recovered object names and messages:
 
 - `viewport-*`
@@ -277,3 +294,6 @@ Recovered object names and messages:
 - `graph-unit`
 - `make-cascading-menu`
 - `choose-from-menu`
+
+See also `docs/gui-reconstruction.md` for the evidence map and next GUI build
+target.

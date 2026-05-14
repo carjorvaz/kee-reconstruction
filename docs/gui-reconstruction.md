@@ -1,0 +1,135 @@
+# GUI Reconstruction Evidence
+
+This note collects the current evidence for KEE's browser and graphical
+interface layer. It is deliberately about behavior and vocabulary, not source
+copying.
+
+## Evidence Summary
+
+KEE's GUI was not just a thin visualizer over frames. Public descriptions
+consistently describe a development environment with browsers, mouse/menu
+graphics, debugging views, and application-specific panels built on top of the
+same unit/slot substrate.
+
+Strongest recovered points:
+
+- KEE included an Emacs editor, schema and knowledge-base browser, a graphics
+  interface development package, TellAndAsk querying, debugging and trace
+  information, an agenda/conflict-set viewer, dynamic graphic traces for
+  rules/worlds, textual traces, a rule cross-referencer, and a Lisp debugger.
+  Source: AIAI 1990 toolkit survey,
+  `https://www.aiai.ed.ac.uk/publications/documents/1990-PRE/88-esmed-toolkits.pdf`.
+- The graphics package was mouse/menu based and built around KEEpictures.
+  Graphic items could be defined using units and animated by changing slot
+  values. Listed examples include histograms, gauges, switches, and
+  thermometers. Source: same AIAI 1990 survey.
+- ActiveImages were interactive KEEpictures: mouse changes on the graphic
+  updated the underlying object, and object updates reflected back in the
+  graphic. Source: AIAI 1992 user-interface paper,
+  `https://www.aiai.ed.ac.uk/publications/documents/1992/92-bcs-user-interfaces.pdf`.
+- ActiveImages could display slot values, signal when values reached a limit,
+  and allow mouse-driven slot updates. Source: AIAI 1990 survey.
+- NASA VEG had a KEE browser/toolbox for browsing the class/subclass/member
+  hierarchy and displaying slot values. Its extended browser added a KB menu, a
+  "Current KB" box, and a top-level unit menu excluding ActiveImage and
+  ActiveValue units. Source: NASA NTRS `19930007502`,
+  `https://ntrs.nasa.gov/citations/19930007502`.
+- ASKE, a KEE 3.1 application on a TI/Unisys Explorer, used KEE's Common
+  Windows toolkit. Its interface vocabulary included icons, an Interaction
+  Window, Notebook, Display Window, Rulemaker interface, Rule Display Window,
+  Context Display Window, Class Display Window, and Rule Editing Window.
+  Source: Open University thesis,
+  `https://oro.open.ac.uk/64573/1/27758423.pdf`.
+- NASA TEXSYS/MTK used KEE v2/v3 on Symbolics. Its phase-II work says
+  KEEpictures provided a flexible graphics interface and KEEworlds represented
+  hypothetical or temporal states. It also argues that direct slot inspection
+  is awkward for topology and that graphical interfaces can create component
+  instances and define interactions. Source: NASA CP `19880014804`,
+  `https://ntrs.nasa.gov/api/citations/19880014804/downloads/19880014804.pdf`.
+- Common Windows was an IntelliCorp-produced/specification window system. The
+  local corpus has Lisp-history and Lisp FAQ evidence that KEE 4.0 shipped with
+  a Common Windows implementation for Lucid Lisp on Sun, HP, and IBM
+  workstations. Local corpus sources:
+  `/persist/lisp-corpus/articles/gabriel/dreamsongs.com-derived/pdf-text/Files/HOPL2-Uncut.pymupdf.txt`
+  and
+  `/persist/lisp-corpus/forums/comp.lang.lisp/derived/threads/1995/faq-lisp-window-systems-and-guis-7-7-872bbbc758d59cc9.md`.
+- A 1992 comp.lang.lisp report praises KEE for rapid UI prototyping while
+  warning that production, standard-style user interfaces were difficult. Local
+  corpus source:
+  `/persist/lisp-corpus/forums/comp.lang.lisp/derived/threads/1992/request-for-info-on-intellicorp-s-kee-tm-97b30a6e2467ffab.md`.
+
+## Recovered Vocabulary
+
+Likely original or application-visible names:
+
+- Common Windows
+- KEEpictures
+- ActiveImages
+- ActiveValues
+- KEEworlds
+- schema browser
+- knowledge-base browser
+- agenda viewer
+- graphic traces
+- rule cross-referencer
+- Display Window, Interaction Window, Rule Display Window
+- Context Display Window, Class Display Window, Rule Editing Window
+- Notebook
+- Current KB
+
+Recovered or public-code object/message names already tracked:
+
+- `viewport-*`
+- `windowpane-*`
+- `open-panel!`
+- `close-panel!`
+- `open!`
+- `mouseleftfn`
+- `mouseleftfn!`
+- `create-kee-output-window`
+- `graph-unit`
+- `make-cascading-menu`
+- `choose-from-menu`
+
+## Reconstruction Implications
+
+The next browser should become more KEE-like in structure:
+
+- Add a first-class KB selector and visible current-KB state.
+- Add a hierarchy pane that can browse class/subclass/member trees up and down,
+  with top-level-unit selection when reaching a tree boundary.
+- Keep slot values inspectable beside the hierarchy, rather than hiding them
+  only inside clicked graph nodes.
+- Preserve the graph view, but treat it as one pane among browser, slot, rule,
+  world, and trace panes.
+- Add an ActiveImage abstraction before adding many widgets: a display object
+  should bind to `(unit slot facet?)`, render a value, and optionally push a
+  new value back through ordinary KEE mutators.
+- Start with simple ActiveImage widgets that match the evidence: button,
+  gauge/thermometer, switch, histogram/plot.
+- Design tracing views around the recovered categories: rule agenda/conflict
+  set, forward/backward/world graphic traces, text traces, and rule
+  cross-reference.
+
+## Open Questions
+
+- Exact KEE browser menus and pane layout from the KEE User's Guide.
+- Exact KEEpictures object hierarchy and constructor API.
+- Exact ActiveImages unit/slot layout and event names.
+- Exact Common Windows pane/window APIs used by KEE.
+- Whether any original KEE distribution or manual scans survive outside the
+  public references and secondary bibliographies found so far.
+
+## Next Build Target
+
+Implement a KB/hierarchy browser mode in the standalone viewer:
+
+- show `Current KB`
+- list loaded KBs
+- list top-level units, excluding ActiveImage and ActiveValue-like units
+- browse up/down class/member hierarchy
+- keep a slot table synchronized with the selected unit
+- keep graph focus synchronized with hierarchy selection
+
+This is closer to the NASA VEG browser evidence than adding more graph-only
+features.
