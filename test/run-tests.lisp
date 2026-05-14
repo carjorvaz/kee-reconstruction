@@ -328,6 +328,10 @@
     (check (search "reviewTourTarget" viewer-html))
     (check (search "Top Level Units" viewer-html))
     (check (search "Slot Table" viewer-html))
+    (check (search "slotFacetText" viewer-html))
+    (check (search "renderSlotTableRow" viewer-html))
+    (check (search "<th>Local</th><th>Inherited</th><th>Combined</th><th>Facets</th>"
+                   viewer-html))
     (check (search "ActiveImages" viewer-html))
     (check (search "Trace" viewer-html))
     (check (search "Rule Xref" viewer-html))

@@ -164,7 +164,8 @@ prototype level:
 - lists top-level units, excluding ActiveImage and ActiveValue-like units
 - browses class parents, member parents, subclass children, and member
   children
-- keeps a slot table synchronized with the selected unit
+- keeps a slot table synchronized with the selected unit, separating local,
+  inherited, combined, and facet values
 - keeps graph focus synchronized with hierarchy selection
 
 ## Implemented ActiveImage Increment
