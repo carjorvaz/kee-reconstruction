@@ -165,7 +165,8 @@ The reconstruction now has a first trace layer for rule/world debugging:
 - trace panes include search text plus previous/next jump controls, with the
   focused trace highlighted
 - focused traces show a compact normalized event-detail drilldown
-- focused traces highlight referenced units or worlds in the visible SVG graph
+- focused traces highlight referenced units or worlds in the visible SVG graph,
+  including world ancestry paths for focused world/problem traces
 - focused trace detail exposes clickable unit/world graph targets
 - trace rows expose clickable unit/world references
 - a spatial trace map lays out recent agenda/rule/world/problem events in
@@ -173,6 +174,8 @@ The reconstruction now has a first trace layer for rule/world debugging:
 - focused trace-map events emphasize adjacent chronological path segments
 - trace-map replay controls step or play through filtered map events, with
   speed, loop, and current-position controls for larger demos
+- trace-map events and links emphasize the focused world's generated branch
+  path
 - a compact trace graph summarizes agenda/rule/world/contradiction flow
 - textual method traces now record `unitmsg` dispatch, before/primary/after
   method contribution calls, and returns
@@ -196,5 +199,4 @@ The reconstruction now has a first static rule cross-referencer:
 
 Expand the debugging tools around the first trace and xref panes:
 
-- richer branch/path emphasis over rule firings, generated worlds, and
-  contradictions
+- first agenda/conflict-set pane for recovered RuleSystem debugging
