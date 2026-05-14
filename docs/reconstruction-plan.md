@@ -40,6 +40,8 @@ Status:
 - Initial implementation exists.
 - Method slots support before, primary, and after contributions.
 - ActiveValue read/write/add/remove hooks exist, with reconstructed event names.
+- First ActiveImage units exist as slot-bound display objects with simple HTML
+  widget renderers and optional write-back through `put.value`.
 
 ## Phase 2: ActiveValues and Methods
 
@@ -148,10 +150,10 @@ Status:
 - `examples/kee-graph-dot.lisp` emits DOT for the Hamburg puzzle unit
   hierarchy and generated worlds.
 - `examples/kee-graph-viewer.lisp` emits a browser-openable HTML graph view.
+- `examples/active-image-mini.lisp` demonstrates a slot-bound ActiveImage
+  gauge and ActiveValue write hook interaction.
 
 Next GUI target:
 
-- Add the first ActiveImage abstraction: bind display objects to unit slots,
-  render simple button/gauge/switch/thermometer widgets, and let configured
-  widgets push ordinary `put.value` updates back into the reconstructed KEE
-  object layer.
+- Embed ActiveImage widgets into the standalone viewer so selected units can
+  show live slot-bound controls beside the hierarchy and slot table.

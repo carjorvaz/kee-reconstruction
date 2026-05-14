@@ -29,6 +29,9 @@ The first implementation target is `kee-core`:
   `unit.parents`, `unit.children`, and `unitmsg`
 - method slots with `:before`, `:primary`, and `:after` contributions
 - first-pass ActiveValue hooks on slot read/write/add/remove
+- first-pass ActiveImage units bound to ordinary unit slots, with HTML
+  fragments for button, gauge/thermometer, switch, histogram, and plot widgets
+  plus optional write-back through `put.value`
 - value-class and cardinality facets such as `(one.of ...)`,
   `min.cardinality`, and `max.cardinality`
 - a tiny RuleSystem subset with rule units, `external.form`, `parse`,
@@ -80,6 +83,10 @@ hierarchy and generated worlds. The browser shell can also print DOT with
 
 `examples/kee-graph-viewer.lisp` emits a standalone HTML/SVG graph browser for
 the Hamburg puzzle. The browser shell can also print one with `(viewer 40)`.
+
+`examples/active-image-mini.lisp` creates a slot-bound ActiveImage gauge,
+renders it as a small HTML fragment, and updates the target slot through the
+ActiveImage so ActiveValue write hooks still run.
 
 ## Running Tests
 

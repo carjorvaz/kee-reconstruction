@@ -47,6 +47,14 @@
    #:value-written
    #:value-added
    #:values-removed
+   #:create.active.image
+   #:list.active.images
+   #:active.image.report
+   #:active.image.values
+   #:active.image.value
+   #:set.active.image.value
+   #:active.image.html
+   #:write.active.image.html
    #:create.world
    #:world
    #:goto.world

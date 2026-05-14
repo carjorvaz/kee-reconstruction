@@ -133,12 +133,24 @@ prototype level:
 - keeps a slot table synchronized with the selected unit
 - keeps graph focus synchronized with hierarchy selection
 
+## Implemented ActiveImage Increment
+
+The reconstruction now has a first ActiveImage primitive:
+
+- ActiveImages are ordinary KEE units under `active.images`
+- each ActiveImage binds to `(unit slot facet?)`
+- supported widgets are button, gauge/thermometer, switch, histogram/plot, and
+  value display
+- `set.active.image.value` writes target slots through `put.value`, preserving
+  ActiveValue hooks
+- `active.image.html` renders small HTML fragments for early browser and
+  documentation experiments
+
 ## Next Build Target
 
-Implement the first ActiveImage abstraction:
+Embed ActiveImage widgets into the standalone viewer:
 
-- bind a display object to `(unit slot facet?)`
-- render simple evidence-backed widgets: button, gauge/thermometer, switch,
-  histogram/plot
-- allow configured widgets to update slots through ordinary KEE mutators
-- route those updates through the existing ActiveValue hooks
+- include ActiveImage units in the viewer JSON detail map
+- show slot-bound controls beside the selected unit's slot table
+- support local in-page writes for generated HTML demos
+- preserve the ordinary KEE mutator path for Lisp-side writes

@@ -5,6 +5,7 @@
   :serial t
   :components ((:file "src/package")
                (:file "src/core")
+               (:file "src/active-images")
                (:file "src/worlds")
                (:file "src/rules")
                (:file "src/inspect")

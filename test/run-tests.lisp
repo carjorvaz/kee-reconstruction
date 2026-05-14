@@ -1,5 +1,6 @@
 (load (merge-pathnames "../src/package.lisp" *load-truename*))
 (load (merge-pathnames "../src/core.lisp" *load-truename*))
+(load (merge-pathnames "../src/active-images.lisp" *load-truename*))
 (load (merge-pathnames "../src/worlds.lisp" *load-truename*))
 (load (merge-pathnames "../src/rules.lisp" *load-truename*))
 (load (merge-pathnames "../src/inspect.lisp" *load-truename*))
@@ -116,6 +117,39 @@
                   '((written sample.1 complete.description
                      ("demo sample") ("changed"))
                     (read sample.1 complete.description ("changed"))))))
+  (let ((events nil))
+    (kee:create.unit 'meter.av 'veg 'entities nil)
+    (kee:put.value 'meter.av 'kee:value-written
+                   (lambda (self target slot old new)
+                     (declare (ignore self))
+                     (push (list 'meter-write (kee:unit.name target)
+                                 slot old new)
+                           events)))
+    (kee:create.unit 'sensor.1 'veg nil '(target.data))
+    (kee:create.slot 'sensor.1 'temperature 'member '(21)
+                     nil nil nil '((kee:active.values meter.av)))
+    (kee:create.active.image 'temperature.gauge 'sensor.1 'temperature
+                             :widget :gauge
+                             :label "Temperature"
+                             :min 0
+                             :max 100
+                             :writable-p t)
+    (check (equal (names (kee:list.active.images 'veg))
+                  '(temperature.gauge)))
+    (check (eql (kee:active.image.value 'temperature.gauge) 21))
+    (let ((report (kee:active.image.report 'temperature.gauge))
+          (html (kee:active.image.html 'temperature.gauge)))
+      (check (eq (getf report :target-unit) 'sensor.1))
+      (check (eq (getf report :target-slot) 'temperature))
+      (check (eq (getf report :widget) :gauge))
+      (check (getf report :writable-p))
+      (check (search "active-image-gauge" html))
+      (check (search "Temperature" html))
+      (check (search "data-target-slot='TEMPERATURE'" html)))
+    (kee:set.active.image.value 'temperature.gauge 42)
+    (check (eql (kee:get.value 'sensor.1 'temperature) 42))
+    (check (equal (reverse events)
+                  '((meter-write sensor.1 temperature (21) (42))))))
   (kee:create.unit 'technique.selection.rules 'veg 'entities 'classes)
   (kee:put.value 'technique.selection.rules 'kee:parse #'kee:parse)
   (let ((wave (kee:create.unit 'wavelength.1 'veg nil nil)))

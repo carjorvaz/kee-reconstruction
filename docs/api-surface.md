@@ -133,6 +133,35 @@ Important uncertainty:
 These operation slot names are reconstruction names. The concept is recovered;
 the exact original KEE operation names still need manual evidence.
 
+## ActiveImages
+
+High confidence concept:
+
+- ActiveImages are interactive KEEpictures bound to object state.
+- They display slot values and can optionally push mouse-driven changes back
+  into slots.
+
+Current reconstruction:
+
+- `create.active.image` creates an ActiveImage as an ordinary KEE unit under
+  the reconstructed `active.images` class.
+- ActiveImage units store target bindings in `target.unit`, `target.kb`,
+  `target.slot`, and optional `target.facet` slots.
+- `active.image.values`, `active.image.value`, and `active.image.report` read
+  the target state.
+- `set.active.image.value` writes through the target binding. Slot writes use
+  `put.value`, so existing ActiveValue write hooks still fire.
+- `active.image.html` and `write.active.image.html` render small HTML
+  fragments for `:button`, `:gauge`, `:thermometer`, `:switch`,
+  `:histogram`, `:plot`, and fallback value widgets.
+- `list.active.images` lists ActiveImage units in a KB.
+
+Important uncertainty:
+
+This is a reconstruction support API. The ActiveImage concept is recovered
+from public descriptions; exact original constructor names, slot layout, and
+event vocabulary still need manual evidence.
+
 ## Rules and TellAndAsk
 
 High confidence syntax fragments:
