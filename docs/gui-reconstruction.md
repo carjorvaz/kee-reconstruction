@@ -111,6 +111,9 @@ The standalone browser should keep moving toward the recovered KEE structure:
   set, forward/backward/world graphic traces, text traces, and rule
   cross-reference.
 
+`docs/gui-fidelity-matrix.md` keeps the current status and reviewer questions
+for these GUI areas in one place.
+
 ## Open Questions
 
 - Exact KEE browser menus and pane layout from the KEE User's Guide.
@@ -165,6 +168,9 @@ The reconstruction now has a first trace layer for rule/world debugging:
   world detail
 - generated viewer pages can specify an initial view, selected node, and trace
   scope so demos open on historically meaningful review states
+- the browser pane includes Review Tour controls that jump to representative
+  units, rules, worlds, agenda traces, rule cross-references, and ActiveImages
+  when available
 - trace panes can filter by event kind and selected-node scope
 - trace panes can also isolate method, rule, world, and problem event families
 - trace panes include search text plus previous/next jump controls, with the

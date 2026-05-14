@@ -57,6 +57,8 @@ reconstruction, and causality views in one place.
 - `docs/api-surface.md` - reconstructed API surface and known uncertainty.
 - `docs/gui-reconstruction.md` - GUI, KEEpictures, ActiveImages, and trace
   evidence.
+- `docs/gui-fidelity-matrix.md` - GUI evidence mapped to implementation
+  status, reviewer questions, and next actions.
 - `docs/provenance-policy.md` - what can be stored in this repository.
 - `docs/expert-review.md` - notes and prompts for first-hand conversations.
 

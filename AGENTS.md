@@ -13,6 +13,8 @@ work legible to both humans and future agents.
 - `docs/api-surface.md` records recovered API behavior and uncertainty.
 - `docs/gui-reconstruction.md` tracks KEE browser, Common Windows,
   KEEpictures, ActiveImages, trace, and viewer evidence.
+- `docs/gui-fidelity-matrix.md` maps recovered GUI evidence to current
+  implementation status and reviewer questions.
 - `docs/demo.md` explains how to generate and view the runnable demo.
 - `docs/reviewer-packet.md` is the concise first-look packet for people who
   used KEE or Lisp machines professionally.

@@ -65,6 +65,7 @@ reason about it.
 - `docs/agent-workflow.md` records the repo-local agent workflow.
 - `docs/reviewer-packet.md` is the short guided path for first-hand reviewers.
 - `docs/gui-reconstruction.md` tracks the historically important GUI layer.
+- `docs/gui-fidelity-matrix.md` maps GUI evidence to implementation status.
 
 ## Current Scope
 

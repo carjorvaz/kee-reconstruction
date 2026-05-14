@@ -8,7 +8,9 @@ world assumptions, and nogood explanations.
 The generated page opens on the Worlds tab with an inconsistent generated world
 selected. This is intentional: it gives reviewers a concrete first view of
 KEEworlds-style branching, assumptions, support labels, nogoods, and rule trace
-explanations instead of a blank or generic hierarchy view.
+explanations instead of a blank or generic hierarchy view. The Browser pane also
+includes Review Tour controls that jump to representative units, rules, worlds,
+agenda traces, rule cross-references, and ActiveImages when available.
 
 ## Run
 
