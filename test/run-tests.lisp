@@ -1,8 +1,8 @@
 (load (merge-pathnames "../src/package.lisp" *load-truename*))
 (load (merge-pathnames "../src/core.lisp" *load-truename*))
 (load (merge-pathnames "../src/active-images.lisp" *load-truename*))
-(load (merge-pathnames "../src/pictures.lisp" *load-truename*))
 (load (merge-pathnames "../src/traces.lisp" *load-truename*))
+(load (merge-pathnames "../src/pictures.lisp" *load-truename*))
 (load (merge-pathnames "../src/worlds.lisp" *load-truename*))
 (load (merge-pathnames "../src/rules.lisp" *load-truename*))
 (load (merge-pathnames "../src/inspect.lisp" *load-truename*))
@@ -186,22 +186,51 @@
                              :label "Slot value"
                              :x 18
                              :y 108)
+    (kee:create.picture.viewport 'sensor.viewport 'sensor.panel
+                                 :label "Sensor View"
+                                 :width 240
+                                 :height 120)
+    (kee:create.picture.windowpane 'sensor.window 'sensor.viewport
+                                   :label "Sensor Window"
+                                   :width 260
+                                   :height 150)
     (check (equal (names (kee:list.kee.pictures 'veg))
                   '(sensor.panel)))
     (check (equal (names (kee:picture.items 'sensor.panel))
                   '(panel.frame panel.title temperature.card
                     temperature.value)))
+    (check (equal (names (kee:picture.viewports 'sensor.panel))
+                  '(sensor.viewport)))
+    (check (equal (names (kee:picture.windowpanes 'sensor.viewport))
+                  '(sensor.window)))
     (let ((report (kee:kee.picture.report 'sensor.panel))
           (svg (kee:kee.picture.svg 'sensor.panel)))
       (check (eq (getf report :name) 'sensor.panel))
       (check (= (length (getf report :items)) 4))
+      (check (= (length (getf report :viewports)) 1))
       (check (search "class='kee-picture'" svg))
       (check (search "KEEpicture sensor panel" svg))
       (check (search "data-picture-item='TEMPERATURE.CARD'" svg))
       (check (search "Temperature" svg))
       (check (search "42" svg)))
-    (kee:set.active.image.value 'temperature.gauge 55)
-    (check (search "55" (kee:kee.picture.svg 'sensor.panel))))
+    (kee:picture.mouse.event 'sensor.panel 'temperature.card :mouse-left
+                             :viewport 'sensor.viewport
+                             :windowpane 'sensor.window
+                             :x 82
+                             :y 68
+                             :button :left
+                             :value 55)
+    (check (eql (kee:get.value 'sensor.1 'temperature) 55))
+    (check (search "55" (kee:kee.picture.svg 'sensor.panel)))
+    (let ((event (first (last (kee:trace.events :kind :picture-mouse)))))
+      (check (eq (getf event :picture) 'sensor.panel))
+      (check (eq (getf event :item) 'temperature.card))
+      (check (eq (getf event :viewport) 'sensor.viewport))
+      (check (eq (getf event :windowpane) 'sensor.window))
+      (check (eq (getf event :action) :mouse-left))
+      (check (equal (getf event :old-values) '(42)))
+      (check (equal (getf event :new-values) '(55)))
+      (check (eq (getf event :result) :active-image-write))))
   (kee:create.unit 'technique.selection.rules 'veg 'entities 'classes)
   (kee:put.value 'technique.selection.rules 'kee:parse #'kee:parse)
   (let ((wave (kee:create.unit 'wavelength.1 'veg nil nil)))
@@ -381,9 +410,17 @@
     (check (search "data-session-window" viewer-html))
     (check (search "id='picture-browser'" viewer-html))
     (check (search "renderPictureBrowser" viewer-html))
+    (check (search "pictureViewportSummary" viewer-html))
     (check (search "data-picture-name" viewer-html))
     (check (search "Sensor Panel" viewer-html))
     (check (search "TEMPERATURE.CARD" viewer-html))
+    (check (search "Sensor View" viewer-html))
+    (check (search "Sensor Window" viewer-html))
+    (check (search "\"kind\":\"PICTURE-MOUSE\"" viewer-html))
+    (check (search "\"picture\":\"SENSOR.PANEL\"" viewer-html))
+    (check (search "\"windowpane\":\"SENSOR.WINDOW\"" viewer-html))
+    (check (search "Picture mouse" viewer-html))
+    (check (search "pictures" viewer-html))
     (check (search "Top Level Units" viewer-html))
     (check (search "Slot Table" viewer-html))
     (check (search "slotFacetText" viewer-html))

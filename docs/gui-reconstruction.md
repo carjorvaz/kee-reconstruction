@@ -179,6 +179,9 @@ The reconstruction now has a first object-backed KEEpicture primitive:
 - picture items are ordinary KEE units contained by their owning picture
 - supported item kinds are rectangle, text, slot-value display, and embedded
   ActiveImage reference
+- reconstructed viewport and windowpane units can wrap a picture preview
+- `picture.mouse.event` records KEEpicture mouse traces and can drive a
+  writable embedded ActiveImage through ordinary KEE slot mutation
 - `kee.picture.report` exposes a structured picture and current item values
 - `kee.picture.svg` renders a small SVG preview for examples and reviewer
   demos

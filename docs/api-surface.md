@@ -158,6 +158,12 @@ Current reconstruction:
 - `:value` items read a target unit/slot binding.
 - `:active-image` items reference an existing ActiveImage unit, so picture
   previews can display the current slot-bound ActiveImage value.
+- `create.picture.viewport` and `create.picture.windowpane` add a first
+  reconstructed Common-Windows-flavored viewing structure around a picture.
+- `picture.mouse.event` records `:picture-mouse` traces. When a writable
+  embedded ActiveImage receives a supplied value, the event writes through
+  `set.active.image.value`, so ordinary slot writes and ActiveValue hooks
+  still run.
 - `list.kee.pictures`, `picture.items`, and `kee.picture.report` expose the
   structured picture model.
 - `kee.picture.svg` and `write.kee.picture.svg` render small SVG previews.
@@ -167,10 +173,11 @@ Current reconstruction:
 
 Important uncertainty:
 
-This is a deliberately small picture-object model. The KEEpictures concept is
-recovered from public descriptions, but exact original constructor names,
-object hierarchy, editor behavior, and mouse event vocabulary still need
-manual or source evidence.
+This is a deliberately small picture-object model. The KEEpictures, viewport,
+windowpane, and mouse/menu concepts are recovered from public descriptions and
+local vocabulary leads, but exact original constructor names, object hierarchy,
+editor behavior, and mouse event vocabulary still need manual or source
+evidence.
 
 ## ActiveImages
 

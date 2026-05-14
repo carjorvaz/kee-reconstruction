@@ -86,7 +86,8 @@ The first implementation target is `kee-core`:
   fragments for button, gauge/thermometer, switch, histogram, and plot widgets
   plus optional write-back through `put.value`
 - first-pass KEEpicture units with contained rectangle, text, slot-value, and
-  embedded ActiveImage items, plus SVG previews through `kee.picture.svg`
+  embedded ActiveImage items, reconstructed viewport/windowpane units,
+  mouse-event traces, and SVG previews through `kee.picture.svg`
 - value-class and cardinality facets such as `(one.of ...)`,
   `min.cardinality`, and `max.cardinality`
 - a tiny RuleSystem subset with rule units, `external.form`, `parse`,

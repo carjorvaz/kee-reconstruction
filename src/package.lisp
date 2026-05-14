@@ -59,6 +59,13 @@
    #:list.kee.pictures
    #:create.picture.item
    #:picture.items
+   #:create.picture.viewport
+   #:picture.viewports
+   #:picture.viewport.report
+   #:create.picture.windowpane
+   #:picture.windowpanes
+   #:picture.windowpane.report
+   #:picture.mouse.event
    #:kee.picture.report
    #:kee.picture.svg
    #:write.kee.picture.svg

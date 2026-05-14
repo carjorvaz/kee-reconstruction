@@ -45,8 +45,8 @@ Status:
 - First ActiveImage units exist as slot-bound display objects with simple HTML
   widget renderers and optional write-back through `put.value`.
 - First KEEpicture units exist as object-backed picture containers with
-  rectangle, text, slot-value, and embedded ActiveImage items plus SVG preview
-  rendering.
+  rectangle, text, slot-value, and embedded ActiveImage items plus viewport,
+  windowpane, mouse-event trace, and SVG preview support.
 
 ## Phase 2: ActiveValues and Methods
 

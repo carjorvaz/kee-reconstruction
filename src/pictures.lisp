@@ -2,6 +2,8 @@
 
 (defparameter *kee-picture-class-name* 'kee.pictures)
 (defparameter *kee-picture-item-class-name* 'kee.picture.items)
+(defparameter *kee-picture-viewport-class-name* 'kee.picture.viewports)
+(defparameter *kee-picture-windowpane-class-name* 'kee.picture.windowpanes)
 
 (defun kee-picture-kb (kb-designator)
   (cond ((typep kb-designator 'knowledge-base) kb-designator)
@@ -24,8 +26,22 @@
                             target-kb
                             nil
                             nil
-                            "Reconstructed KEEpicture items class."))))
-    (values picture-class item-class)))
+                            "Reconstructed KEEpicture items class.")))
+         (viewport-class
+           (or (unit.exists.p *kee-picture-viewport-class-name* kb-name)
+               (create.unit *kee-picture-viewport-class-name*
+                            target-kb
+                            nil
+                            nil
+                            "Reconstructed KEEpicture viewports class.")))
+         (windowpane-class
+           (or (unit.exists.p *kee-picture-windowpane-class-name* kb-name)
+               (create.unit *kee-picture-windowpane-class-name*
+                            target-kb
+                            nil
+                            nil
+                            "Reconstructed KEEpicture windowpanes class."))))
+    (values picture-class item-class viewport-class windowpane-class)))
 
 (defun picture-keyword (value &optional (default :rectangle))
   (cond ((null value) default)
@@ -65,6 +81,17 @@ IntelliCorp source or an exact original constructor."
     (sort (and class (copy-list (unit.children class 'member)))
           #'string<
           :key #'unit.name)))
+
+(defun picture-children-of-class (parent-designator class-name)
+  (let* ((parent (unit parent-designator))
+         (class (unit.exists.p class-name (kb.name (unit.kb parent)))))
+    (when class
+      (sort (remove-if-not
+             (lambda (child)
+               (member class (unit.parents child 'member)))
+             (copy-list (unit.children parent 'member)))
+            #'string<
+            :key #'unit.name))))
 
 (defun create.picture.item
     (picture-designator name kind
@@ -115,9 +142,64 @@ reference an existing ActiveImage unit through ACTIVE-IMAGE."
 
 (defun picture.items (picture-designator)
   "Return picture item units contained by PICTURE-DESIGNATOR."
-  (sort (copy-list (unit.children picture-designator 'member))
-        #'string<
-        :key #'unit.name))
+  (picture-children-of-class picture-designator
+                             *kee-picture-item-class-name*))
+
+(defun create.picture.viewport
+    (name picture-designator &key (x 0) (y 0) width height label (scale 1))
+  "Create a reconstructed viewport over PICTURE-DESIGNATOR."
+  (let* ((picture (unit picture-designator))
+         (target-kb (unit.kb picture)))
+    (multiple-value-bind (picture-class item-class viewport-class windowpane-class)
+        (ensure-kee-picture-classes target-kb)
+      (declare (ignore picture-class item-class windowpane-class))
+      (let ((viewport (create.unit name
+                                   target-kb
+                                   nil
+                                   (list viewport-class picture)
+                                   "Reconstructed KEEpicture viewport.")))
+        (put.value viewport 'viewport.picture (unit.name picture))
+        (put.value viewport 'x x)
+        (put.value viewport 'y y)
+        (put.value viewport 'width (or width (get.value picture 'picture.width)))
+        (put.value viewport 'height (or height (get.value picture 'picture.height)))
+        (put.value viewport 'scale scale)
+        (when label
+          (put.value viewport 'label label))
+        viewport))))
+
+(defun picture.viewports (picture-designator)
+  "Return reconstructed viewport units attached to PICTURE-DESIGNATOR."
+  (picture-children-of-class picture-designator
+                             *kee-picture-viewport-class-name*))
+
+(defun create.picture.windowpane
+    (name viewport-designator &key (x 0) (y 0) width height label (open-p t))
+  "Create a reconstructed windowpane containing VIEWPORT-DESIGNATOR."
+  (let* ((viewport (unit viewport-designator))
+         (target-kb (unit.kb viewport)))
+    (multiple-value-bind (picture-class item-class viewport-class windowpane-class)
+        (ensure-kee-picture-classes target-kb)
+      (declare (ignore picture-class item-class viewport-class))
+      (let ((windowpane (create.unit name
+                                     target-kb
+                                     nil
+                                     (list windowpane-class viewport)
+                                     "Reconstructed KEEpicture windowpane.")))
+        (put.value windowpane 'windowpane.viewport (unit.name viewport))
+        (put.value windowpane 'x x)
+        (put.value windowpane 'y y)
+        (put.value windowpane 'width (or width (get.value viewport 'width)))
+        (put.value windowpane 'height (or height (get.value viewport 'height)))
+        (put.value windowpane 'open.p (not (null open-p)))
+        (when label
+          (put.value windowpane 'label label))
+        windowpane))))
+
+(defun picture.windowpanes (viewport-designator)
+  "Return reconstructed windowpane units attached to VIEWPORT-DESIGNATOR."
+  (picture-children-of-class viewport-designator
+                             *kee-picture-windowpane-class-name*))
 
 (defun picture-number (value &optional (default 0))
   (cond ((numberp value) value)
@@ -174,6 +256,36 @@ reference an existing ActiveImage unit through ACTIVE-IMAGE."
           :values values
           :value (first values))))
 
+(defun picture.windowpane.report (windowpane-designator)
+  "Return a plist describing reconstructed KEE windowpane state."
+  (let ((windowpane (unit windowpane-designator)))
+    (list :name (unit.name windowpane)
+          :kb (kb.name (unit.kb windowpane))
+          :label (or (get.value windowpane 'label)
+                     (unit.name windowpane))
+          :viewport (get.value windowpane 'windowpane.viewport)
+          :x (picture-number (get.value windowpane 'x) 0)
+          :y (picture-number (get.value windowpane 'y) 0)
+          :width (picture-number (get.value windowpane 'width) 320)
+          :height (picture-number (get.value windowpane 'height) 180)
+          :open-p (not (null (get.value windowpane 'open.p))))))
+
+(defun picture.viewport.report (viewport-designator)
+  "Return a plist describing reconstructed KEE viewport state."
+  (let ((viewport (unit viewport-designator)))
+    (list :name (unit.name viewport)
+          :kb (kb.name (unit.kb viewport))
+          :label (or (get.value viewport 'label)
+                     (unit.name viewport))
+          :picture (get.value viewport 'viewport.picture)
+          :x (picture-number (get.value viewport 'x) 0)
+          :y (picture-number (get.value viewport 'y) 0)
+          :width (picture-number (get.value viewport 'width) 320)
+          :height (picture-number (get.value viewport 'height) 180)
+          :scale (picture-number (get.value viewport 'scale) 1)
+          :windowpanes (mapcar #'picture.windowpane.report
+                               (picture.windowpanes viewport)))))
+
 (defun kee.picture.report (picture-designator)
   "Return a plist describing PICTURE-DESIGNATOR and its current item values."
   (let ((picture (unit picture-designator)))
@@ -183,8 +295,60 @@ reference an existing ActiveImage unit through ACTIVE-IMAGE."
           :width (picture-number (get.value picture 'picture.width) 320)
           :height (picture-number (get.value picture 'picture.height) 180)
           :background (or (get.value picture 'background) "#FFFFFF")
+          :viewports (mapcar #'picture.viewport.report
+                             (picture.viewports picture))
           :items (mapcar #'picture.item.report
                          (picture.items picture)))))
+
+(defun picture-designator-name (designator)
+  (when designator
+    (unit.name (unit designator))))
+
+(defun picture.mouse.event
+    (picture-designator item-designator action
+     &key viewport windowpane x y button (value nil value-supplied-p))
+  "Record a reconstructed mouse event on a KEEpicture item.
+
+When ITEM-DESIGNATOR references a writable ActiveImage and VALUE is supplied,
+the event also writes through `set.active.image.value`, preserving ordinary
+slot and ActiveValue behavior."
+  (let* ((picture (unit picture-designator))
+         (item (unit item-designator))
+         (item-report (picture.item.report item))
+         (active-image-name (getf item-report :active-image))
+         (old-values (and active-image-name
+                          (active.image.values active-image-name)))
+         (write-p (and value-supplied-p active-image-name)))
+    (when write-p
+      (set.active.image.value active-image-name value))
+    (let* ((updated-report (picture.item.report item))
+           (new-values (or (and active-image-name
+                                (active.image.values active-image-name))
+                           (getf updated-report :values))))
+      (record.trace.event
+       :picture-mouse
+       :picture (unit.name picture)
+       :item (unit.name item)
+       :viewport (picture-designator-name viewport)
+       :windowpane (picture-designator-name windowpane)
+       :action (picture-keyword action :mouse)
+       :x x
+       :y y
+       :button button
+       :active-image active-image-name
+       :unit (or (getf updated-report :target-unit)
+                 (and active-image-name
+                      (getf (active.image.report active-image-name)
+                            :target-unit)))
+       :slot (or (getf updated-report :target-slot)
+                 (and active-image-name
+                      (getf (active.image.report active-image-name)
+                            :target-slot)))
+       :old-values old-values
+       :new-values new-values
+       :value (and value-supplied-p value)
+       :result (if write-p :active-image-write :record-only)
+       :message "KEEpicture mouse event"))))
 
 (defun picture-svg-string (value)
   (active-image-html-escape-string value))

@@ -1,6 +1,7 @@
 (load (merge-pathnames "../src/package.lisp" *load-truename*))
 (load (merge-pathnames "../src/core.lisp" *load-truename*))
 (load (merge-pathnames "../src/active-images.lisp" *load-truename*))
+(load (merge-pathnames "../src/traces.lisp" *load-truename*))
 (load (merge-pathnames "../src/pictures.lisp" *load-truename*))
 
 (in-package #:cl-user)
@@ -40,16 +41,32 @@
                            :x 18
                            :y 42
                            :width 150
-                           :height 58))
+                           :height 58)
+  (kee:create.picture.viewport 'sensor.viewport 'sensor.panel
+                               :label "Sensor View"
+                               :width 240
+                               :height 120)
+  (kee:create.picture.windowpane 'sensor.window 'sensor.viewport
+                                 :label "Sensor Window"
+                                 :width 260
+                                 :height 150))
 
 (defun run ()
   (setup-active-image-mini)
   (format t "~&Initial ActiveImage: ~A~%"
           (kee:active.image.html 'temperature.gauge))
-  (kee:set.active.image.value 'temperature.gauge 42)
+  (kee:picture.mouse.event 'sensor.panel 'temperature.card :mouse-left
+                           :viewport 'sensor.viewport
+                           :windowpane 'sensor.window
+                           :x 82
+                           :y 68
+                           :button :left
+                           :value 42)
   (format t "~&Updated ActiveImage: ~A~%"
           (kee:active.image.html 'temperature.gauge))
   (format t "~&Picture SVG: ~A~%"
-          (kee:kee.picture.svg 'sensor.panel)))
+          (kee:kee.picture.svg 'sensor.panel))
+  (format t "~&Picture Trace: ~S~%"
+          (first (last (kee:trace.events :kind :picture-mouse)))))
 
 (run)
