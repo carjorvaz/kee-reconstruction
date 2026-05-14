@@ -339,6 +339,7 @@
     (check (search "trace-map" viewer-html))
     (check (search "renderTraceMap" viewer-html))
     (check (search "traceMapLane" viewer-html))
+    (check (search "trace-map-link.focused" viewer-html))
     (check (search "setActiveImageLocal" viewer-html))
     (check (search "data-active-image-name" viewer-html))
     (check (search "activeBrowserUnitP" viewer-html))

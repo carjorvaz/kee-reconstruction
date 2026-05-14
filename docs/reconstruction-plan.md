@@ -150,7 +150,8 @@ Status:
   focused trace detail, graph highlighting for focused trace references, and a
   compact trace graph with focused-trace graph target links.
 - The Trace pane includes a spatial trace map over recent filtered agenda,
-  rule, world, nogood, and contradiction events.
+  rule, world, nogood, and contradiction events, with adjacent focused path
+  emphasis.
 - `trace.events` records world creation, world slot writes, agenda passes,
   rule matches/firings, method dispatch/calls/returns, generated branches,
   nogoods, and contradictions.
@@ -171,5 +172,5 @@ Status:
 Next GUI target:
 
 - Expand the recovered debugging tools beyond the first trace/xref view:
-  richer trace-map path emphasis and replay controls over rule firings,
-  generated worlds, and contradictions.
+  trace-map replay controls over rule firings, generated worlds, and
+  contradictions.
