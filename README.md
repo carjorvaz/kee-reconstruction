@@ -64,10 +64,11 @@ The first implementation target is `kee-core`:
   scope, and search text, with previous/next trace jumps, focused trace detail,
   a compact agenda/conflict-set pane with candidate/fired-rule jump controls
   plus condition/action/effect drilldowns, a provenance-backed causality graph,
-  selected world/fact/problem why trails, clickable trace references and
-  focused-trace graph targets, graph/path highlighting for focused traces, a
-  spatial trace map with speed/loop replay controls and focused-branch
-  emphasis, and a compact trace graph
+  selected world/fact/problem why trails, alternative-world assumption
+  summaries, clickable trace references and focused-trace graph targets,
+  graph/path highlighting for focused traces, a spatial trace map with
+  speed/loop replay controls and focused-branch emphasis, and a compact trace
+  graph
 
 Later phases broaden RuleSystem/TellAndAsk, grow the KEEworlds/ATMS model, and
 add the Common Windows / KEEpictures / ActiveImages GUI layer.

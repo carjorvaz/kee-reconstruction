@@ -178,6 +178,8 @@ The reconstruction now has a first trace layer for rule/world debugging:
   flows
 - selected world details render trace-backed why trails for world branches,
   local facts, nogoods, contradictions, and focused trace effects
+- selected world details summarize the alternative-world assumptions along the
+  selected world's ancestry
 - focused traces highlight referenced units or worlds in the visible SVG graph,
   including world ancestry paths for focused world/problem traces
 - focused trace detail exposes clickable unit/world graph targets
@@ -212,4 +214,4 @@ The reconstruction now has a first static rule cross-referencer:
 
 Expand the debugging tools around the first trace and xref panes:
 
-- trace-backed dependency summaries for alternative-world assumptions
+- explicit ATMS-style environment and nogood dependency records

@@ -363,8 +363,30 @@
 
 (defun trace-effect-event-p (event)
   (member (getf event :kind)
-          '(:world-branch :world-slot-write :nogood :contradiction)
+          '(:world-create :world-branch :world-slot-write :nogood :contradiction)
           :test #'eq))
+
+(defun trace-world-parent-index (events)
+  (let ((index (make-hash-table :test #'equal)))
+    (dolist (event events index)
+      (when (and (eq (getf event :kind) :world-branch)
+                 (getf event :world)
+                 (getf event :parent))
+        (setf (gethash (getf event :world) index)
+              (getf event :parent))))))
+
+(defun trace-ancestor-world-names (events world-names)
+  (let ((parents (trace-world-parent-index events))
+        (seen (make-hash-table :test #'equal))
+        (names nil))
+    (labels ((add (name)
+               (when (and name (not (gethash name seen)))
+                 (setf (gethash name seen) t)
+                 (push name names)
+                 (add (gethash name parents)))))
+      (dolist (name world-names)
+        (add name)))
+    names))
 
 (defun trace-touches-visible-world-p (event world-names)
   (and world-names
@@ -403,7 +425,9 @@
 
 (defun trace-detail-events (&key (limit 200) world-graph)
   (let* ((events (trace.events))
-         (world-names (graph-world-names world-graph))
+         (world-names (trace-ancestor-world-names
+                       events
+                       (graph-world-names world-graph)))
          (recent (if limit
                      (last events (min limit (length events)))
                      events))
@@ -558,6 +582,8 @@
          ".why-trail { display: grid; gap: 5px; padding: 7px; border: 1px solid var(--line); border-radius: 6px; background: #ffffff; }"
          ".why-trail strong { font-size: 12px; overflow-wrap: anywhere; }"
          ".trace-detail .why-trail { margin-top: 8px; }"
+         ".assumption-trails { display: grid; gap: 8px; }"
+         ".assumption-trails .why-trail { background: #fbfcfd; }"
          ".agenda-controls { display: grid; grid-template-columns: auto auto auto auto minmax(0, 1fr); gap: 6px; align-items: center; margin-bottom: 8px; }"
          ".agenda-controls button { border: 1px solid var(--line); border-radius: 6px; background: #f9fafb; color: var(--ink); min-height: 30px; padding: 0 9px; font: inherit; font-size: 12px; cursor: pointer; }"
          ".agenda-controls button:hover { border-color: var(--accent); background: var(--accent-soft); }"
@@ -832,10 +858,19 @@
          "  const conditions = (nogood.conditions || []).join(' | ');"
          "  return `<div class='detail-block'><strong>${refButton('unit', nogood.rule, DATA.units.kb)}</strong>${detailLine('proposition', nogood.proposition)}${bindings.length ? pillList(bindings) : ''}${conditions ? detailLine('conditions', conditions) : ''}${detailLine('action', nogood.action)}</div>`;"
          "}"
+         "function traceFactParts(fact) { if (!Array.isArray(fact) || fact.length < 4) return null; const values = Array.isArray(fact[3]) ? fact[3] : [fact[3]]; return { kb: fact[0], unit: fact[1], slot: fact[2], values }; }"
+         "function traceFactLabel(fact) { const parts = traceFactParts(fact); return parts ? `${parts.unit}.${parts.slot}=${traceValueText(parts.values)}` : traceValueText(fact); }"
+         "function traceWorldParentByName(rows) { const parents = worldParentByName(); rows.filter(event => traceKind(event) === 'world-branch' && event.world && event.parent).forEach(event => parents.set(event.world, event.parent)); return parents; }"
+         "function worldAssumptionNames(name, rows = DATA.details.traces || []) { const parents = traceWorldParentByName(rows); const names = []; const seen = new Set(); for (let cursor = name; cursor && parents.has(cursor) && !seen.has(cursor); cursor = parents.get(cursor)) { names.push(cursor); seen.add(cursor); } return names.reverse(); }"
+         "function branchTraceForWorld(name, rows = DATA.details.traces || []) { return lastTrace(rows, event => traceKind(event) === 'world-branch' && event.world === name); }"
+         "function branchWriteTrace(branch, rows = DATA.details.traces || []) { const fact = traceFactParts(branch?.fact); return lastTrace(rows, event => traceKind(event) === 'world-slot-write' && event.world === branch?.world && (!fact || (event.unit === fact.unit && event.slot === fact.slot && sameTraceValues(event.newValues, fact.values)))); }"
+         "function worldAssumptions(detail) { const rows = DATA.details.traces || []; const parents = traceWorldParentByName(rows); return worldAssumptionNames(detail.name, rows).map(name => { const branch = branchTraceForWorld(name, rows); const write = branch && branchWriteTrace(branch, rows); const event = write || branch; return event ? { world: name, parent: branch?.parent || parents.get(name), label: branch?.fact ? traceFactLabel(branch.fact) : causalEffectLabel(event), event } : null; }).filter(Boolean); }"
+         "function renderWorldAssumption(assumption, index) { const hop = `${index + 1}. ${assumption.parent || 'ROOT'} -> ${assumption.world}`; const label = `${hop} / ${assumption.label}`; return renderWhyTrail(label, assumption.event); }"
+         "function renderWorldAssumptions(detail) { const assumptions = worldAssumptions(detail); if (!assumptions.length) return ''; return `<section class='detail-section'><h3>Assumptions</h3><div class='assumption-trails'>${assumptions.map(renderWorldAssumption).join('')}</div></section>`; }"
          "function renderWorldDetail(detail) {"
          "  const facts = detail.facts || [];"
          "  const nogoods = detail.nogoods || [];"
-         "  return `<section class='detail-section'><h3>Facts</h3>${facts.length ? facts.map(renderFact).join('') : `<p class='empty'>None</p>`}</section><section class='detail-section'><h3>Nogoods</h3>${nogoods.length ? nogoods.map(renderNogood).join('') : `<p class='empty'>None</p>`}</section>${renderWorldWhyTrails(detail)}`;"
+         "  return `<section class='detail-section'><h3>Facts</h3>${facts.length ? facts.map(renderFact).join('') : `<p class='empty'>None</p>`}</section><section class='detail-section'><h3>Nogoods</h3>${nogoods.length ? nogoods.map(renderNogood).join('') : `<p class='empty'>None</p>`}</section>${renderWorldAssumptions(detail)}${renderWorldWhyTrails(detail)}`;"
          "}"
          "function traceKind(event) { return String(event.kind || '').toLowerCase(); }"
          "function traceFamily(event) { const kind = traceKind(event); if (kind.startsWith('method-')) return 'methods'; if (kind.startsWith('rule-') || kind === 'agenda') return 'rules'; if (kind.startsWith('world-')) return 'worlds'; if (kind === 'nogood' || kind === 'contradiction') return 'problems'; return 'other'; }"

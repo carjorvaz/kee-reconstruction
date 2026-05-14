@@ -150,8 +150,9 @@ Status:
   focused trace detail, compact agenda/conflict-set panes with candidate and
   fired-rule jump controls plus condition/action/effect drilldowns, a compact
   causality graph over agenda activations and downstream effects, selected
-  world/fact/problem why trails, graph/path highlighting for focused trace
-  references, and a compact trace graph with focused-trace graph target links.
+  world/fact/problem why trails, alternative-world assumption summaries,
+  graph/path highlighting for focused trace references, and a compact trace
+  graph with focused-trace graph target links.
 - The Trace pane includes a spatial trace map over recent filtered agenda,
   rule, world, nogood, and contradiction events, with adjacent focused path
   emphasis, focused-branch emphasis, and speed/loop replay controls.
@@ -176,4 +177,4 @@ Status:
 Next GUI target:
 
 - Expand the recovered debugging tools beyond the first trace/xref view:
-  trace-backed dependency summaries for alternative-world assumptions.
+  explicit ATMS-style environment and nogood dependency records.
