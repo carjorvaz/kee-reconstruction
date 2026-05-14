@@ -36,6 +36,8 @@ The first implementation target is `kee-core`:
 - structured inspector helpers and a compact terminal browser, including
   `list.kbs`, `list.units`, `inspect.unit`, `inspect.slot`, `inspect.world`,
   `inspect.world.tree`, `print.browser`, `browser.command`, and `browse`
+- structured unit/world graph exports and Graphviz DOT renderers, including
+  `unit.graph`, `world.graph`, `unit.graph.dot`, and `world.graph.dot`
 
 Later phases broaden RuleSystem/TellAndAsk, grow the KEEworlds/ATMS model, and
 add the Common Windows / KEEpictures / ActiveImages GUI layer.
@@ -62,6 +64,10 @@ KEE browser/GUI layer.
 `examples/kee-browser-shell.lisp` sets up the same puzzle and opens a small
 form-oriented browser shell. Useful commands include `(help)`, `(kbs)`,
 `(units puzzle)`, `(unit tom)`, `(slot tom sport)`, `(worlds 8)`, and `(quit)`.
+
+`examples/kee-graph-dot.lisp` emits DOT graphs for the Hamburg puzzle's unit
+hierarchy and generated worlds. The browser shell can also print DOT with
+`(unit-graph)` and `(world-graph 20)`.
 
 ## Running Tests
 

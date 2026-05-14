@@ -9,6 +9,8 @@
     (worlds "List worlds, optionally limited: (worlds 20) or (worlds all).")
     (world "Inspect a world: (world NAME).")
     (summary "Print the compact KB/unit/world browser summary.")
+    (unit-graph "Print a DOT unit hierarchy graph: (unit-graph) or (unit-graph KB).")
+    (world-graph "Print a DOT worlds graph: (world-graph 20) or (world-graph all).")
     (goto-kb "Set the current KB: (goto-kb NAME).")
     (goto-world "Set the current world: (goto-world NAME).")
     (current "Show the current KB and world.")
@@ -122,6 +124,13 @@ Returns :CONTINUE for ordinary commands and :QUIT for quit commands."
            :continue)
           ((command-named-p name "summary")
            (print.browser :stream stream)
+           :continue)
+          ((command-named-p name "unit-graph" "unit.graph")
+           (destructuring-bind (&optional kb-name) args
+             (write.unit.graph.dot stream :kb kb-name))
+           :continue)
+          ((command-named-p name "world-graph" "world.graph")
+           (write.world.graph.dot stream :limit (command-limit args 20))
            :continue)
           ((command-named-p name "goto-kb" "goto.kb")
            (destructuring-bind (kb-name) args

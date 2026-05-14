@@ -242,6 +242,10 @@ Current reconstruction:
 - `browser.command` executes a single command form such as `(unit tom)`,
   `(slot tom sport)`, or `(worlds 8)`.
 - `browse` runs a small interactive command loop over the same command forms.
+- `unit.graph` and `world.graph` return structured graph plists for a KB's
+  unit hierarchy and the current KEEworlds DAG.
+- `unit.graph.dot`, `world.graph.dot`, `write.unit.graph.dot`, and
+  `write.world.graph.dot` render those graphs as Graphviz DOT.
 
 This is a reconstruction support layer rather than a recovered KEE API. It is
 intended to keep display logic separate from the object/rule/world core, so a

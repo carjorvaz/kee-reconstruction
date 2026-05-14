@@ -8,4 +8,5 @@
                (:file "src/worlds")
                (:file "src/rules")
                (:file "src/inspect")
+               (:file "src/graph")
                (:file "src/browser")))

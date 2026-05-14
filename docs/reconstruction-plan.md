@@ -133,5 +133,9 @@ Status:
   slot/facet summaries, generated worlds, and nogood explanations.
 - `browser.command` and `browse` provide a tiny form-oriented listener for
   browsing KBs, units, slots, and worlds.
+- `unit.graph` and `world.graph` provide structured graph exports with DOT
+  renderers for quick visual inspection.
 - `examples/kee-browser.lisp` and `examples/kee-browser-shell.lisp` exercise
   the browser against the Hamburg puzzle demo.
+- `examples/kee-graph-dot.lisp` emits DOT for the Hamburg puzzle unit
+  hierarchy and generated worlds.

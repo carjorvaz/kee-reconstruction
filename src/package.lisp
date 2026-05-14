@@ -87,6 +87,12 @@
    #:inspect.world
    #:inspect.world.tree
    #:print.browser
+   #:unit.graph
+   #:world.graph
+   #:unit.graph.dot
+   #:world.graph.dot
+   #:write.unit.graph.dot
+   #:write.world.graph.dot
    #:browser.commands
    #:browser.command
    #:browse
