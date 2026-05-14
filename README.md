@@ -46,6 +46,7 @@ Useful follow-up commands:
 
 ```sh
 nix develop --command scripts/screenshot-demo.sh
+nix develop --command scripts/check-viewer.sh
 nix develop --command scripts/smoke.sh
 ```
 
@@ -168,5 +169,6 @@ sbcl --script test/run-tests.lisp
 Or with the dev shell:
 
 ```sh
+nix develop --command scripts/check-viewer.sh
 nix develop --command scripts/smoke.sh
 ```
