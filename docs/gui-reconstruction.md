@@ -178,6 +178,8 @@ The reconstruction now has a first static rule cross-referencer:
 - selected rule units show a Rule Xref pane with reads, writes, and assertions
 - selected ordinary units show rules that literally mention that unit or use it
   as a rule class
+- Rule Xref panes can filter by operation, slot, and selected/variable/concrete
+  targets
 
 ## Next Build Target
 
@@ -185,6 +187,5 @@ Expand the debugging tools around the first trace and xref panes:
 
 - a more spatial graphic trace view over rule firings, generated worlds, and
   contradictions
-- richer xref filtering by slot name, operation, and variable target
 - trace controls for isolating methods, rules, worlds, and contradictions more
   quickly in larger demos

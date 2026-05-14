@@ -145,8 +145,8 @@ Status:
   synchronized slot display, embedded ActiveImage controls with local static
   updates, a searchable node list, and clicked-node detail panes for slots,
   facets, facts, nogoods, and in-graph references, plus rule cross-reference
-  panes, filterable trace panes with clickable trace references, and a compact
-  trace graph.
+  panes with operation/slot/target filters, filterable trace panes with
+  clickable trace references, and a compact trace graph.
 - `trace.events` records world creation, world slot writes, agenda passes,
   rule matches/firings, method dispatch/calls/returns, generated branches,
   nogoods, and contradictions.
@@ -167,5 +167,5 @@ Status:
 Next GUI target:
 
 - Expand the recovered debugging tools beyond the first trace/xref view:
-  richer rule-reference filtering, trace controls for larger demos, and a more
-  spatial graphic trace over rule firings, generated worlds, and contradictions.
+  trace controls for larger demos and a more spatial graphic trace over rule
+  firings, generated worlds, and contradictions.

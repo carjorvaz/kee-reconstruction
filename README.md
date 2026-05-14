@@ -58,8 +58,9 @@ The first implementation target is `kee-core`:
   class/member hierarchy browser, synchronized slot table, embedded
   ActiveImage controls with local static-page updates, searchable node browser,
   and a clickable inspector for slots, facets, facts, nogood explanations, and
-  in-graph references, rule cross-reference panes, plus filterable rule/world
-  trace panes with clickable trace references and a compact trace graph
+  in-graph references, rule cross-reference panes with operation/slot/target
+  filters, plus filterable rule/world trace panes with clickable trace
+  references and a compact trace graph
 
 Later phases broaden RuleSystem/TellAndAsk, grow the KEEworlds/ATMS model, and
 add the Common Windows / KEEpictures / ActiveImages GUI layer.
