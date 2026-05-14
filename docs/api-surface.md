@@ -238,6 +238,10 @@ Current reconstruction:
 - `inspect.world.tree` returns inspected worlds sorted by name.
 - `print.browser` prints a compact terminal browser view over KBs, units,
   slots, worlds, and contradiction reasons.
+- `browser.commands` returns the supported terminal-browser command table.
+- `browser.command` executes a single command form such as `(unit tom)`,
+  `(slot tom sport)`, or `(worlds 8)`.
+- `browse` runs a small interactive command loop over the same command forms.
 
 This is a reconstruction support layer rather than a recovered KEE API. It is
 intended to keep display logic separate from the object/rule/world core, so a

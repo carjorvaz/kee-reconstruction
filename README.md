@@ -35,7 +35,7 @@ The first implementation target is `kee-core`:
   effective-fact deduplication for generated worlds
 - structured inspector helpers and a compact terminal browser, including
   `list.kbs`, `list.units`, `inspect.unit`, `inspect.slot`, `inspect.world`,
-  `inspect.world.tree`, and `print.browser`
+  `inspect.world.tree`, `print.browser`, `browser.command`, and `browse`
 
 Later phases broaden RuleSystem/TellAndAsk, grow the KEEworlds/ATMS model, and
 add the Common Windows / KEEpictures / ActiveImages GUI layer.
@@ -58,6 +58,10 @@ and lists complete consistent candidate worlds.
 Hamburg puzzle KB: selected units, slot/facet summaries, generated worlds, and
 contradiction reasons. This is the first foundation for reconstructing the
 KEE browser/GUI layer.
+
+`examples/kee-browser-shell.lisp` sets up the same puzzle and opens a small
+form-oriented browser shell. Useful commands include `(help)`, `(kbs)`,
+`(units puzzle)`, `(unit tom)`, `(slot tom sport)`, `(worlds 8)`, and `(quit)`.
 
 ## Running Tests
 

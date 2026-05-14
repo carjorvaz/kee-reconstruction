@@ -7,4 +7,5 @@
                (:file "src/core")
                (:file "src/worlds")
                (:file "src/rules")
-               (:file "src/inspect")))
+               (:file "src/inspect")
+               (:file "src/browser")))

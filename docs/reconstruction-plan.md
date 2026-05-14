@@ -131,5 +131,7 @@ Status:
 - A first structured inspector layer exists for KBs, units, slots, and worlds.
 - `print.browser` provides a terminal browser that renders selected units,
   slot/facet summaries, generated worlds, and nogood explanations.
-- `examples/kee-browser.lisp` exercises the browser against the Hamburg puzzle
-  demo.
+- `browser.command` and `browse` provide a tiny form-oriented listener for
+  browsing KBs, units, slots, and worlds.
+- `examples/kee-browser.lisp` and `examples/kee-browser-shell.lisp` exercise
+  the browser against the Hamburg puzzle demo.

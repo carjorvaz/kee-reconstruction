@@ -87,5 +87,8 @@
    #:inspect.world
    #:inspect.world.tree
    #:print.browser
+   #:browser.commands
+   #:browser.command
+   #:browse
    #:unitmsg
    #:unitmsg*))
