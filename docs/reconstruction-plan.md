@@ -149,9 +149,9 @@ Status:
   event kind, selected-node scope, and search text, previous/next trace jumps,
   focused trace detail, compact agenda/conflict-set panes with candidate and
   fired-rule jump controls plus condition/action/effect drilldowns, a compact
-  causality graph over agenda activations and downstream effects, graph/path
-  highlighting for focused trace references, and a compact trace graph with
-  focused-trace graph target links.
+  causality graph over agenda activations and downstream effects, selected
+  world/fact/problem why trails, graph/path highlighting for focused trace
+  references, and a compact trace graph with focused-trace graph target links.
 - The Trace pane includes a spatial trace map over recent filtered agenda,
   rule, world, nogood, and contradiction events, with adjacent focused path
   emphasis, focused-branch emphasis, and speed/loop replay controls.
@@ -176,4 +176,4 @@ Status:
 Next GUI target:
 
 - Expand the recovered debugging tools beyond the first trace/xref view:
-  selected world/fact/problem why trails backed by agenda and fire provenance.
+  trace-backed dependency summaries for alternative-world assumptions.

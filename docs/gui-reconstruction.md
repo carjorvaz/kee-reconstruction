@@ -176,6 +176,8 @@ The reconstruction now has a first trace layer for rule/world debugging:
   writes, generated branches, nogoods, and contradictions
 - a provenance-backed causality graph renders agenda -> match -> fire -> effect
   flows
+- selected world details render trace-backed why trails for world branches,
+  local facts, nogoods, contradictions, and focused trace effects
 - focused traces highlight referenced units or worlds in the visible SVG graph,
   including world ancestry paths for focused world/problem traces
 - focused trace detail exposes clickable unit/world graph targets
@@ -210,4 +212,4 @@ The reconstruction now has a first static rule cross-referencer:
 
 Expand the debugging tools around the first trace and xref panes:
 
-- selected world/fact/problem why trails backed by agenda and fire provenance
+- trace-backed dependency summaries for alternative-world assumptions

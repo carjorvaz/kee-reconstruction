@@ -357,17 +357,77 @@
         (cons "result" (trace-json-value (getf event :result)))
         (cons "message" (trace-json-value (getf event :message)))))
 
-(defun trace-detail-json (&key (limit 200))
+(defun graph-world-names (world-graph)
+  (mapcar (lambda (node) (getf node :name))
+          (getf world-graph :nodes)))
+
+(defun trace-effect-event-p (event)
+  (member (getf event :kind)
+          '(:world-branch :world-slot-write :nogood :contradiction)
+          :test #'eq))
+
+(defun trace-touches-visible-world-p (event world-names)
+  (and world-names
+       (or (member (getf event :world) world-names :test #'equal)
+           (member (getf event :parent) world-names :test #'equal))))
+
+(defun trace-index-by (events kind key)
+  (let ((index (make-hash-table :test #'equal)))
+    (dolist (event events index)
+      (when (and (eq (getf event :kind) kind)
+                 (getf event key))
+        (setf (gethash (getf event key) index) event)))))
+
+(defun trace-provenance-events (events targets)
+  (let ((agenda-by-id (trace-index-by events :agenda :agenda-id))
+        (match-by-id (trace-index-by events :rule-match :activation-id))
+        (fire-by-id (trace-index-by events :rule-fire :fire-id)))
+    (loop for event in targets
+          append (remove nil
+                         (list (gethash (getf event :agenda-id)
+                                        agenda-by-id)
+                               (gethash (getf event :activation-id)
+                                        match-by-id)
+                               (gethash (getf event :fire-id)
+                                        fire-by-id))))))
+
+(defun unique-trace-events (events)
+  (let ((seen (make-hash-table :test #'eql))
+        (unique nil))
+    (dolist (event events)
+      (let ((id (getf event :id)))
+        (unless (gethash id seen)
+          (setf (gethash id seen) t)
+          (push event unique))))
+    (sort (nreverse unique) #'< :key (lambda (event) (getf event :id)))))
+
+(defun trace-detail-events (&key (limit 200) world-graph)
+  (let* ((events (trace.events))
+         (world-names (graph-world-names world-graph))
+         (recent (if limit
+                     (last events (min limit (length events)))
+                     events))
+         (visible-effects
+           (remove-if-not
+            (lambda (event)
+              (and (trace-effect-event-p event)
+                   (trace-touches-visible-world-p event world-names)))
+            events))
+         (provenance (trace-provenance-events events visible-effects)))
+    (unique-trace-events (append recent visible-effects provenance))))
+
+(defun trace-detail-json (&key (limit 200) world-graph)
   (json-array
    (when (fboundp 'trace.events)
-     (mapcar #'trace-event-json (trace.events :limit limit)))))
+     (mapcar #'trace-event-json
+             (trace-detail-events :limit limit :world-graph world-graph)))))
 
 (defun viewer-details-json (unit-graph world-graph)
   (list (cons "units" (unit-detail-map-json unit-graph))
         (cons "worlds" (world-detail-map-json world-graph))
         (cons "activeImages" (active-image-detail-json unit-graph))
         (cons "ruleReferences" (rule-reference-detail-json unit-graph))
-        (cons "traces" (trace-detail-json))))
+        (cons "traces" (trace-detail-json :world-graph world-graph))))
 
 (defun viewer-kbs-json (unit-graph)
   (detail-string-array
@@ -492,7 +552,12 @@
          ".causal-node.fire { border-color: var(--accent); background: var(--accent-soft); }"
          ".causal-node.effect { background: var(--good-soft); }"
          ".causal-node.bad { background: var(--bad-soft); border-color: #f1b4ad; }"
+         ".causal-node.focused { box-shadow: 0 0 0 2px var(--accent-soft); }"
          ".causal-arrow { color: var(--muted); }"
+         ".why-trails { display: grid; gap: 8px; }"
+         ".why-trail { display: grid; gap: 5px; padding: 7px; border: 1px solid var(--line); border-radius: 6px; background: #ffffff; }"
+         ".why-trail strong { font-size: 12px; overflow-wrap: anywhere; }"
+         ".trace-detail .why-trail { margin-top: 8px; }"
          ".agenda-controls { display: grid; grid-template-columns: auto auto auto auto minmax(0, 1fr); gap: 6px; align-items: center; margin-bottom: 8px; }"
          ".agenda-controls button { border: 1px solid var(--line); border-radius: 6px; background: #f9fafb; color: var(--ink); min-height: 30px; padding: 0 9px; font: inherit; font-size: 12px; cursor: pointer; }"
          ".agenda-controls button:hover { border-color: var(--accent); background: var(--accent-soft); }"
@@ -770,7 +835,7 @@
          "function renderWorldDetail(detail) {"
          "  const facts = detail.facts || [];"
          "  const nogoods = detail.nogoods || [];"
-         "  return `<section class='detail-section'><h3>Facts</h3>${facts.length ? facts.map(renderFact).join('') : `<p class='empty'>None</p>`}</section><section class='detail-section'><h3>Nogoods</h3>${nogoods.length ? nogoods.map(renderNogood).join('') : `<p class='empty'>None</p>`}</section>`;"
+         "  return `<section class='detail-section'><h3>Facts</h3>${facts.length ? facts.map(renderFact).join('') : `<p class='empty'>None</p>`}</section><section class='detail-section'><h3>Nogoods</h3>${nogoods.length ? nogoods.map(renderNogood).join('') : `<p class='empty'>None</p>`}</section>${renderWorldWhyTrails(detail)}`;"
          "}"
          "function traceKind(event) { return String(event.kind || '').toLowerCase(); }"
          "function traceFamily(event) { const kind = traceKind(event); if (kind.startsWith('method-')) return 'methods'; if (kind.startsWith('rule-') || kind === 'agenda') return 'rules'; if (kind.startsWith('world-')) return 'worlds'; if (kind === 'nogood' || kind === 'contradiction') return 'problems'; return 'other'; }"
@@ -795,6 +860,17 @@
          "function agendaMatchForFire(group, fire) { return group.matches.find(match => sameRuleActivation(match, fire)); }"
          "function renderCausalityFlow(group, fire, rows) { const agenda = group.agenda; const match = agendaMatchForFire(group, fire); const effects = agendaEffectEvents(fire, rows).slice(0, 4); const nodes = []; if (agenda) nodes.push(causalNode(agenda, `agenda ${agenda.ruleClass || group.world || ''}`, 'agenda')); if (match) nodes.push(causalNode(match, `match ${match.rule || ''}`, 'match')); nodes.push(causalNode(fire, `fire ${fire.rule || ''}`, 'fire')); effects.forEach(effect => nodes.push(causalNode(effect, causalEffectLabel(effect), `effect ${traceBad(effect) ? 'bad' : ''}`))); return `<div class='causal-row'>${nodes.map((node, index) => index ? `<span class='causal-arrow'>-&gt;</span>${node}` : node).join('')}</div>`; }"
          "function renderCausalityGraph(rows) { const flows = []; agendaGroups(rows).forEach(group => group.fires.forEach(fire => flows.push(renderCausalityFlow(group, fire, rows)))); return flows.length ? `<div class='causality-graph'>${flows.slice(-8).reverse().join('')}</div>` : ''; }"
+         "function normalizedTraceValues(values) { return (values || []).map(traceValueText); }"
+         "function sameTraceValues(left, right) { return JSON.stringify(normalizedTraceValues(left)) === JSON.stringify(normalizedTraceValues(right)); }"
+         "function lastTrace(rows, predicate) { for (let index = rows.length - 1; index >= 0; index -= 1) { if (predicate(rows[index])) return rows[index]; } return null; }"
+         "function whyTraceLabel(event) { const kind = traceKind(event); if (kind === 'agenda') return `agenda ${event.ruleClass || event.world || ''}`; if (kind === 'rule-match') return `match ${event.rule || ''}`; if (kind === 'rule-fire') return `fire ${event.rule || ''}`; if (agendaEffectP(event)) return causalEffectLabel(event); if (kind === 'world-create') return `create ${event.world || ''}`; return kind; }"
+         "function whyNodeClass(event, target) { const classes = []; const kind = traceKind(event); if (kind === 'rule-fire') classes.push('fire'); if (agendaEffectP(event) || kind === 'world-create') classes.push('effect'); if (traceBad(event)) classes.push('bad'); if (target && event.id === target.id) classes.push('focused'); return classes.join(' '); }"
+         "function provenanceTrail(event, rows = DATA.details.traces || []) { const trail = []; const add = candidate => { if (candidate && !trail.some(existing => existing.id === candidate.id)) trail.push(candidate); }; if (event.agendaId) add(rows.find(candidate => traceKind(candidate) === 'agenda' && candidate.agendaId === event.agendaId)); if (event.activationId) add(rows.find(candidate => traceKind(candidate) === 'rule-match' && candidate.activationId === event.activationId)); if (event.fireId) add(rows.find(candidate => traceKind(candidate) === 'rule-fire' && candidate.fireId === event.fireId)); add(event); return trail; }"
+         "function renderWhyTrail(label, event, rows = DATA.details.traces || []) { const nodes = provenanceTrail(event, rows).map(item => causalNode(item, whyTraceLabel(item), whyNodeClass(item, event))); return `<div class='why-trail'><strong>${esc(label)}</strong><div class='causal-row'>${nodes.map((node, index) => index ? `<span class='causal-arrow'>-&gt;</span>${node}` : node).join('')}</div></div>`; }"
+         "function factWriteTrace(fact, worldName, rows) { return lastTrace(rows, event => traceKind(event) === 'world-slot-write' && event.world === worldName && event.unit === fact.unit && event.slot === fact.slot && sameTraceValues(event.newValues, fact.values)); }"
+         "function nogoodTrace(nogood, worldName, rows) { return lastTrace(rows, event => traceKind(event) === 'nogood' && event.world === worldName && event.rule === nogood.rule && event.proposition === nogood.proposition); }"
+         "function whyTrailTargets(detail) { const rows = DATA.details.traces || []; const targets = []; const add = (label, event) => { if (event && !targets.some(target => target.event.id === event.id)) targets.push({ label, event }); }; add(`world ${detail.name}`, lastTrace(rows, event => traceKind(event) === 'world-branch' && event.world === detail.name) || lastTrace(rows, event => traceKind(event) === 'world-create' && event.world === detail.name)); (detail.facts || []).forEach(fact => add(`fact ${fact.unit}.${fact.slot}`, factWriteTrace(fact, detail.name, rows))); (detail.nogoods || []).forEach(nogood => add(`problem ${nogood.proposition || nogood.rule}`, nogoodTrace(nogood, detail.name, rows))); add(`contradiction ${detail.name}`, lastTrace(rows, event => traceKind(event) === 'contradiction' && event.world === detail.name)); return targets; }"
+         "function renderWorldWhyTrails(detail) { const targets = whyTrailTargets(detail); if (!targets.length) return ''; const shown = targets.slice(0, 12).map(target => renderWhyTrail(target.label, target.event)); const more = targets.length > shown.length ? `<p class='empty'>${targets.length - shown.length} more trails</p>` : ''; return `<section class='detail-section'><h3>Why</h3><div class='why-trails'>${shown.join('')}${more}</div></section>`; }"
          "function agendaTraceP(event) { return ['agenda', 'rule-match', 'rule-fire'].includes(traceKind(event)); }"
          "function makeAgendaGroup(agenda = null, world = null) { return { agenda, agendaId: agenda?.agendaId || null, world: world || agenda?.world || null, matches: [], fires: [] }; }"
          "function agendaGroupKey(event) { return event.agendaId ? `agenda:${event.agendaId}` : `world:${event.world || ''}`; }"
@@ -840,7 +916,8 @@
          "function traceVisibleRows(rows) { let visible = rows.slice(-40).reverse(); const focused = rows.find(event => event.id === state.traceFocusId); if (focused && !visible.some(event => event.id === focused.id)) visible = [focused, ...visible.slice(0, 39)]; return visible; }"
          "function traceDetailValueP(value) { return value !== null && value !== undefined && !(Array.isArray(value) && !value.length); }"
          "function traceTargetButtons(event) { const targets = traceTargets(event); return targets.length ? `<div class='pill-row'>${targets.map(target => refButton(target.kind, target.name, target.kb, target.label)).join('')}</div>` : ''; }"
-         "function traceDetailHtml(rows) { const event = rows.find(candidate => candidate.id === state.traceFocusId); if (!event) return ''; const fields = Object.entries(event).filter(([, value]) => traceDetailValueP(value)); const body = fields.map(([key, value]) => `<dt>${esc(key)}</dt><dd><span class='code-text'>${esc(traceValueText(value))}</span></dd>`).join(''); return `<div class='trace-detail'><strong>Focused Trace ${esc(event.id)}</strong>${traceTargetButtons(event)}<dl class='trace-detail-grid'>${body}</dl></div>`; }"
+         "function renderFocusedTraceWhy(event, rows) { const trail = provenanceTrail(event, DATA.details.traces || rows); return trail.length > 1 ? renderWhyTrail('Why Trail', event, DATA.details.traces || rows) : ''; }"
+         "function traceDetailHtml(rows) { const event = rows.find(candidate => candidate.id === state.traceFocusId); if (!event) return ''; const fields = Object.entries(event).filter(([, value]) => traceDetailValueP(value)); const body = fields.map(([key, value]) => `<dt>${esc(key)}</dt><dd><span class='code-text'>${esc(traceValueText(value))}</span></dd>`).join(''); return `<div class='trace-detail'><strong>Focused Trace ${esc(event.id)}</strong>${traceTargetButtons(event)}${renderFocusedTraceWhy(event, rows)}<dl class='trace-detail-grid'>${body}</dl></div>`; }"
          "function jumpTrace(direction) { const graph = activeGraph(); const detail = detailMap(graph)[state.selected]; const rows = filteredTraces(graph, detail); if (!rows.length) { state.traceFocusId = null; render(); return; } const current = rows.findIndex(event => event.id === state.traceFocusId); const next = current < 0 ? (direction > 0 ? 0 : rows.length - 1) : (current + direction + rows.length) % rows.length; state.traceFocusId = rows[next].id; render(); }"
          "function renderTracePane(graph, detail) { const all = DATA.details.traces || []; const filtered = filteredTraces(graph, detail); ensureTraceFocus(filtered); const rows = traceVisibleRows(filtered); return `<section class='detail-section'><h3>Trace</h3>${renderTraceControls(filtered, all.length)}${renderAgendaPane(filtered)}${renderCausalityGraph(filtered)}${renderTraceMap(filtered)}${renderTraceGraph(filtered)}${traceDetailHtml(filtered)}${rows.length ? `<div class='trace-list'>${rows.map(renderTraceEvent).join('')}</div>` : `<p class='empty'>No trace events</p>`}</section>`; }"
          "function renderInspector(model, graph) {"
