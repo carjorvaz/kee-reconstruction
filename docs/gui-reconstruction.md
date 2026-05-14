@@ -203,6 +203,9 @@ The reconstruction now has a first trace layer for rule/world debugging:
 - the browser pane includes Review Tour controls that jump to representative
   units, rules, worlds, agenda traces, rule cross-references, and ActiveImages
   when available
+- the browser pane includes a compact Desktop roster using recovered window
+  vocabulary such as Lisp Listener, Typescript, Prompt, KEEpictures, and
+  ActiveImages
 - trace panes can filter by event kind and selected-node scope
 - trace panes can also isolate method, rule, world, and problem event families
 - trace panes include search text plus previous/next jump controls, with the

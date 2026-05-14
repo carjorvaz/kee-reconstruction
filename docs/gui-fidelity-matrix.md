@@ -13,7 +13,7 @@ Status meanings:
 
 | Area | Evidence | Current status | Reviewer question | Next action |
 | --- | --- | --- | --- | --- |
-| Knowledge-base browser | NASA VEG describes a KB menu, Current KB box, top-level unit menu, hierarchy browsing, and slot display. | `approximated` | Did KEE's browser feel pane-oriented, menu-oriented, graph-oriented, or some combination? | Refine viewer/browser pane layout around remembered browser workflows. |
+| Knowledge-base browser | NASA VEG describes a KB menu, Current KB box, top-level unit menu, hierarchy browsing, slot display, and broader KEE desktop/window vocabulary. | `approximated` | Did KEE's browser feel pane-oriented, menu-oriented, graph-oriented, desktop-window-oriented, or some combination? | Refine viewer/browser pane layout around remembered browser workflows. |
 | Class/member hierarchy | CLOS-on-KEE and NASA VEG expose class/subclass/member idioms and browsing. | `implemented` | Are relation names and displayed hierarchy directions right? | Add relation-specific filters and parent/child jump affordances if confirmed. |
 | Slot/facet inspection | Patent and application reports emphasize local, inherited, and combined values plus facets. | `implemented` | Are the local/inherited/combined/facet columns historically plausible? | Adjust column labels, ordering, or facet expansion after reviewer feedback. |
 | Common Windows | ASKE and local Lisp history identify Common Windows as IntelliCorp/KEE UI substrate. | `missing` | Which Common Windows concepts were visible to application developers? | Collect API names and decide whether McCLIM or browser layout should model pane/window concepts. |

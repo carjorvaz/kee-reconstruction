@@ -9,6 +9,9 @@ test('review tour jumps to reconstructed KEE surfaces', async ({ page }) => {
   await page.goto(pathToFileURL(viewerHtml).href);
 
   await expect(page.locator('#review-tour')).toBeVisible();
+  await expect(page.locator('#desktop-roster')).toContainText('Lisp Listener');
+  await expect(page.locator('#desktop-roster')).toContainText('KEEpictures');
+  await expect(page.locator('[data-desktop-tour="units"]').first()).toBeEnabled();
   await expect(page.locator('[data-tab="worlds"]')).toHaveClass(/active/);
   await expect(page.locator('.inspector-pane h2')).toHaveText(/WORLD-/);
 
@@ -38,4 +41,5 @@ test('review tour jumps to reconstructed KEE surfaces', async ({ page }) => {
   await expect(page.locator('.inspector-pane')).toContainText('Rule Xref');
 
   await expect(page.locator('[data-review-tour="active-images"]')).toBeDisabled();
+  await expect(page.locator('[data-desktop-tour="active-images"]')).toBeDisabled();
 });
