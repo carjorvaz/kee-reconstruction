@@ -15,20 +15,7 @@ sbcl --noinform --disable-debugger \
   --eval '(asdf:load-system :kee-core)' \
   --eval '(sb-ext:exit)'
 
-"$repo_root/scripts/render-demo.sh" "$tmpdir/kee-viewer.html"
-perl -0ne 'print $1 if m{<script>\n(.*)</script>\n</body>}s' \
-  "$tmpdir/kee-viewer.html" > "$tmpdir/kee-viewer.js"
-node --check "$tmpdir/kee-viewer.js"
-"$repo_root/scripts/render-auv-panel-demo.sh" "$tmpdir/auv-panel-workflow.html"
-perl -0ne 'print $1 if m{<script>\n(.*)</script>\n</body>}s' \
-  "$tmpdir/auv-panel-workflow.html" > "$tmpdir/auv-panel-workflow.js"
-node --check "$tmpdir/auv-panel-workflow.js"
-rg -F --quiet "Mission Selection Panel" "$tmpdir/auv-panel-workflow.html"
-rg -F --quiet "Parameter Entry Panel" "$tmpdir/auv-panel-workflow.html"
-rg -F --quiet "Mission Monitoring Panel" "$tmpdir/auv-panel-workflow.html"
-rg -F --quiet "\"kind\":\"PANEL-CLOSE\"" "$tmpdir/auv-panel-workflow.html"
-"$repo_root/scripts/check-viewer.sh"
-"$repo_root/scripts/check-auv-panel-demo.sh"
+"$repo_root/scripts/check-reviewer-demos.sh"
 "$repo_root/scripts/render-demo-dump.sh" "$tmpdir/delivery.kdump"
 cmp -s "$tmpdir/delivery.kdump" "$repo_root/docs/assets/dumps/delivery.kdump"
 

@@ -33,7 +33,7 @@ KEEworlds areas.
 Start with:
 
 ```sh
-nix develop --command scripts/render-demo.sh
+nix develop --command scripts/render-reviewer-demos.sh
 ```
 
 Then open `demo/hamburg-viewer.html` and inspect:
@@ -45,6 +45,13 @@ Then open `demo/hamburg-viewer.html` and inspect:
 - the Worlds tab
 - selected world facts, support labels, assumptions, and nogoods
 - the Trace pane, agenda view, causality graph, and trace map
+
+Then open `demo/auv-panel-workflow.html` and inspect:
+
+- the mission-selection, parameter-entry, and monitoring panels
+- panel Open/Close behavior
+- ActiveImage write-through into mission state
+- picture mouse traces and panel trace events
 
 ## Notes From Review
 

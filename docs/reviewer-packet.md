@@ -15,19 +15,25 @@ claim of historical completeness.
 ## Quick Start
 
 ```sh
-nix develop --command scripts/render-demo.sh
+nix develop --command scripts/render-reviewer-demos.sh
 ```
 
-Open:
+Open both pages:
 
 ```text
 demo/hamburg-viewer.html
+demo/auv-panel-workflow.html
 ```
 
-The demo opens on the Worlds tab with an inconsistent generated world selected.
-That first view is meant to show KEEworlds-style branching, local facts,
-assumptions, support labels, nogoods, rule traces, agenda/conflict-set
+The Hamburg viewer opens on the Worlds tab with an inconsistent generated world
+selected. That first view is meant to show KEEworlds-style branching, local
+facts, assumptions, support labels, nogoods, rule traces, agenda/conflict-set
 reconstruction, and causality views in one place.
+
+The AUV panel workflow opens on a reconstructed image-panel session with
+mission-selection, parameter-entry, and monitoring panels. It is the most direct
+current demo for GUI feel: KEEpicture surfaces, panel open/close behavior,
+ActiveImage write-through, and picture mouse traces.
 
 ## What To Inspect
 
@@ -79,9 +85,12 @@ reconstruction, and causality views in one place.
 ## Running Checks
 
 ```sh
+nix develop --command scripts/check-reviewer-demos.sh
 nix develop --command scripts/smoke.sh
 ```
 
-The smoke script runs the documentation harness, Common Lisp regression tests,
-ASDF load, viewer generation, viewer JavaScript syntax check, Playwright viewer
-interaction check, and the current example scripts.
+The reviewer demo check regenerates both pages, verifies the checked-in
+screenshot and dump artifacts exist, and runs both Playwright interaction
+checks. The smoke script also runs the documentation harness, Common Lisp
+regression tests, ASDF load, JavaScript syntax checks, dump comparison, and the
+current example scripts.

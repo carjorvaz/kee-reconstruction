@@ -38,23 +38,24 @@ inventing history.
 With Nix:
 
 ```sh
-nix develop --command scripts/render-demo.sh
+nix develop --command scripts/render-reviewer-demos.sh
 ```
 
-Then open `demo/hamburg-viewer.html` in a browser.
+Then open `demo/hamburg-viewer.html` and `demo/auv-panel-workflow.html` in a
+browser.
 
-The current demo is a standalone Hamburg puzzle viewer. It is not the original
-KEE GUI, but it gives a concrete surface for reviewing reconstructed units,
-slots, rule classes, generated worlds, trace events, assumptions, support
-labels, nogood explanations, KEEpictures, image panels, and ActiveImages.
+The Hamburg puzzle viewer is not the original KEE GUI, but it gives a concrete
+surface for reviewing reconstructed units, slots, rule classes, generated
+worlds, trace events, assumptions, support labels, nogood explanations,
+KEEpictures, image panels, and ActiveImages. The AUV panel workflow is the
+current GUI/application-session specimen for reconstructed image-panel
+behavior.
 
 Useful follow-up commands:
 
 ```sh
+nix develop --command scripts/check-reviewer-demos.sh
 nix develop --command scripts/screenshot-demo.sh
-nix develop --command scripts/check-viewer.sh
-nix develop --command scripts/check-auv-panel-demo.sh
-nix develop --command scripts/render-auv-panel-demo.sh
 nix develop --command scripts/smoke.sh
 ```
 
@@ -208,6 +209,6 @@ sbcl --script test/run-tests.lisp
 Or with the dev shell:
 
 ```sh
-nix develop --command scripts/check-viewer.sh
+nix develop --command scripts/check-reviewer-demos.sh
 nix develop --command scripts/smoke.sh
 ```

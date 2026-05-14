@@ -21,6 +21,19 @@ generated session.
 With Nix:
 
 ```sh
+nix develop --command scripts/render-reviewer-demos.sh
+```
+
+This writes both reviewer-facing HTML files:
+
+```text
+demo/hamburg-viewer.html
+demo/auv-panel-workflow.html
+```
+
+To render only the Hamburg puzzle viewer:
+
+```sh
 nix develop --command scripts/render-demo.sh
 ```
 
@@ -92,7 +105,13 @@ KEE_DEMO_RENDERER=scripts/render-auv-panel-demo.sh KEE_DEMO_HTML=demo/auv-panel-
 
 ## Interaction Check
 
-Run the browser-level viewer check:
+Run both browser-level reviewer checks:
+
+```sh
+nix develop --command scripts/check-reviewer-demos.sh
+```
+
+Run only the Hamburg viewer check:
 
 ```sh
 nix develop --command scripts/check-viewer.sh
