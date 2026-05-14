@@ -135,10 +135,113 @@
              (cons "edges" (json-array (mapcar #'graph-edge-json
                                                 (getf graph :edges)))))))))
 
+(defun detail-string (value)
+  (cond ((null value) "NIL")
+        ((symbolp value) (graph-symbol-label value))
+        ((stringp value) value)
+        (t (princ-to-string value))))
+
+(defun detail-string-array (values)
+  (json-array (mapcar #'detail-string values)))
+
+(defun unit-detail-id (report)
+  (graph-unit-id (getf report :kb) (getf report :name)))
+
+(defun world-detail-id (report)
+  (graph-world-id (getf report :name)))
+
+(defun facet-detail-json (facet)
+  (list (cons "name" (detail-string (car facet)))
+        (cons "values" (detail-string-array (cdr facet)))))
+
+(defun slot-detail-json (slot)
+  (list (cons "name" (detail-string (getf slot :name)))
+        (cons "kind" (detail-string (getf slot :kind)))
+        (cons "localValues" (detail-string-array (getf slot :local-values)))
+        (cons "inheritedValues"
+              (detail-string-array (getf slot :inherited-values)))
+        (cons "combinedValues"
+              (detail-string-array (getf slot :combined-values)))
+        (cons "inheritance" (if (getf slot :inheritance)
+                                (detail-string (getf slot :inheritance))
+                                :json-null))
+        (cons "valueType" (if (getf slot :value-type)
+                              (detail-string (getf slot :value-type))
+                              :json-null))
+        (cons "default" (if (getf slot :default)
+                            (detail-string (getf slot :default))
+                            :json-null))
+        (cons "facets" (json-array (mapcar #'facet-detail-json
+                                            (getf slot :facets))))))
+
+(defun unit-detail-json (report)
+  (list (cons "id" (unit-detail-id report))
+        (cons "name" (detail-string (getf report :name)))
+        (cons "kb" (detail-string (getf report :kb)))
+        (cons "classParents"
+              (detail-string-array (getf report :class-parents)))
+        (cons "memberParents"
+              (detail-string-array (getf report :member-parents)))
+        (cons "classChildren"
+              (detail-string-array (getf report :class-children)))
+        (cons "memberChildren"
+              (detail-string-array (getf report :member-children)))
+        (cons "slots" (json-array (mapcar #'slot-detail-json
+                                           (getf report :slots))))))
+
+(defun fact-detail-json (fact)
+  (list (cons "kb" (detail-string (getf fact :kb)))
+        (cons "unit" (detail-string (getf fact :unit)))
+        (cons "slot" (detail-string (getf fact :slot)))
+        (cons "values" (detail-string-array (getf fact :values)))))
+
+(defun binding-detail-json (binding)
+  (list (cons "variable" (detail-string (car binding)))
+        (cons "value" (detail-string (cdr binding)))))
+
+(defun nogood-detail-json (nogood)
+  (list (cons "world" (detail-string (getf nogood :world)))
+        (cons "rule" (detail-string (getf nogood :rule)))
+        (cons "bindings" (json-array (mapcar #'binding-detail-json
+                                              (getf nogood :bindings))))
+        (cons "conditions" (detail-string-array (getf nogood :conditions)))
+        (cons "action" (detail-string (getf nogood :action)))
+        (cons "proposition" (detail-string (getf nogood :proposition)))))
+
+(defun world-detail-json (report)
+  (list (cons "id" (world-detail-id report))
+        (cons "name" (detail-string (getf report :name)))
+        (cons "parent" (if (getf report :parent)
+                           (detail-string (getf report :parent))
+                           :json-null))
+        (cons "inconsistentP" (json-bool (getf report :inconsistent-p)))
+        (cons "facts" (json-array (mapcar #'fact-detail-json
+                                           (getf report :facts))))
+        (cons "nogoods" (json-array (mapcar #'nogood-detail-json
+                                             (getf report :nogoods))))))
+
+(defun unit-detail-map-json (unit-graph)
+  (mapcar (lambda (node)
+            (let ((report (inspect.unit (list (getf node :name)
+                                              (getf node :kb)))))
+              (cons (getf node :id) (unit-detail-json report))))
+          (getf unit-graph :nodes)))
+
+(defun world-detail-map-json (world-graph)
+  (mapcar (lambda (node)
+            (let ((report (inspect.world (getf node :name))))
+              (cons (getf node :id) (world-detail-json report))))
+          (getf world-graph :nodes)))
+
+(defun viewer-details-json (unit-graph world-graph)
+  (list (cons "units" (unit-detail-map-json unit-graph))
+        (cons "worlds" (world-detail-map-json world-graph))))
+
 (defun viewer-json-object (unit-graph world-graph title)
   (list (cons "title" title)
         (cons "units" (graph-json-object unit-graph))
-        (cons "worlds" (graph-json-object world-graph))))
+        (cons "worlds" (graph-json-object world-graph))
+        (cons "details" (viewer-details-json unit-graph world-graph))))
 
 (defun write-html-lines (stream lines)
   (dolist (line lines)
@@ -188,6 +291,13 @@
          ".meta dd { margin: 0; min-width: 0; overflow-wrap: anywhere; }"
          ".pill-row { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }"
          ".pill { border: 1px solid var(--line); border-radius: 999px; padding: 3px 8px; font-size: 12px; background: #f9fafb; }"
+         ".detail-section { margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--line); }"
+         ".detail-section h3 { margin: 0 0 8px; font-size: 13px; color: var(--muted); }"
+         ".detail-block { border: 1px solid var(--line); border-radius: 6px; padding: 8px; margin-top: 8px; background: #fbfcfd; }"
+         ".detail-block strong { display: block; font-size: 13px; margin-bottom: 5px; }"
+         ".detail-line { display: flex; gap: 6px; flex-wrap: wrap; font-size: 12px; margin-top: 4px; }"
+         ".detail-label { color: var(--muted); }"
+         ".code-text { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 12px; overflow-wrap: anywhere; }"
          ".empty { color: var(--muted); font-size: 13px; }"
          "@media (max-width: 760px) { #app { grid-template-rows: auto minmax(0, 1fr); } header { flex-wrap: wrap; } .actions { margin-left: 0; width: 100%; } input[type='search'] { width: 100%; } main { grid-template-columns: 1fr; grid-template-rows: minmax(420px, 1fr) auto; } aside { border-left: 0; border-top: 1px solid var(--line); max-height: 40vh; } }"
          "</style>"
@@ -270,13 +380,44 @@
          "  renderInspector(model, graph);"
          "  if (!state.viewBox) setViewBox(model.width, model.height); else svg.setAttribute('viewBox', `${state.viewBox.x} ${state.viewBox.y} ${state.viewBox.w} ${state.viewBox.h}`);"
          "}"
+         "function detailMap(graph) { return graph.kind === 'unit' ? DATA.details.units : DATA.details.worlds; }"
+         "function pillList(items) { return (items && items.length) ? `<div class='pill-row'>${items.map(item => `<span class='pill'>${esc(item)}</span>`).join('')}</div>` : `<p class='empty'>None</p>`; }"
+         "function detailLine(label, value) { return `<div class='detail-line'><span class='detail-label'>${esc(label)}</span><span class='code-text'>${esc(value ?? 'NIL')}</span></div>`; }"
+         "function facetSummary(facet) { return `${facet.name}: ${(facet.values || []).join(', ') || 'NIL'}`; }"
+         "function renderSlot(slot) {"
+         "  const localValues = (slot.localValues || []).join(', ');"
+         "  const inheritedValues = (slot.inheritedValues || []).join(', ');"
+         "  const combinedValues = (slot.combinedValues || []).join(', ');"
+         "  const facets = (slot.facets || []).map(facetSummary).join('; ');"
+         "  return `<div class='detail-block'><strong>${esc(slot.name)}</strong>${detailLine('kind', slot.kind)}${detailLine('values', combinedValues || 'NIL')}${localValues ? detailLine('local', localValues) : ''}${inheritedValues ? detailLine('inherited', inheritedValues) : ''}${slot.inheritance ? detailLine('inheritance', slot.inheritance) : ''}${slot.valueType ? detailLine('value type', slot.valueType) : ''}${slot.default ? detailLine('default', slot.default) : ''}${facets ? detailLine('facets', facets) : ''}</div>`;"
+         "}"
+         "function renderUnitDetail(detail) {"
+         "  const parents = [...(detail.classParents || []), ...(detail.memberParents || [])];"
+         "  const children = [...(detail.classChildren || []), ...(detail.memberChildren || [])];"
+         "  const slots = detail.slots || [];"
+         "  return `<section class='detail-section'><h3>Parents</h3>${pillList(parents)}</section><section class='detail-section'><h3>Children</h3>${pillList(children)}</section><section class='detail-section'><h3>Slots</h3>${slots.length ? slots.map(renderSlot).join('') : `<p class='empty'>None</p>`}</section>`;"
+         "}"
+         "function renderFact(fact) { return `<div class='detail-block'><strong>${esc(fact.unit)} / ${esc(fact.slot)}</strong>${pillList(fact.values || [])}</div>`; }"
+         "function renderNogood(nogood) {"
+         "  const bindings = (nogood.bindings || []).map(binding => `${binding.variable}=${binding.value}`);"
+         "  const conditions = (nogood.conditions || []).join(' | ');"
+         "  return `<div class='detail-block'><strong>${esc(nogood.rule)}</strong>${detailLine('proposition', nogood.proposition)}${bindings.length ? pillList(bindings) : ''}${conditions ? detailLine('conditions', conditions) : ''}${detailLine('action', nogood.action)}</div>`;"
+         "}"
+         "function renderWorldDetail(detail) {"
+         "  const facts = detail.facts || [];"
+         "  const nogoods = detail.nogoods || [];"
+         "  return `<section class='detail-section'><h3>Facts</h3>${facts.length ? facts.map(renderFact).join('') : `<p class='empty'>None</p>`}</section><section class='detail-section'><h3>Nogoods</h3>${nogoods.length ? nogoods.map(renderNogood).join('') : `<p class='empty'>None</p>`}</section>`;"
+         "}"
          "function renderInspector(model, graph) {"
          "  const node = model.placed.get(state.selected) || model.nodes[0];"
          "  if (!node) { inspector.innerHTML = `<h2>Inspector</h2><p class='empty'>No nodes</p>`; return; }"
          "  const incoming = graph.edges.filter(edge => edge.to === node.id);"
          "  const outgoing = graph.edges.filter(edge => edge.from === node.id);"
-         "  const slots = node.slots || [];"
-         "  inspector.innerHTML = `<h2>${esc(nodeLabel(node))}</h2><dl class='meta'><dt>ID</dt><dd>${esc(node.id)}</dd>${node.kb ? `<dt>KB</dt><dd>${esc(node.kb)}</dd>` : ''}${node.parent ? `<dt>Parent</dt><dd>${esc(node.parent)}</dd>` : ''}${graph.kind === 'world' ? `<dt>Facts</dt><dd>${node.factCount}</dd><dt>Nogoods</dt><dd>${node.nogoodCount}</dd><dt>Status</dt><dd>${node.inconsistentP ? 'inconsistent' : 'consistent'}</dd>` : `<dt>Slots</dt><dd>${slots.length}</dd>`}<dt>Incoming</dt><dd>${incoming.length}</dd><dt>Outgoing</dt><dd>${outgoing.length}</dd></dl>${slots.length ? `<div class='pill-row'>${slots.map(slot => `<span class='pill'>${esc(slot)}</span>`).join('')}</div>` : ''}`;"
+         "  const detail = detailMap(graph)[node.id];"
+         "  const title = detail ? detail.name : nodeLabel(node);"
+         "  const slotCount = detail?.slots?.length ?? (node.slots || []).length;"
+         "  const summary = `<h2>${esc(title)}</h2><dl class='meta'><dt>ID</dt><dd>${esc(node.id)}</dd>${detail?.kb ? `<dt>KB</dt><dd>${esc(detail.kb)}</dd>` : ''}${detail?.parent ? `<dt>Parent</dt><dd>${esc(detail.parent)}</dd>` : ''}${graph.kind === 'world' ? `<dt>Facts</dt><dd>${node.factCount}</dd><dt>Nogoods</dt><dd>${node.nogoodCount}</dd><dt>Status</dt><dd>${node.inconsistentP ? 'inconsistent' : 'consistent'}</dd>` : `<dt>Slots</dt><dd>${slotCount}</dd>`}<dt>Incoming</dt><dd>${incoming.length}</dd><dt>Outgoing</dt><dd>${outgoing.length}</dd></dl>`;"
+         "  inspector.innerHTML = summary + (detail ? (graph.kind === 'unit' ? renderUnitDetail(detail) : renderWorldDetail(detail)) : '');"
          "}"
          "document.querySelectorAll('[data-tab]').forEach(button => button.addEventListener('click', () => { document.querySelectorAll('[data-tab]').forEach(item => item.classList.toggle('active', item === button)); state.view = button.dataset.tab; state.selected = null; state.viewBox = null; render(); }));"
          "search.addEventListener('input', () => { state.query = search.value; render(); });"

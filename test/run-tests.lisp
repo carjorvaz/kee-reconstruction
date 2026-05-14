@@ -231,7 +231,11 @@
     (check (search "unit:VEG/TOM" unit-dot))
     (check (search "id='kee-data'" viewer-html))
     (check (search "unit:VEG/TOM" viewer-html))
-    (check (search "function render" viewer-html)))
+    (check (search "function render" viewer-html))
+    (check (search "\"details\"" viewer-html))
+    (check (search "\"facets\"" viewer-html))
+    (check (search "MAX.CARDINALITY" viewer-html))
+    (check (search "renderUnitDetail" viewer-html)))
   (let ((loop-text
           (with-output-to-string (output)
             (with-input-from-string (input "(kbs) (quit)")
@@ -276,6 +280,13 @@
       (check (= (length (getf bad-report :nogoods)) 1))
       (check (search "TOM-GOLF-HEIGHTS" browser-text))
       (check (search "HEIGHTS.GOLF" browser-text)))
+    (let ((viewer-html (kee:kee.viewer.html :kb 'veg
+                                            :worlds (list bad-world
+                                                          good-world))))
+      (check (search "TOM-GOLF-HEIGHTS" viewer-html))
+      (check (search "HEIGHTS.GOLF" viewer-html))
+      (check (search "\"nogoods\"" viewer-html))
+      (check (search "\"conditions\"" viewer-html)))
     (let* ((world-graph (kee:world.graph))
            (world-dot (kee:world.graph.dot)))
       (check (member "world:TOM-GOLF-HEIGHTS" (getf world-graph :nodes)

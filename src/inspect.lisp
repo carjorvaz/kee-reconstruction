@@ -83,6 +83,9 @@
                       (list :world (nogood.world nogood)
                             :rule (justification.rule justification)
                             :bindings (justification.bindings justification)
+                            :conditions (justification.conditions
+                                         justification)
+                            :action (justification.action justification)
                             :proposition (justification.proposition
                                           justification))))
                   (world.nogoods target-world)))))
