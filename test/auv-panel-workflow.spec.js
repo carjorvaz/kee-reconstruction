@@ -13,7 +13,12 @@ test('AUV panel workflow exposes interactive reconstructed panels', async ({ pag
   await expect(page.locator('#desktop-context')).toContainText('Symbolics 3675');
   await expect(page.locator('#desktop-context')).toContainText('TI Micro-Explorer');
   await expect(page.locator('#current-kb')).toHaveText('AUV.WORKFLOW');
+  await expect(page.locator('[data-edge-mode="off"]')).toHaveClass(/active/);
   expect(await page.locator('svg#graph .edge.background').count()).toBeGreaterThan(0);
+  await expect(page.locator('svg#graph .edge-label')).toHaveCount(0);
+  await page.locator('[data-edge-mode="all"]').click();
+  expect(await page.locator('svg#graph .edge-label').count()).toBeGreaterThan(0);
+  await page.locator('[data-edge-mode="off"]').click();
   await expect(page.locator('svg#graph .edge-label')).toHaveCount(0);
   await expect(page.locator('.inspector-pane h2')).toHaveText('MISSION.STATE');
   await expect(page.locator('#slot-browser')).toContainText('MISSION.PROFILE');

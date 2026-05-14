@@ -14,7 +14,9 @@ includes Review Tour controls that jump to representative units, rules, worlds,
 agenda traces, rule cross-references, KEEpictures, panels, and ActiveImages when
 available. It also shows a compact reconstructed desktop context, a Desktop
 roster using recovered KEE window vocabulary, and a small
-Listener/Typescript/Prompt transcript for the generated session.
+Listener/Typescript/Prompt transcript for the generated session. Dense graph
+views default relation edges off; the header's edge controls can show selected
+or all relations when structural browsing matters.
 
 ## Run
 

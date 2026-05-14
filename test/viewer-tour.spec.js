@@ -13,6 +13,7 @@ test('review tour jumps to reconstructed KEE surfaces', async ({ page }) => {
   await expect(page.locator('#desktop-roster')).toContainText('KEEpictures');
   await expect(page.locator('[data-desktop-tour="units"]').first()).toBeEnabled();
   await expect(page.locator('#session-pane')).toContainText('CL-USER> (SETUP)');
+  await expect(page.locator('[data-edge-mode="off"]')).toHaveClass(/active/);
   await expect(page.locator('[data-tab="worlds"]')).toHaveClass(/active/);
   await expect(page.locator('.inspector-pane h2')).toHaveText(/WORLD-/);
 

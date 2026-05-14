@@ -262,7 +262,8 @@ The reconstruction now has a first trace layer for rule/world debugging:
   world detail
 - generated viewer pages can specify an initial view, selected node, and trace
   scope so demos open on historically meaningful review states
-- dense generated graphs hide background arrows and edge labels so reviewer
+- dense generated graphs default relation edges off, with explicit header
+  controls for selected-node or all-edge relation browsing, so reviewer
   screenshots foreground the selected unit or world instead of a tangled
   relation diagram
 - the browser pane includes Review Tour controls that jump to representative
