@@ -162,6 +162,8 @@ The reconstruction now has a first trace layer for rule/world debugging:
   world detail
 - trace panes can filter by event kind and selected-node scope
 - trace panes can also isolate method, rule, world, and problem event families
+- trace panes include search text plus previous/next jump controls, with the
+  focused trace highlighted
 - trace rows expose clickable unit/world references
 - a compact trace graph summarizes agenda/rule/world/contradiction flow
 - textual method traces now record `unitmsg` dispatch, before/primary/after
@@ -188,4 +190,4 @@ Expand the debugging tools around the first trace and xref panes:
 
 - a more spatial graphic trace view over rule firings, generated worlds, and
   contradictions
-- a trace search/jump control for larger demos
+- a more inspector-like trace detail drilldown for larger demos
