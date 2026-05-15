@@ -8,6 +8,7 @@ required_files=(
   "AGENTS.md"
   "docs/artifacts.md"
   "docs/research-dossier.md"
+  "docs/source-mirroring.md"
   "docs/provenance-policy.md"
   "docs/reviewer-packet.md"
   "docs/gui-reconstruction.md"
@@ -21,6 +22,7 @@ required_files=(
   "scripts/check-auv-panel-demo.sh"
   "scripts/check-reviewer-demos.sh"
   "scripts/check-viewer.sh"
+  "scripts/mirror-research-sources.sh"
   "scripts/render-auv-panel-demo.sh"
   "scripts/render-demo-dump.sh"
   "scripts/render-reviewer-demos.sh"
@@ -90,6 +92,19 @@ research_terms=(
 
 for term in "${research_terms[@]}"; do
   rg -F --quiet "$term" "$repo_root/docs/research-dossier.md"
+done
+
+mirror_terms=(
+  ".research-mirror/sources/"
+  "direct NTRS PDF"
+  "KEE_MIRROR_REFRESH=1"
+  "manifest.tsv"
+  "failures.tsv"
+  "Do not commit"
+)
+
+for term in "${mirror_terms[@]}"; do
+  rg -F --quiet "$term" "$repo_root/docs/source-mirroring.md"
 done
 
 for term in "${review_terms[@]}"; do

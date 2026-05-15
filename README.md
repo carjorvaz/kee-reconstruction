@@ -73,6 +73,8 @@ reason about it.
 - `docs/artifacts.md` is the evidence ledger and missing-artifact list.
 - `docs/research-dossier.md` is the broad reachable-source inventory,
   including internet, archive, NTRS, patent, and local-corpus leads.
+- `docs/source-mirroring.md` explains the private, gitignored source mirror
+  for preserving cited material without committing raw PDFs or scans.
 - `docs/provenance-policy.md` explains what can be checked in.
 - `docs/agent-workflow.md` records the repo-local agent workflow.
 - `docs/reviewer-packet.md` is the short guided path for first-hand reviewers.
