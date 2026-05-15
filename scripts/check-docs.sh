@@ -9,6 +9,7 @@ required_files=(
   "docs/artifacts.md"
   "docs/research-dossier.md"
   "docs/source-mirroring.md"
+  "docs/mirror-audit.md"
   "docs/provenance-policy.md"
   "docs/reviewer-packet.md"
   "docs/gui-reconstruction.md"
@@ -22,6 +23,7 @@ required_files=(
   "scripts/check-auv-panel-demo.sh"
   "scripts/check-reviewer-demos.sh"
   "scripts/check-viewer.sh"
+  "scripts/audit-source-mirror.sh"
   "scripts/mirror-research-sources.sh"
   "scripts/render-auv-panel-demo.sh"
   "scripts/render-demo-dump.sh"
@@ -97,6 +99,7 @@ done
 mirror_terms=(
   ".research-mirror/sources/"
   "direct NTRS PDF"
+  "scripts/audit-source-mirror.sh"
   "KEE_MIRROR_REFRESH=1"
   "manifest.tsv"
   "failures.tsv"
@@ -105,6 +108,22 @@ mirror_terms=(
 
 for term in "${mirror_terms[@]}"; do
   rg -F --quiet "$term" "$repo_root/docs/source-mirroring.md"
+done
+
+audit_terms=(
+  "Last audited: 2026-05-15"
+  "Public URL successes:"
+  "Local corpus successes:"
+  "Failed URL targets:"
+  "Bad Or Partial Successes"
+  "AI Magazine 1984 KEE paper"
+  "Bielefeld KEE evaluation"
+  "ASKE thesis"
+  "scripts/audit-source-mirror.sh"
+)
+
+for term in "${audit_terms[@]}"; do
+  rg -F --quiet "$term" "$repo_root/docs/mirror-audit.md"
 done
 
 for term in "${review_terms[@]}"; do

@@ -75,6 +75,8 @@ reason about it.
   including internet, archive, NTRS, patent, and local-corpus leads.
 - `docs/source-mirroring.md` explains the private, gitignored source mirror
   for preserving cited material without committing raw PDFs or scans.
+- `docs/mirror-audit.md` summarizes the current private mirror, including
+  preserved material, partial captures, and remaining failures.
 - `docs/provenance-policy.md` explains what can be checked in.
 - `docs/agent-workflow.md` records the repo-local agent workflow.
 - `docs/reviewer-packet.md` is the short guided path for first-hand reviewers.

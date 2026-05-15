@@ -41,6 +41,15 @@ Force a fresh download of already mirrored URLs:
 KEE_MIRROR_REFRESH=1 scripts/mirror-research-sources.sh
 ```
 
+Print a current generated audit summary:
+
+```sh
+scripts/audit-source-mirror.sh
+```
+
+`docs/mirror-audit.md` keeps the current hand-written audit, including partial
+captures and manual fallback work.
+
 Do not commit `.research-mirror/`. If a source later has clear redistribution
 permission and is worth keeping in git, add it deliberately with a provenance
 note instead of moving the whole mirror into the repository.
