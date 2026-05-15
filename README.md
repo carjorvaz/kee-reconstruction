@@ -3,10 +3,14 @@
 An evidence-first reconstruction of IntelliCorp's Knowledge Engineering
 Environment (KEE).
 
+**Start here:** [Live reviewer site and demos](https://carjorvaz.github.io/kee-reconstruction/).
+The repository holds the reconstruction source, provenance notes, and evidence
+trail behind that site.
+
 <p>
-  <a href="docs/demos/aske-common-windows.html"><img src="docs/assets/screenshots/aske-common-windows.png" alt="ASKE Common Windows demo screenshot" width="32%"></a>
-  <a href="docs/demos/hamburg-viewer.html"><img src="docs/assets/screenshots/hamburg-viewer-review.png" alt="Hamburg puzzle reviewer-view screenshot" width="32%"></a>
-  <a href="docs/demos/auv-panel-workflow.html"><img src="docs/assets/screenshots/auv-panel-workflow.png" alt="AUV panel workflow screenshot" width="32%"></a>
+  <a href="https://carjorvaz.github.io/kee-reconstruction/demos/aske-common-windows.html"><img src="docs/assets/screenshots/aske-common-windows.png" alt="ASKE Common Windows demo screenshot" width="32%"></a>
+  <a href="https://carjorvaz.github.io/kee-reconstruction/demos/hamburg-viewer.html"><img src="docs/assets/screenshots/hamburg-viewer-review.png" alt="Hamburg puzzle reviewer-view screenshot" width="32%"></a>
+  <a href="https://carjorvaz.github.io/kee-reconstruction/demos/auv-panel-workflow.html"><img src="docs/assets/screenshots/auv-panel-workflow.png" alt="AUV panel workflow screenshot" width="32%"></a>
 </p>
 
 This is not original IntelliCorp KEE source. It is a clean-room reconstruction
@@ -33,14 +37,13 @@ inventing history.
 
 ## Try The Demo
 
-The checked-in public demo copies live under `docs/demos/`:
+The public demos are served from GitHub Pages:
 
-- [ASKE Common Windows demo](docs/demos/aske-common-windows.html)
-- [Hamburg puzzle viewer](docs/demos/hamburg-viewer.html)
-- [AUV panel workflow](docs/demos/auv-panel-workflow.html)
+- [ASKE Common Windows demo](https://carjorvaz.github.io/kee-reconstruction/demos/aske-common-windows.html)
+- [Hamburg puzzle viewer](https://carjorvaz.github.io/kee-reconstruction/demos/hamburg-viewer.html)
+- [AUV panel workflow](https://carjorvaz.github.io/kee-reconstruction/demos/auv-panel-workflow.html)
 
-When served through GitHub Pages from the `docs/` directory, those same pages
-are available under `demos/`.
+The checked-in copies live under `docs/demos/`.
 
 With Nix:
 
