@@ -3,15 +3,11 @@
 An evidence-first reconstruction of IntelliCorp's Knowledge Engineering
 Environment (KEE).
 
-![Hamburg puzzle reviewer-view screenshot](docs/assets/screenshots/hamburg-viewer-review.png)
-
-![Hamburg puzzle KEEpicture tour screenshot](docs/assets/screenshots/hamburg-viewer-kee-picture.png)
-
-![Hamburg puzzle Panels tour screenshot](docs/assets/screenshots/hamburg-viewer-panels.png)
-
-![AUV panel workflow screenshot](docs/assets/screenshots/auv-panel-workflow.png)
-
-![ASKE Common Windows demo screenshot](docs/assets/screenshots/aske-common-windows.png)
+<p>
+  <a href="docs/demos/aske-common-windows.html"><img src="docs/assets/screenshots/aske-common-windows.png" alt="ASKE Common Windows demo screenshot" width="32%"></a>
+  <a href="docs/demos/hamburg-viewer.html"><img src="docs/assets/screenshots/hamburg-viewer-review.png" alt="Hamburg puzzle reviewer-view screenshot" width="32%"></a>
+  <a href="docs/demos/auv-panel-workflow.html"><img src="docs/assets/screenshots/auv-panel-workflow.png" alt="AUV panel workflow screenshot" width="32%"></a>
+</p>
 
 This is not original IntelliCorp KEE source. It is a clean-room reconstruction
 of selected behavior, built from public evidence and runnable experiments.
