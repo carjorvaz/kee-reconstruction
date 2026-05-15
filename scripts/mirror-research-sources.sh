@@ -13,7 +13,7 @@ failures_tmp="$mirror_root/failures.tsv.tmp"
 failures="$mirror_root/failures.tsv"
 timeout="${KEE_MIRROR_TIMEOUT:-180}"
 refresh="${KEE_MIRROR_REFRESH:-0}"
-ua="${KEE_MIRROR_USER_AGENT:-Mozilla/5.0 (compatible; KEE research mirror/1.0)}"
+ua="${KEE_MIRROR_USER_AGENT:-Mozilla/5.0}"
 
 mkdir -p "$files_dir" "$corpus_dir"
 rm -f "$files_dir"/*.tmp "$files_dir"/*.headers.tmp
