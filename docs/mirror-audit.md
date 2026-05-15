@@ -19,9 +19,14 @@ gitignored local archive, not the archive itself.
 - Failure log: `.research-mirror/sources/failures.tsv`
 - Manual browser captures: use `scripts/register-manual-source.sh` to place
   browser-saved files under `.research-mirror/sources/manual/`.
-- Current manual captures: ASKE thesis, registered as
-  `.research-mirror/sources/manual/20260515T101849Z-aske-thesis.pdf` with
-  SHA-256 `852d02dc2cbf5e38020249fdc5fdab37cfafb19ba842d3df0ac7b95dfec1ed44`.
+- Current manual captures:
+  - ASKE thesis, registered as
+    `.research-mirror/sources/manual/20260515T101849Z-aske-thesis.pdf` with
+    SHA-256 `852d02dc2cbf5e38020249fdc5fdab37cfafb19ba842d3df0ac7b95dfec1ed44`.
+  - Bielefeld KEE evaluation, registered as
+    `.research-mirror/sources/manual/20260515T102125Z-bielefeld-kee-evaluation.pdf`
+    with SHA-256
+    `e312c64af3d3f583fa3be0738ed5125ef3f319305bdd7bfc3fb3fb623567bb02`.
 
 Public file types currently preserved:
 
@@ -55,6 +60,9 @@ The local corpus mirror contributes 15 text/markdown files copied from
   page.
 - ASKE thesis via manual browser capture, preserving the KEE 3.1 /
   Unisys/TI Explorer Common Windows GUI evidence that curl could not retrieve.
+- Bielefeld KEE evaluation via manual browser capture, preserving the KEE
+  chapter, desktop/window description, platform list, and manual bibliography
+  that curl could not retrieve from doczz.
 - SimKit PDF via the NCSU DSpace bitstream.
 - Trade/product pages for KEEconnection, RunTime KEE, J-KEE, Unisys/TI
   Explorer, Apollo AI pacts, and Kappa/ProKappa transition context.
@@ -80,7 +88,6 @@ otherwise keep the URL in the failure list and move on.
 
 | Priority | Source | Browser action |
 | --- | --- | --- |
-| High | `https://doczz.net/doc/5911786/evaluation-hybrider-expertensystemtools` | Save as PDF or complete HTML after the Cloudflare challenge. This preserves the Bielefeld KEE chapter and manual bibliography. |
 | High | `https://doi.org/10.1609/aimag.v5i3.447` | Try from a browser; if the AI Magazine article or PDF loads, save it as the 1984 IntelliCorp KEE paper. |
 | Medium | `https://doi.org/10.1145/42404.42405` | If ACM exposes the Filman KEEworlds PDF in-browser, save it. Metadata is already preserved through DBLP/OpenAlex. |
 | Low | `https://journals.sagepub.com/doi/10.1177/089443939000800304` | Save only if convenient; it is a pricing/runtime context lead, not core API/GUI evidence. |
@@ -95,7 +102,7 @@ otherwise keep the URL in the failure list and move on.
 | CiteSeerX Filman PDF | Full KEEworlds article PDF. | CiteSeerX returns 403/404 intermittently. | Prefer ACM/DOI browser capture now that DBLP/OpenAlex confirm DOI `10.1145/42404.42405`; keep searching public mirrors by title. |
 | CiteSeerX SPIKE Common Windows PDF | Source for SPIKE prototype GUI implemented in KEE Common Windows. | CiteSeerX returns 403/404. | Search by DOI hash, title text, and SPIKE/Hubble/KEE Common Windows phrases; keep NTRS SPIKE report as fallback. |
 | CiteSeerX POLYMER PDF | KEE/ATMS/planner application lead. | CiteSeerX returns 403/404. | Search title/authors and POLYMER KEE ATMS phrases; preserve any alternate PDF. |
-| `https://doczz.net/doc/5911786/evaluation-hybrider-expertensystemtools` | Bielefeld KEE evaluation and manual bibliography. | Curl cannot mirror page reliably, though browser/search access works. | Manual browser print/save or test doczz download iframe endpoint; this is high priority because the KEE chapter is unusually useful. |
+| `https://doczz.net/doc/5911786/evaluation-hybrider-expertensystemtools` | Bielefeld KEE evaluation and manual bibliography. | Curl cannot mirror page reliably, though browser access works. | Resolved by manual browser capture on 2026-05-15; keep this row as explanation for the remaining curl failure entry. |
 | `https://journals.sagepub.com/doi/10.1177/089443939000800304` | Pricing/runtime lead for IBM/mainframe KEE. | Publisher blocks curl. | Low priority; manual browser save or library access later. |
 | `https://oro.open.ac.uk/64573/1/27758423.pdf` | ASKE thesis with TI Explorer/Common Windows GUI evidence. | Cloudflare challenge blocks curl, although browser access works. | Resolved by manual browser capture on 2026-05-15; keep this row as explanation for the remaining curl failure entry. |
 
