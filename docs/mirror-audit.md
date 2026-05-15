@@ -19,6 +19,9 @@ gitignored local archive, not the archive itself.
 - Failure log: `.research-mirror/sources/failures.tsv`
 - Manual browser captures: use `scripts/register-manual-source.sh` to place
   browser-saved files under `.research-mirror/sources/manual/`.
+- Current manual captures: ASKE thesis, registered as
+  `.research-mirror/sources/manual/20260515T101849Z-aske-thesis.pdf` with
+  SHA-256 `852d02dc2cbf5e38020249fdc5fdab37cfafb19ba842d3df0ac7b95dfec1ed44`.
 
 Public file types currently preserved:
 
@@ -50,6 +53,8 @@ The local corpus mirror contributes 15 text/markdown files copied from
 - AIAI toolkit/UI PDFs.
 - NPS AUV thesis via Wikimedia/Internet Archive mirror, plus the NPS handle
   page.
+- ASKE thesis via manual browser capture, preserving the KEE 3.1 /
+  Unisys/TI Explorer Common Windows GUI evidence that curl could not retrieve.
 - SimKit PDF via the NCSU DSpace bitstream.
 - Trade/product pages for KEEconnection, RunTime KEE, J-KEE, Unisys/TI
   Explorer, Apollo AI pacts, and Kappa/ProKappa transition context.
@@ -75,7 +80,6 @@ otherwise keep the URL in the failure list and move on.
 
 | Priority | Source | Browser action |
 | --- | --- | --- |
-| High | `https://oro.open.ac.uk/64573/1/27758423.pdf` | Open/save the ASKE thesis PDF, then register it with label `aske-thesis`. This is the strongest TI Explorer/Common Windows GUI source. |
 | High | `https://doczz.net/doc/5911786/evaluation-hybrider-expertensystemtools` | Save as PDF or complete HTML after the Cloudflare challenge. This preserves the Bielefeld KEE chapter and manual bibliography. |
 | High | `https://doi.org/10.1609/aimag.v5i3.447` | Try from a browser; if the AI Magazine article or PDF loads, save it as the 1984 IntelliCorp KEE paper. |
 | Medium | `https://doi.org/10.1145/42404.42405` | If ACM exposes the Filman KEEworlds PDF in-browser, save it. Metadata is already preserved through DBLP/OpenAlex. |
@@ -93,7 +97,7 @@ otherwise keep the URL in the failure list and move on.
 | CiteSeerX POLYMER PDF | KEE/ATMS/planner application lead. | CiteSeerX returns 403/404. | Search title/authors and POLYMER KEE ATMS phrases; preserve any alternate PDF. |
 | `https://doczz.net/doc/5911786/evaluation-hybrider-expertensystemtools` | Bielefeld KEE evaluation and manual bibliography. | Curl cannot mirror page reliably, though browser/search access works. | Manual browser print/save or test doczz download iframe endpoint; this is high priority because the KEE chapter is unusually useful. |
 | `https://journals.sagepub.com/doi/10.1177/089443939000800304` | Pricing/runtime lead for IBM/mainframe KEE. | Publisher blocks curl. | Low priority; manual browser save or library access later. |
-| `https://oro.open.ac.uk/64573/1/27758423.pdf` | ASKE thesis with TI Explorer/Common Windows GUI evidence. | Cloudflare challenge blocks curl, although browser/search access can view the PDF text. | Manual browser download from Open Research Online. High priority for GUI fidelity. |
+| `https://oro.open.ac.uk/64573/1/27758423.pdf` | ASKE thesis with TI Explorer/Common Windows GUI evidence. | Cloudflare challenge blocks curl, although browser access works. | Resolved by manual browser capture on 2026-05-15; keep this row as explanation for the remaining curl failure entry. |
 
 ## Refresh Commands
 
