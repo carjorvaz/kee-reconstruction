@@ -9,10 +9,10 @@ gitignored local archive, not the archive itself.
 ## Snapshot
 
 - Mirror root: `.research-mirror/sources/`
-- Mirror size: `328M`
-- Source URL targets extracted: `81`
+- Mirror size: `324M`
+- Source URL targets extracted: `82`
 - Local corpus targets extracted: `15`
-- Public URL successes: `71`
+- Public URL successes: `72`
 - Local corpus successes: `15`
 - Failed URL targets: `10`
 - Manifest: `.research-mirror/sources/manifest.tsv`
@@ -34,7 +34,7 @@ Public file types currently preserved:
 | --- | ---: |
 | `application/json` | 3 |
 | `application/pdf` | 30 |
-| `text/html` | 36 |
+| `text/html` | 37 |
 | `text/plain` | 1 |
 | `video/mp4` | 1 |
 
@@ -43,9 +43,9 @@ The local corpus mirror contributes 15 text/markdown files copied from
 
 ## High-Value Preserved Material
 
-- DBLP, OpenAlex, DOI, and AITopics metadata/text fallbacks for the 1984 AI
-  Magazine KEE paper, plus DBLP/OpenAlex metadata for the 1988 Filman
-  KEEworlds paper.
+- DBLP, OpenAlex, DOI, and AITopics document/search metadata fallbacks for
+  the 1984 AI Magazine KEE paper, plus DBLP/OpenAlex metadata for the 1988
+  Filman KEEworlds paper.
 - Computer Chronicles 1984 "Artificial Intelligence" page, MP4, transcript,
   and metadata JSON.
 - NASA/NTRS PDFs for KATYDID, SLED, TEXSYS/MTK, HITEX, the Space Station
@@ -73,7 +73,7 @@ The local corpus mirror contributes 15 text/markdown files copied from
 
 | Source | Mirror state | Next action |
 | --- | --- | --- |
-| AI Magazine 1984 KEE paper | The OJS URL produced a 98-byte server-side error page, not the paper; a browser path also showed the same open_basedir-style error on 2026-05-15. DBLP/OpenAlex/DOI metadata is tracked, and AITopics preserves the issue entry plus abstract, but no PDF has been captured. | Keep the fallbacks; continue searching for a stable AAAI/Semantic Scholar/Internet Archive copy of "Applications Development Using a Hybrid Artificial Intelligence Development System." |
+| AI Magazine 1984 KEE paper | The OJS URL produced a 98-byte server-side error page, not the paper; a browser path also showed the same open_basedir-style error on 2026-05-15. DBLP/OpenAlex/DOI metadata is tracked, AITopics preserves a dedicated document page plus the issue/search entry and abstract, OpenAlex reports no `pdf_url`/OA location, and an Internet Archive exact-title metadata search returned zero hits on 2026-05-15. No PDF has been captured. | Keep the fallbacks; continue searching for a stable AAAI/Semantic Scholar/Internet Archive copy of "Applications Development Using a Hybrid Artificial Intelligence Development System." |
 | AI Magazine DOI `10.1609/aimag.v5i3.447` | The DOI is identified and mirrored as a URL target, but curl follows it to the same 98-byte AAAI/OJS error page. | Keep the DOI as metadata and try manual/browser capture only if a later network path exposes the paper itself. |
 | NPS handle page | The handle URL mirrors only the DSpace shell page. | The Wikimedia/Internet Archive PDF mirror is preserved and should be treated as the useful local copy. |
 | NTRS `19930063758` | Landing page preserved; derived direct PDF URL returns 404. | Keep the landing page. If the paper has no NTRS PDF, search conference proceedings or alternate NASA mirrors by title. |
