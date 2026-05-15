@@ -7,6 +7,7 @@ manifest="$mirror_root/manifest.tsv"
 failures="$mirror_root/failures.tsv"
 url_list="$mirror_root/source-urls.txt"
 corpus_list="$mirror_root/local-corpus-paths.txt"
+suspicious_bytes="${KEE_MIRROR_SUSPICIOUS_BYTES:-2048}"
 
 if [ ! -f "$manifest" ]; then
   printf 'No mirror manifest found at %s\n' "$manifest" >&2
@@ -101,6 +102,16 @@ awk -F '\t' '
   }' "$manifest" |
   sort |
   awk -F '\t' '{ printf "| `%s` | %d |\n", $1, $2 }'
+
+printf '\n## Suspicious Captures\n\n'
+printf 'Small files are not automatically wrong, but they often mean a publisher\n'
+printf 'returned an error page while curl still exited successfully.\n\n'
+printf '| Reason | Bytes | Content type | Local path | Source |\n'
+printf '| --- | ---: | --- | --- | --- |\n'
+awk -F '\t' -v max_bytes="$suspicious_bytes" '
+  NR > 1 && $1 == "url" && ($3 + 0) < max_bytes {
+    printf "| `small-file` | %d | `%s` | `%s` | %s |\n", $3, $4, $6, $7
+  }' "$manifest"
 
 if [ -f "$failures" ]; then
   printf '\n## Failures\n\n'

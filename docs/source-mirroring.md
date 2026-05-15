@@ -47,6 +47,22 @@ Print a current generated audit summary:
 scripts/audit-source-mirror.sh
 ```
 
+Some high-value sources are reachable in a normal browser but not through
+`curl` because of Cloudflare, publisher bot checks, or old repository
+front-ends. Save those manually into a temporary/downloads folder, then register
+the saved file in the same private mirror:
+
+```sh
+scripts/register-manual-source.sh \
+  'https://example.invalid/source' \
+  ~/Downloads/source.pdf \
+  short-source-label
+```
+
+Manual captures are copied into `.research-mirror/sources/manual/` with a
+sidecar `.source.tsv` recording the source URL, local path, byte count, content
+type, retrieval time, and SHA-256 digest.
+
 `docs/mirror-audit.md` keeps the current hand-written audit, including partial
 captures and manual fallback work.
 
