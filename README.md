@@ -71,6 +71,8 @@ reason about it.
 
 - `AGENTS.md` is the short map for future Codex work.
 - `docs/artifacts.md` is the evidence ledger and missing-artifact list.
+- `docs/research-dossier.md` is the broad reachable-source inventory,
+  including internet, archive, NTRS, patent, and local-corpus leads.
 - `docs/provenance-policy.md` explains what can be checked in.
 - `docs/agent-workflow.md` records the repo-local agent workflow.
 - `docs/reviewer-packet.md` is the short guided path for first-hand reviewers.

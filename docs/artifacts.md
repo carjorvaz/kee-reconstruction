@@ -17,27 +17,36 @@ secondary descriptions.
   transcriptions belong in a private research note, not in source files.
 - See `docs/provenance-policy.md` before adding raw PDFs, scans, binaries, or
   recovered source.
+- See `docs/research-dossier.md` for the broad reachable-source inventory and
+  dated search trail.
 
 ## Strong Evidence
 
 | Artifact | Why it matters | Source |
 | --- | --- | --- |
 | CLOS-on-KEE | Public Lisp code that runs on KEE and exposes real API names such as `create.unit`, `create.slot`, `get.value`, `put.value`, `unitmsg`, and relation functions. | https://www.cs.cmu.edu/afs/cs/project/ai-repository/ai/lang/lisp/oop/clos/kee/0.html |
+| AI Magazine 1984 KEE paper | Primary IntelliCorp-authored description of KEE as a hybrid environment combining frames, rules, Lisp, interactive graphics, and active values. | https://ojs.aaai.org/aimagazine/index.php/aimagazine/article/view/447 |
+| Fikes/Kehler CACM 1985 frame paper | Primary IntelliCorp-authored conceptual source for KEE frames/units, methods, active values, and rules represented as frames. | https://dblp.org/rec/journals/cacm/FikesK85 |
+| Filman CACM 1988 worlds paper | Primary source for KEEworlds and truth maintenance in KEE. | https://citeseerx.ist.psu.edu/document?doi=3a6acacb32bbc48ff773481e45681824c5d14a32&repid=rep1&type=pdf |
 | NASA VEG report B921020-U-2R00 | Large appendix listings from a real KEE application: dynamic unit creation, file import/export, ActiveImages panes, custom browser, rules, and `unitmsg` usage. | https://ntrs.nasa.gov/citations/19930007502 |
+| NASA VEG task-report family | Adds reachable VEG reports for learning, historical database files, add-techniques UI, atmospheric techniques, Help System, and workbench summaries. | https://ntrs.nasa.gov/citations/19930007498 |
 | NASA VEG report C931021-U-2R07 | Add-techniques interface. Shows KEE rule creation, `external.form`, parse checks, and user-driven extension of a KEE app. | https://ntrs.nasa.gov/citations/19930015965 |
 | NASA VEG report C931033-U-2R00 | Later VEG summary. Confirms `veg4.u`, `veg-methods.lisp`, extra Lisp files, Help System, and delivery on Sun cartridge tape. | https://ntrs.nasa.gov/citations/19940015811 |
 | Hamburg KEE 3.0 slides | Training slides for KEE concepts, including units, slots, rules, TellAndAsk, ActiveValues, ActiveImages, KEEpictures, KEEworlds, and a 3-by-3 puzzle example. | https://www.chai.uni-hamburg.de/~moeller/symbolics-info/kee.html |
 | US4675829A | IntelliCorp patent for KEE-style slot inheritance using local, inherited, and combined values. | https://patents.google.com/patent/US4675829A/en |
 | US4918621A | IntelliCorp patent for representing a DAG of worlds using an ATMS. | https://patents.google.com/patent/US4918621A |
+| US4930071A | IntelliCorp patent for mapping arbitrary relational databases to knowledge-base classes, slots, and units; likely KEEconnection-family evidence. | https://patents.google.com/patent/US4930071A/en |
 | SimKit WSC 1989 paper | Describes an application framework built in/on KEE, especially the graphics/model-builder pattern. | https://repository.lib.ncsu.edu/items/461ffbbe-1936-47f6-8f33-66309300547b |
 | AIAI expert-system toolkit survey | Describes KEE's development environment: schema/KB browser, mouse/menu KEEpictures graphics, ActiveImages, TellAndAsk, agenda viewer, graphic traces, textual traces, and rule cross-referencer. | https://www.aiai.ed.ac.uk/publications/documents/1990-PRE/88-esmed-toolkits.pdf |
 | AIAI user-interface paper | Describes KEEpictures and ActiveImages as a two-way graphical specification mechanism: mouse changes update objects and object updates reflect in graphics. | https://www.aiai.ed.ac.uk/publications/documents/1992/92-bcs-user-interfaces.pdf |
 | ASKE thesis | KEE 3.1 application evidence for Common Windows interfaces with icons, interaction/display windows, notebook, rulemaker, context/class/rule display windows, and rule editing window. | https://oro.open.ac.uk/64573/1/27758423.pdf |
 | NASA TEXSYS/MTK conference paper | Application evidence for KEE v2/v3 on Symbolics, KEEpictures as flexible graphics, KEEworlds for temporal/hypothetical states, and graphical model-building. | https://ntrs.nasa.gov/api/citations/19880014804/downloads/19880014804.pdf |
+| NASA SLED papers | TI Explorer + KEE 2.1 evidence for KEE units, KEE-Bitmaps, electrical schematics, ActiveValues, mouse-driven explanation/recovery windows, and non-programmer authoring tools. | https://ntrs.nasa.gov/api/citations/19890017222/downloads/19890017222.pdf |
 | NASA KATYDID / KEE-to-Ada paper | Primary NASA/IntelliCorp evidence for KEE delivery concerns: a KEE object-structure runtime library for Ada, knowledge-structure translation, rules translation, Lisp-to-Ada translation, and a knowledge-base dumper. Useful for reconstruction boundaries, though not original KEE source. | https://ntrs.nasa.gov/citations/19900018018 |
 | NPS AUV mission-planning thesis | Public KEE application evidence on a Symbolics 3675 Lisp machine, with mouse-driven KEE graphics panels, a KEE knowledge-base figure, Symbolics/SGI integration, appendix source listings, and a planned TI Micro-Explorer delivery configuration. | https://hdl.handle.net/10945/23457 |
 | Bielefeld hybrid expert-system tools evaluation | 1993 public evaluation with a KEE chapter. Records architecture from the KEE User's Guide, supported Unix platforms, desktop/window behavior, ActiveValues slot-operation triggers, and a useful KEE manual bibliography. | https://doczz.net/doc/5911786/evaluation-hybrider-expertensystemtools |
 | IBM System/370 bibliography, January 1990 | IBM publication catalog entries for IBM KEE manuals. Confirms IBM publication numbers, page counts, and concise descriptions for TellAndAsk, KEEpictures, KEEworlds, and RuleSystem3. | https://chiclassiccomp.org/docs/content/computing/IBM/Mainframe/AppSoftware/GC20-0370-7_System370-30xx-4300-9370BibliographySystem%26AppPrograms_Jan90.pdf |
+| Computer Chronicles 1984 AI episode | Public video lead for KEE demonstration feel. Archive metadata names Tom Kehler of IntelliGenetics; Kehler's public page identifies the segment as a KEE demo. | https://archive.org/details/CC1024_artificial_intelligence |
 
 ## Manual Targets
 
@@ -68,6 +77,8 @@ No full scans found yet. These identifiers make the search precise.
 - KEE 3.0/3.1/4.0 manuals as scans.
 - NASA VEG files: `veg4.u`, `veg-methods.lisp`, and extension Lisp files.
 - The NASA GSFC Sun cartridge tape mentioned in the VEG reports.
+- KEEconnection, IntelliScope/KEEscope, RunTime KEE, PC-Host, KEE/C
+  Integration Kit, J-KEE, and KEEspy product sheets or manuals.
 - Raw NPS AUV MPES files if separately recoverable from the thesis listing:
   `mpexpert.u`, the `auv-mpes` desktop, `mission3.lisp`, `missions.lisp`, and
   related Symbolics/IRIS communication files.
@@ -94,6 +105,8 @@ redistribute with it.
 - `docs/assets/dumps/delivery.kdump` - generated readable reconstructed KB dump
   for the delivery mini-example; useful for inspecting and loading the
   clean-room dump format.
+- `docs/research-dossier.md` - broad reachable-source inventory and dated
+  search trail covering web, archive, NTRS, patent, and local-corpus leads.
 - `docs/reviewer-packet.md` - short guided path for first-hand KEE and Lisp
   Machine reviewers.
 - `docs/demo.md` - reproducible commands for generating the interactive HTML

@@ -7,6 +7,7 @@ required_files=(
   "README.md"
   "AGENTS.md"
   "docs/artifacts.md"
+  "docs/research-dossier.md"
   "docs/provenance-policy.md"
   "docs/reviewer-packet.md"
   "docs/gui-reconstruction.md"
@@ -31,6 +32,9 @@ required_files=(
 artifact_terms=(
   "IntelliCorp KEE source or binary distributions"
   "KEE 3.0/3.1/4.0 manuals as scans"
+  "docs/research-dossier.md"
+  "US4930071A"
+  "Computer Chronicles"
   "NPS AUV mission-planning thesis"
   "3.0-U-1"
   "K3.1-UG1"
@@ -68,6 +72,24 @@ done
 
 for term in "${artifact_terms[@]}"; do
   rg -F --quiet "$term" "$repo_root/docs/artifacts.md"
+done
+
+research_terms=(
+  "Last audited: 2026-05-15"
+  "CLOS-on-KEE"
+  "K3.1-UG-1"
+  "US4930071A"
+  "Computer Chronicles"
+  "19930007498"
+  "KEEconnection"
+  "RunTime KEE"
+  "KEE/C Integration Kit"
+  "KEEspy"
+  "No original KEE source tree or binary distribution found"
+)
+
+for term in "${research_terms[@]}"; do
+  rg -F --quiet "$term" "$repo_root/docs/research-dossier.md"
 done
 
 for term in "${review_terms[@]}"; do
