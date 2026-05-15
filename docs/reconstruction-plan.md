@@ -197,3 +197,7 @@ Next GUI target:
 - Expand the panel/picture layer toward menu prompts, workflow-specific
   actions, and remembered Common Windows behavior before attempting a full
   editor.
+- Add a small ASKE-inspired Common Windows reviewer demo after the ASKE thesis
+  is manually captured: Aske/Rulemaker interface switch, icon actions, current
+  knowledge-base Display Window, Notebook pages, Rule/Context/Class display
+  windows, and rule-editing mouse-action traces.

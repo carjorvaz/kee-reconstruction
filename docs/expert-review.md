@@ -26,6 +26,10 @@ KEEworlds areas.
 - Which API names or idioms here feel right, wrong, or missing?
 - Did Texas Instruments Lisp Machine usage differ materially from Symbolics,
   Sun/Lucid, or later workstation KEE usage?
+- Do the ASKE interface names from the public thesis sound like ordinary
+  KEE/Common Windows practice or a bespoke application interface: Aske,
+  Rulemaker, Cerveau, Notebook, Display Window, Rule DW, Context DW, Class DW,
+  Central Concepts Window?
 - What demos would best evoke "real KEE" without pretending to be original KEE?
 
 ## Demo Path

@@ -40,6 +40,16 @@ Strongest recovered points:
   Context Display Window, Class Display Window, and Rule Editing Window.
   Source: Open University thesis,
   `https://oro.open.ac.uk/64573/1/27758423.pdf`.
+- The ASKE thesis gives a concrete Common Windows application pattern, not just
+  vocabulary. Chapter V describes an Aske interface with six top-left icons,
+  an Interaction Window, Notebook, and Display Window for the current
+  knowledge base; its Rulemaker interface has five icons, Rule DW, Context DW,
+  Class DW, and a Rule Editing Window opened from Rule DW. The documented icon
+  actions include New KB, Load KB, Save KB, Quit, Help, Rulemaker, Context,
+  Class, Rule, and Aske. It also records hierarchical concept windows,
+  Notebook pages, and left/middle mouse distinctions for rule-editing actions.
+  This is currently the sharpest target for a KEE 3.1 / TI Explorer
+  Common-Windows-inspired reconstruction.
 - NASA TEXSYS/MTK used KEE v2/v3 on Symbolics. Its phase-II work says
   KEEpictures provided a flexible graphics interface and KEEworlds represented
   hypothetical or temporal states. It also argues that direct slot inspection
@@ -94,6 +104,9 @@ Likely original or application-visible names:
 - ActiveImages
 - ActiveValues
 - KEEworlds
+- Aske Interface
+- Rulemaker Interface
+- Cerveau
 - schema browser
 - knowledge-base browser
 - agenda viewer
@@ -102,6 +115,9 @@ Likely original or application-visible names:
 - Display Window, Interaction Window, Rule Display Window
 - Context Display Window, Class Display Window, Rule Editing Window
 - Notebook
+- Rule DW, Context DW, Class DW
+- Central Concepts Window
+- New KB, Load KB, Save KB, Quit, Help
 - Current KB
 - Desktop
 - Lisp Listener
@@ -166,6 +182,8 @@ for these GUI areas in one place.
 - Exact image-panel constructor, backing Common Windows objects, and lifecycle
   semantics behind `open-panel!` and `close-panel!`.
 - Exact Common Windows pane/window APIs used by KEE.
+- Whether ASKE's named windows and icons reflect normal KEE/Common Windows
+  idioms, application-specific conventions, or a mixture of both.
 - Exact desktop save/load model and window vocabulary across Lisp Machine,
   DEC Windows, and Unix/X11 versions.
 - Whether KEEspy was commonly available to users or mostly an IntelliCorp
