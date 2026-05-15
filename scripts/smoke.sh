@@ -23,4 +23,5 @@ sbcl --script examples/veg-rule-mini.lisp
 sbcl --script examples/kb-dump-mini.lisp
 sbcl --script examples/active-image-mini.lisp
 sbcl --script examples/auv-panel-workflow.lisp > "$tmpdir/auv-panel-workflow-example.html"
+sbcl --script examples/aske-common-windows.lisp > "$tmpdir/aske-common-windows-example.html"
 sbcl --script examples/hamburg-puzzle-mini.lisp

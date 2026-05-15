@@ -11,6 +11,8 @@ Environment (KEE).
 
 ![AUV panel workflow screenshot](docs/assets/screenshots/auv-panel-workflow.png)
 
+![ASKE Common Windows demo screenshot](docs/assets/screenshots/aske-common-windows.png)
+
 This is not original IntelliCorp KEE source. It is a clean-room reconstruction
 of selected behavior, built from public evidence and runnable experiments.
 
@@ -41,15 +43,16 @@ With Nix:
 nix develop --command scripts/render-reviewer-demos.sh
 ```
 
-Then open `demo/hamburg-viewer.html` and `demo/auv-panel-workflow.html` in a
-browser.
+Then open `demo/hamburg-viewer.html`, `demo/auv-panel-workflow.html`, and
+`demo/aske-common-windows.html` in a browser.
 
 The Hamburg puzzle viewer is not the original KEE GUI, but it gives a concrete
 surface for reviewing reconstructed units, slots, rule classes, generated
 worlds, trace events, assumptions, support labels, nogood explanations,
 KEEpictures, image panels, and ActiveImages. The AUV panel workflow is the
 current GUI/application-session specimen for reconstructed image-panel
-behavior.
+behavior. The ASKE demo is the current Common Windows / TI Explorer review
+specimen, built from the public ASKE thesis vocabulary.
 
 Useful follow-up commands:
 

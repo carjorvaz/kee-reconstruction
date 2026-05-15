@@ -27,11 +27,12 @@ With Nix:
 nix develop --command scripts/render-reviewer-demos.sh
 ```
 
-This writes both reviewer-facing HTML files:
+This writes the reviewer-facing HTML files:
 
 ```text
 demo/hamburg-viewer.html
 demo/auv-panel-workflow.html
+demo/aske-common-windows.html
 ```
 
 To render only the Hamburg puzzle viewer:
@@ -65,6 +66,25 @@ drives them with `open-panel!`/`close-panel!`, and records picture mouse events
 that write through ActiveImages into `mission.state`. Its Browser pane also
 shows the three application panels as a small image-panel window deck, with
 Symbolics 3675 and TI Micro-Explorer provenance cues for expert review.
+
+The ASKE Common Windows demo focuses on the public ASKE thesis's KEE 3.1 /
+Unisys Explorer GUI vocabulary:
+
+```sh
+nix develop --command scripts/render-aske-demo.sh
+```
+
+Then open:
+
+```text
+demo/aske-common-windows.html
+```
+
+This page builds two reconstructed Common Windows-style panels: an Aske
+interface with icons, Interaction Window, Notebook, and current-KB Display
+Window; and a Rulemaker interface with Rule DW, Context DW, Class DW, and Rule
+Editing Window. It records panel open/close events and picture mouse events
+for left/middle mouse actions.
 
 Without Nix, install SBCL and run:
 
@@ -106,6 +126,12 @@ The AUV panel workflow screenshot uses the alternate renderer:
 
 ```sh
 KEE_DEMO_RENDERER=scripts/render-auv-panel-demo.sh KEE_DEMO_HTML=demo/auv-panel-workflow.html KEE_DEMO_TOUR=panels nix develop --command scripts/screenshot-demo.sh docs/assets/screenshots/auv-panel-workflow.png
+```
+
+The ASKE Common Windows screenshot uses the ASKE renderer:
+
+```sh
+nix develop --command env KEE_DEMO_RENDERER=scripts/render-aske-demo.sh KEE_DEMO_HTML=demo/aske-common-windows.html KEE_DEMO_TOUR=panels scripts/screenshot-demo.sh docs/assets/screenshots/aske-common-windows.png
 ```
 
 ## Interaction Check

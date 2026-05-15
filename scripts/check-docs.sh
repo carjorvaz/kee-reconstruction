@@ -19,16 +19,20 @@ required_files=(
   "docs/assets/screenshots/hamburg-viewer-kee-picture.png"
   "docs/assets/screenshots/hamburg-viewer-panels.png"
   "docs/assets/screenshots/auv-panel-workflow.png"
+  "docs/assets/screenshots/aske-common-windows.png"
   "docs/assets/dumps/delivery.kdump"
   "scripts/check-auv-panel-demo.sh"
+  "scripts/check-aske-demo.sh"
   "scripts/check-reviewer-demos.sh"
   "scripts/check-viewer.sh"
   "scripts/audit-source-mirror.sh"
   "scripts/mirror-research-sources.sh"
   "scripts/render-auv-panel-demo.sh"
+  "scripts/render-aske-demo.sh"
   "scripts/render-demo-dump.sh"
   "scripts/render-reviewer-demos.sh"
   "test/auv-panel-workflow.spec.js"
+  "test/aske-common-windows.spec.js"
   "test/demo-screenshot.spec.js"
   "test/viewer-tour.spec.js"
 )
@@ -56,6 +60,7 @@ artifact_terms=(
   "docs/assets/screenshots/hamburg-viewer-kee-picture.png"
   "docs/assets/screenshots/hamburg-viewer-panels.png"
   "docs/assets/screenshots/auv-panel-workflow.png"
+  "docs/assets/screenshots/aske-common-windows.png"
   "docs/assets/dumps/delivery.kdump"
 )
 
