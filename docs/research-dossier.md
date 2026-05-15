@@ -4,8 +4,8 @@ Last audited: 2026-05-15.
 
 This dossier is the broad source inventory for IntelliCorp's Knowledge
 Engineering Environment (KEE). It is meant to answer: what can we actually
-reach from public web sources, public archives, and the local
-`/persist/lisp-corpus`, and what still appears to be missing?
+reach from public web sources, public archives, and a private local corpus, and
+what still appears to be missing?
 
 This is not a claim of completion. It is a dated search state. The important
 result so far is that we have found a strong public behavioral record, many
@@ -265,9 +265,9 @@ Missing VEG targets:
 
 ## Local Corpus Leads
 
-The local corpus is useful for platform/product/support reality, especially
-late-1980s and 1990s Lisp community memory. Paths are under
-`/persist/lisp-corpus`.
+The private local corpus is useful for platform/product/support reality,
+especially late-1980s and 1990s Lisp community memory. Paths below are relative
+corpus paths.
 
 Confirmed KEE-specific threads:
 
@@ -326,8 +326,7 @@ Searched:
   Environment source code`, `IntelliCorp KEE download Lisp`.
 - Archive.org and bitsavers searches for `IntelliCorp KEE manual`,
   `Knowledge Engineering Environment IntelliCorp`, and KEE source/binary terms.
-- Local `/persist/lisp-corpus` targeted searches for KEE/IntelliCorp/product
-  names.
+- Private local-corpus targeted searches for KEE/IntelliCorp/product names.
 
 Result:
 

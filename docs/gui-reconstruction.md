@@ -76,24 +76,24 @@ Strongest recovered points:
 - Common Windows was an IntelliCorp-produced/specification window system. The
   local corpus has Lisp-history and Lisp FAQ evidence that KEE 4.0 shipped with
   a Common Windows implementation for Lucid Lisp on Sun, HP, and IBM
-  workstations. Local corpus sources:
-  `/persist/lisp-corpus/articles/gabriel/dreamsongs.com-derived/pdf-text/Files/HOPL2-Uncut.pymupdf.txt`
+  workstations. Private local-corpus sources:
+  `articles/gabriel/dreamsongs.com-derived/pdf-text/Files/HOPL2-Uncut.pymupdf.txt`
   and
-  `/persist/lisp-corpus/forums/comp.lang.lisp/derived/threads/1995/faq-lisp-window-systems-and-guis-7-7-872bbbc758d59cc9.md`.
+  `forums/comp.lang.lisp/derived/threads/1995/faq-lisp-window-systems-and-guis-7-7-872bbbc758d59cc9.md`.
 - A 1998 comp.lang.lisp thread quotes the KEE for Symbolics manual set about
   the 1986 IntelliCorp Common Windows Manual: principal designers at
   IntelliCorp and lineage from Interlisp-D and ZetaLisp window systems. Local
   corpus source:
-  `/persist/lisp-corpus/forums/comp.lang.lisp/derived/threads/1998/common-windows-4ee975ab0b388b6d.md`.
+  `forums/comp.lang.lisp/derived/threads/1998/common-windows-4ee975ab0b388b6d.md`.
 - A 1991 comp.lang.lisp question asks about KEE on a DEC VAXStation 3100 under
   DEC Windows, KeePictures, and VMS or Ultrix C integration, which broadens the
   platform/graphics lead beyond Symbolics, TI, and Unix workstations. Local
   corpus source:
-  `/persist/lisp-corpus/forums/comp.lang.lisp/derived/threads/1991/lisp-programming-in-kee-toolkit-for-graphics-c-integration-a25c92aa4b91613e.md`.
+  `forums/comp.lang.lisp/derived/threads/1991/lisp-programming-in-kee-toolkit-for-graphics-c-integration-a25c92aa4b91613e.md`.
 - A 1992 comp.lang.lisp report praises KEE for rapid UI prototyping while
   warning that production, standard-style user interfaces were difficult. Local
   corpus source:
-  `/persist/lisp-corpus/forums/comp.lang.lisp/derived/threads/1992/request-for-info-on-intellicorp-s-kee-tm-97b30a6e2467ffab.md`.
+  `forums/comp.lang.lisp/derived/threads/1992/request-for-info-on-intellicorp-s-kee-tm-97b30a6e2467ffab.md`.
 
 ## Recovered Vocabulary
 

@@ -35,6 +35,23 @@ demo/auv-panel-workflow.html
 demo/aske-common-windows.html
 ```
 
+The checked-in GitHub Pages copies are regenerated with:
+
+```sh
+nix develop --command scripts/render-reviewer-demos.sh docs/demos
+```
+
+Those copies live in the repository at:
+
+```text
+docs/demos/hamburg-viewer.html
+docs/demos/auv-panel-workflow.html
+docs/demos/aske-common-windows.html
+```
+
+When GitHub Pages is configured to serve from `docs/`, the same files are
+served under `demos/`.
+
 To render only the Hamburg puzzle viewer:
 
 ```sh

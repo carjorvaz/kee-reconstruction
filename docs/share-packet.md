@@ -31,6 +31,18 @@ demo/auv-panel-workflow.html
 demo/aske-common-windows.html
 ```
 
+Checked-in public copies live at:
+
+```text
+docs/demos/hamburg-viewer.html
+docs/demos/auv-panel-workflow.html
+docs/demos/aske-common-windows.html
+```
+
+When served through GitHub Pages from the `docs/` directory, use
+`demos/hamburg-viewer.html`, `demos/auv-panel-workflow.html`, and
+`demos/aske-common-windows.html`.
+
 Start with the ASKE demo if your memory is mainly TI Explorer / Common Windows.
 Start with the Hamburg viewer if your memory is mainly KEE units, slots, rules,
 worlds, traces, and browser/debugger behavior. Start with the AUV workflow if

@@ -124,8 +124,8 @@ redistribute with it.
 
 ## Local Corpus Leads
 
-These are not original KEE distributions, but they are useful leads in
-`/persist/lisp-corpus`:
+These are not original KEE distributions, but they are useful leads from a
+private local corpus. Paths below are relative corpus paths:
 
 - `forums/comp.lang.lisp/derived/threads/1992/request-for-info-on-intellicorp-s-kee-tm-97b30a6e2467ffab.md`
   reports that KEE was strong for UI prototyping but difficult for producing a

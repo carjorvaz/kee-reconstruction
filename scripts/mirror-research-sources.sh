@@ -14,6 +14,8 @@ failures="$mirror_root/failures.tsv"
 timeout="${KEE_MIRROR_TIMEOUT:-180}"
 refresh="${KEE_MIRROR_REFRESH:-0}"
 ua="${KEE_MIRROR_USER_AGENT:-Mozilla/5.0}"
+local_corpus_root="${KEE_LOCAL_CORPUS_ROOT:-}"
+local_corpus_label="${KEE_LOCAL_CORPUS_LABEL:-private-local-corpus}"
 
 mkdir -p "$files_dir" "$corpus_dir"
 rm -f "$files_dir"/*.tmp "$files_dir"/*.headers.tmp
@@ -145,12 +147,25 @@ download_url() {
 mirror_corpus_path() {
   local rel="$1"
   local dest="$corpus_dir/$rel"
-  local digest bytes retrieved_at
+  local digest bytes retrieved_at source
+  source="$local_corpus_label/$rel"
+  if [ -n "$local_corpus_root" ]; then
+    source="${local_corpus_root%/}/$rel"
+  fi
   mkdir -p "$(dirname "$dest")"
 
   if [ ! -s "$dest" ]; then
-    if ! scp -p "root@pius:/persist/lisp-corpus/$rel" "$dest" >/dev/null 2>&1; then
-      printf 'local-corpus\tfailed\t%s\n' "/persist/lisp-corpus/$rel" >> "$failures_tmp"
+    if [ -z "$local_corpus_root" ]; then
+      printf 'local-corpus\tremote-unconfigured\t%s\n' "$source" >> "$failures_tmp"
+      return 0
+    fi
+    if [[ "$local_corpus_root" == *:* ]]; then
+      if ! scp -p "$source" "$dest" >/dev/null 2>&1; then
+        printf 'local-corpus\tfailed\t%s\n' "$source" >> "$failures_tmp"
+        return 0
+      fi
+    elif ! cp -p "$source" "$dest" >/dev/null 2>&1; then
+      printf 'local-corpus\tfailed\t%s\n' "$source" >> "$failures_tmp"
       return 0
     fi
     retrieved_at="$(date -u '+%Y-%m-%dT%H:%M:%SZ')"
@@ -161,7 +176,7 @@ mirror_corpus_path() {
   bytes="$(wc -c < "$dest" | tr -d ' ')"
   digest="$(sha256 "$dest")"
   printf 'local-corpus\t%s\t%s\ttext/markdown\t%s\t%s\t%s\n' \
-    "$digest" "$bytes" "$retrieved_at" "${dest#$mirror_root/}" "/persist/lisp-corpus/$rel" >> "$manifest_tmp"
+    "$digest" "$bytes" "$retrieved_at" "${dest#$mirror_root/}" "$source" >> "$manifest_tmp"
 }
 
 extract_urls > "$url_list"
@@ -175,17 +190,10 @@ while IFS= read -r url; do
   download_url "$url"
 done < "$url_list"
 
-if ssh -o BatchMode=yes -o ConnectTimeout=5 root@pius true >/dev/null 2>&1; then
-  while IFS= read -r rel; do
-    [ -n "$rel" ] || continue
-    mirror_corpus_path "$rel"
-  done < "$corpus_list"
-else
-  while IFS= read -r rel; do
-    [ -n "$rel" ] || continue
-    printf 'local-corpus\tssh-unavailable\t%s\n' "/persist/lisp-corpus/$rel" >> "$failures_tmp"
-  done < "$corpus_list"
-fi
+while IFS= read -r rel; do
+  [ -n "$rel" ] || continue
+  mirror_corpus_path "$rel"
+done < "$corpus_list"
 
 mv "$manifest_tmp" "$manifest"
 mv "$failures_tmp" "$failures"

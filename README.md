@@ -37,6 +37,15 @@ inventing history.
 
 ## Try The Demo
 
+The checked-in public demo copies live under `docs/demos/`:
+
+- [ASKE Common Windows demo](docs/demos/aske-common-windows.html)
+- [Hamburg puzzle viewer](docs/demos/hamburg-viewer.html)
+- [AUV panel workflow](docs/demos/auv-panel-workflow.html)
+
+When served through GitHub Pages from the `docs/` directory, those same pages
+are available under `demos/`.
+
 With Nix:
 
 ```sh
@@ -74,6 +83,7 @@ reason about it.
 
 - `AGENTS.md` is the short map for future Codex work.
 - `docs/artifacts.md` is the evidence ledger and missing-artifact list.
+- `docs/index.md` is the GitHub Pages entry point.
 - `docs/research-dossier.md` is the broad reachable-source inventory,
   including internet, archive, NTRS, patent, and local-corpus leads.
 - `docs/source-mirroring.md` explains the private, gitignored source mirror
@@ -87,6 +97,24 @@ reason about it.
 - `docs/reviewer-packet.md` is the short guided path for first-hand reviewers.
 - `docs/gui-reconstruction.md` tracks the historically important GUI layer.
 - `docs/gui-fidelity-matrix.md` maps GUI evidence to implementation status.
+
+## Public Sharing
+
+This repo is intended to be safe to publish without the private research
+mirror. Keep `.research-mirror/` and ad hoc generated `demo/` files out of git;
+publish the checked-in `docs/demos/` copies through GitHub Pages instead.
+
+Recommended GitHub Pages setting: deploy from the `docs/` directory on the
+default branch. The Pages entry point is `docs/index.md`.
+
+Regenerate the public demo copies before a public update:
+
+```sh
+nix develop --command scripts/render-reviewer-demos.sh docs/demos
+```
+
+The code and repo-authored documentation are under the MIT License in
+`LICENSE`; cited third-party sources remain governed by their own rights.
 
 ## Current Scope
 

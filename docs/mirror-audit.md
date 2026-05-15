@@ -39,8 +39,8 @@ Public file types currently preserved:
 | `text/xml` | 1 |
 | `video/mp4` | 1 |
 
-The local corpus mirror contributes 15 text/markdown files copied from
-`root@pius:/persist/lisp-corpus`.
+The local corpus mirror contributes 15 text/markdown files copied from a
+private local-corpus source configured outside the public repository.
 
 ## High-Value Preserved Material
 

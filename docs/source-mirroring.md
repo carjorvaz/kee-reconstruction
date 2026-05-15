@@ -18,8 +18,8 @@ scripts/mirror-research-sources.sh
 
 The script extracts URLs from `docs/research-dossier.md` and
 `docs/artifacts.md`, derives direct NTRS PDF download URLs from NASA citation
-pages, downloads each reachable public source, copies the listed
-`/persist/lisp-corpus` local leads from `root@pius`, and writes:
+pages, downloads each reachable public source, optionally copies listed
+private local-corpus leads, and writes:
 
 - `.research-mirror/sources/manifest.tsv` with source, local path, byte count,
   content type, retrieval time, and SHA-256 digest.
@@ -34,6 +34,19 @@ Use a different destination when desired:
 ```sh
 KEE_SOURCE_MIRROR=/path/to/private/kee-source-mirror scripts/mirror-research-sources.sh
 ```
+
+If you have a private local corpus matching the relative paths listed in the
+dossier, point the mirror at it with `KEE_LOCAL_CORPUS_ROOT`. The value can be a
+local directory or an `scp`-style remote root:
+
+```sh
+KEE_LOCAL_CORPUS_ROOT=/path/to/lisp-corpus scripts/mirror-research-sources.sh
+KEE_LOCAL_CORPUS_ROOT=user@example:/path/to/lisp-corpus scripts/mirror-research-sources.sh
+```
+
+When `KEE_LOCAL_CORPUS_ROOT` is unset, the script still mirrors public URLs and
+records local-corpus entries as `remote-unconfigured` if they are not already
+present in the private mirror.
 
 Force a fresh download of already mirrored URLs:
 
