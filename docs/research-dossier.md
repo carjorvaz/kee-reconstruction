@@ -68,11 +68,11 @@ machine-readable in the repo.
 | --- | --- | --- |
 | KEE Software Development System User's Manual, KEE 2.1 | IntelliCorp, 1985; cited by Space Station/NPS-style bibliographies | Missing target |
 | KEE Software Development System User's Manual, KEE 3.0 | `3.0-U-1`; IntelliCorp, 1986; cited by simulation and patent literature | Missing target |
-| KEE User's Guide, KEE 3.1 | `K3.1-UG-1`; May 1988; also appears in Bielefeld as `K3.1-UG1` | Missing target |
+| KEE Users' Guide, KEE 3.1 | `K3.1-UG1`; May 1988; Bielefeld title form is `Users' Guide` | Missing target |
 | KEE Interface Reference Manual | `K3.1-IRM-1`, IBM `SC26-4545` | Missing target |
 | KEE Core Reference Manual | `K3.1-CRM-2`; 1986/1989 citations in literature | Missing target |
 | TellAndAsk Reference Manual | `3.1-TAA-2`, IBM `SC26-4549` | Missing target |
-| RuleSystem3 Reference Manual | `K3.1-RS3-2`, IBM `SC26-4548` | Missing target |
+| Rule System / RuleSystem3 Reference Manual | `K3.1-RS3-2`, IBM `SC26-4548` | Missing target |
 | Rule Compiler Reference Manual | `K3.1-RC-4` | Missing target |
 | KEEworlds Reference Manual | `K3.1-KW-3`, IBM `SC26-4547` | Missing target |
 | ActiveImages3 Reference Manual | `3.0-R-A3`, November 1986 | Missing target |
@@ -81,7 +81,8 @@ machine-readable in the repo.
 | System Indices | `K3.1-SI-1` | Missing target |
 | KEE 4.0 Release Notes | `K4.0-RN-UNIX-1`, February 1991 | Missing target |
 | Using KEE 4.0 on a UNIX Workstation | `K4.0-UK-UNIX-1`, February 1991 | Missing target |
-| KEEtutor | `KT-Mods1&2-Sun-3`; KEEtutor for KEE 3.1 also reported in 1989 Canadian AI news as a $5,000 package with videotapes, software, and tutorial modules | Missing target |
+| Wolf and Setzer, `Wissensverarbeitung mit KEE` | German KEE book; Oldenbourg, Munich/Vienna, 1991; ISBN `3-486-21407-1` / `978-3-486-21407-9` | Missing target |
+| KEEtutor: A Basic Course (Module 1-12) | `KT-Mods1&2Sun-3`; KEEtutor for KEE 3.1 also reported in 1989 Canadian AI news as a $5,000 package with videotapes, software, and tutorial modules | Missing target |
 | IBM KEE publication set | IBM bibliography lists `SC26-4545` through `SC26-4549` and `GC26-4578` for KEE licensed program specs | Missing target |
 
 Manual evidence sources:
@@ -92,6 +93,12 @@ Manual evidence sources:
   https://chiclassiccomp.org/docs/content/computing/IBM/Mainframe/AppSoftware/GC20-0370-7_System370-30xx-4300-9370BibliographySystem%26AppPrograms_Jan90.pdf
 - KEEtutor news lead:
   https://www.caiac.ca/sites/default/files/shared/canai-archives/CAI%20Volume%2019%20-%20April%201989.pdf
+- DNB catalog record for Wolf/Setzer `Wissensverarbeitung mit KEE`:
+  https://services.dnb.de/sru/dnb?version=1.1&operation=searchRetrieve&query=tit%3D%22Wissensverarbeitung%20mit%20KEE%22&recordSchema=MARC21-xml&maximumRecords=10
+- EMA-XPS literature page citing Wolf/Setzer:
+  https://ema-xps.org/de/lit.html
+- SLUB catalog search result listing Wolf/Setzer:
+  https://katalog.slub-dresden.de/?tx_find_find%5Bq%5D%5Btopic%5D%5B0%5D=%22Expertensystem%22+%22Systementwicklung%22+
 
 ## Product Family And Platform Leads
 

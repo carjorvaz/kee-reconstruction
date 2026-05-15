@@ -55,6 +55,7 @@ extension_for() {
     text/plain*) printf 'txt' ;;
     text/markdown*) printf 'md' ;;
     text/html*|application/xhtml*) printf 'html' ;;
+    text/xml*|application/xml*) printf 'xml' ;;
     application/json*) printf 'json' ;;
     image/png*) printf 'png' ;;
     image/jpeg*) printf 'jpg' ;;

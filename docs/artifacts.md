@@ -56,11 +56,11 @@ No full scans found yet. These identifiers make the search precise.
 | --- | --- | --- |
 | KEE Software Development System User's Manual, KEE 2.1 | unknown | Cambridge Knowledge Engineering Review bibliography cites this 1985 IntelliCorp manual. |
 | KEE Software Development System User's Manual, KEE 3.0 | `3.0-U-1` | Simulation literature and patent bibliographies cite the 1986 User's Manual; Xerox US5072412 cites July 25, 1986 pages 2-19 to 2-23. |
-| KEE User's Guide, KEE 3.1 | `K3.1-UG1` | Bielefeld bibliography. |
+| KEE Users' Guide, KEE 3.1 | `K3.1-UG1` | Bielefeld bibliography gives title form `Users' Guide`, Technical Manuals Vol. 1, May 1988. |
 | KEE Interface Reference Manual | `K3.1-IRM-1`, IBM `SC26-4545` | Bielefeld and IBM bibliography. |
 | KEE Core Reference Manual | `K3.1-CRM-2` | Bielefeld bibliography; also cited in later database/rule literature. |
 | TellAndAsk Reference Manual | `3.1-TAA-2`, IBM `SC26-4549` | IBM bibliography lists a 212-page programmer manual for the TellAndAsk language. |
-| RuleSystem3 Reference Manual | `K3.1-RS3-2`, IBM `SC26-4548` | IBM bibliography lists a 188-page programmer manual for forward/backward chaining and debugging. |
+| Rule System / RuleSystem3 Reference Manual | `K3.1-RS3-2`, IBM `SC26-4548` | Bielefeld title form is `Rule System Reference Manual`; IBM bibliography lists RuleSystem3 as a 188-page programmer manual for forward/backward chaining and debugging. |
 | Rule Compiler Reference Manual | `K3.1-RC-4` | Bielefeld bibliography. |
 | KEEworlds Reference Manual | `K3.1-KW-3`, IBM `SC26-4547` | IBM bibliography lists a 208-page programmer manual for KEEworlds and ATMS. |
 | ActiveImages3 Reference Manual | `3.0-R-A3` | Bielefeld bibliography. |
@@ -69,7 +69,8 @@ No full scans found yet. These identifiers make the search precise.
 | System Indices | `K3.1-SI-1` | Bielefeld bibliography. |
 | KEE 4.0 UNIX release notes | `K4.0-RN-UNIX-1` | Bielefeld bibliography. |
 | Using KEE 4.0 on UNIX | `K4.0-UK-UNIX-1` | Bielefeld bibliography. |
-| KEEtutor modules | `KT-Mods1&2-Sun-3` | Bielefeld bibliography. |
+| Wolf and Setzer, `Wissensverarbeitung mit KEE` | ISBN `3-486-21407-1`, `978-3-486-21407-9` | Bielefeld bibliography, DNB catalog, EMA-XPS literature page, and SLUB catalog. |
+| KEEtutor: A Basic Course (Module 1-12) | `KT-Mods1&2Sun-3` | Bielefeld bibliography. |
 
 ## High-Value Missing Artifacts
 

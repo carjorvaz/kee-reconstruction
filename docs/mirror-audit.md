@@ -10,9 +10,9 @@ gitignored local archive, not the archive itself.
 
 - Mirror root: `.research-mirror/sources/`
 - Mirror size: `324M`
-- Source URL targets extracted: `82`
+- Source URL targets extracted: `85`
 - Local corpus targets extracted: `15`
-- Public URL successes: `72`
+- Public URL successes: `75`
 - Local corpus successes: `15`
 - Failed URL targets: `10`
 - Manifest: `.research-mirror/sources/manifest.tsv`
@@ -34,8 +34,9 @@ Public file types currently preserved:
 | --- | ---: |
 | `application/json` | 3 |
 | `application/pdf` | 30 |
-| `text/html` | 37 |
+| `text/html` | 39 |
 | `text/plain` | 1 |
+| `text/xml` | 1 |
 | `video/mp4` | 1 |
 
 The local corpus mirror contributes 15 text/markdown files copied from
@@ -56,6 +57,8 @@ The local corpus mirror contributes 15 text/markdown files copied from
 - CLOS-on-KEE public code page and OSTI report.
 - IntelliCorp patents mirrored from Google Patents.
 - IBM System/370 bibliography PDF with KEE manual publication numbers.
+- DNB, EMA-XPS, and SLUB bibliography leads for Wolf/Setzer's 1991 German
+  `Wissensverarbeitung mit KEE` book.
 - AIAI toolkit/UI PDFs.
 - NPS AUV thesis via Wikimedia/Internet Archive mirror, plus the NPS handle
   page.
