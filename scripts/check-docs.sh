@@ -11,6 +11,7 @@ required_files=(
   "docs/source-mirroring.md"
   "docs/mirror-audit.md"
   "docs/provenance-policy.md"
+  "docs/share-packet.md"
   "docs/reviewer-packet.md"
   "docs/gui-reconstruction.md"
   "docs/gui-fidelity-matrix.md"
@@ -75,6 +76,15 @@ review_terms=(
   "KEEworlds"
 )
 
+share_terms=(
+  "OpenAI Codex"
+  "Original IntelliCorp KEE source tree or binary distribution"
+  "Full KEE 2.x/3.x/4.x manual scans"
+  "TI Explorer"
+  "AITopics"
+  ".research-mirror/"
+)
+
 for path in "${required_files[@]}"; do
   test -e "$repo_root/$path"
 done
@@ -133,6 +143,10 @@ done
 
 for term in "${review_terms[@]}"; do
   rg -F --quiet "$term" "$repo_root/docs/reviewer-packet.md" "$repo_root/docs/provenance-policy.md" "$repo_root/docs/expert-review.md"
+done
+
+for term in "${share_terms[@]}"; do
+  rg -F --quiet "$term" "$repo_root/docs/share-packet.md"
 done
 
 printf 'Documentation harness checks passed.\n'

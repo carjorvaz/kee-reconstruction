@@ -82,6 +82,8 @@ reason about it.
   preserved material, partial captures, and remaining failures.
 - `docs/provenance-policy.md` explains what can be checked in.
 - `docs/agent-workflow.md` records the repo-local agent workflow.
+- `docs/share-packet.md` is the short external handoff for a first-hand KEE or
+  Lisp Machine reviewer.
 - `docs/reviewer-packet.md` is the short guided path for first-hand reviewers.
 - `docs/gui-reconstruction.md` tracks the historically important GUI layer.
 - `docs/gui-fidelity-matrix.md` maps GUI evidence to implementation status.

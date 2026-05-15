@@ -91,6 +91,7 @@ Window.
 
 ## Evidence Map
 
+- `docs/share-packet.md` - short external handoff for a first conversation.
 - `docs/artifacts.md` - evidence ledger and missing artifact list.
 - `docs/api-surface.md` - reconstructed API surface and known uncertainty.
 - `docs/gui-reconstruction.md` - GUI, KEEpictures, ActiveImages, and trace
