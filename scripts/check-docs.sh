@@ -7,6 +7,7 @@ required_files=(
   "README.md"
   "LICENSE"
   "AGENTS.md"
+  "docs/index.html"
   "docs/index.md"
   "docs/.nojekyll"
   "docs/artifacts.md"

@@ -83,7 +83,8 @@ reason about it.
 
 - `AGENTS.md` is the short map for future Codex work.
 - `docs/artifacts.md` is the evidence ledger and missing-artifact list.
-- `docs/index.md` is the GitHub Pages entry point.
+- `docs/index.html` is the GitHub Pages entry point.
+- `docs/index.md` is the Markdown source for the same reviewer-facing entry.
 - `docs/research-dossier.md` is the broad reachable-source inventory,
   including internet, archive, NTRS, patent, and local-corpus leads.
 - `docs/source-mirroring.md` explains the private, gitignored source mirror
@@ -105,7 +106,7 @@ mirror. Keep `.research-mirror/` and ad hoc generated `demo/` files out of git;
 publish the checked-in `docs/demos/` copies through GitHub Pages instead.
 
 Recommended GitHub Pages setting: deploy from the `docs/` directory on the
-default branch. The Pages entry point is `docs/index.md`.
+default branch. The Pages entry point is `docs/index.html`.
 
 Regenerate the public demo copies before a public update:
 
