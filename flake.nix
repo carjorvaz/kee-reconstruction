@@ -3,7 +3,8 @@
 
   inputs.nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
 
-  outputs = { nixpkgs, ... }:
+  outputs =
+    { nixpkgs, ... }:
     let
       systems = [
         "aarch64-darwin"
@@ -14,25 +15,28 @@
       forAllSystems = nixpkgs.lib.genAttrs systems;
     in
     {
-      devShells = forAllSystems
-        (system:
-          let
-            pkgs = import nixpkgs { inherit system; };
-          in
-          {
-            default = pkgs.mkShell {
-              packages = with pkgs; [
-                graphviz
-                imagemagick
-                just
-                nodejs
-                perl
-                playwright-driver.browsers
-                playwright-test
-                ripgrep
-                sbcl
-              ];
-            };
-          });
+      devShells = forAllSystems (
+        system:
+        let
+          pkgs = import nixpkgs { inherit system; };
+        in
+        {
+          default = pkgs.mkShell {
+            packages = with pkgs; [
+              graphviz
+              imagemagick
+              difftastic
+              just
+              jujutsu
+              nodejs
+              perl
+              playwright-driver.browsers
+              playwright-test
+              ripgrep
+              sbcl
+            ];
+          };
+        }
+      );
     };
 }

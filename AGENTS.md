@@ -25,6 +25,8 @@ work legible to both humans and future agents.
 
 - Do not describe this as original KEE source. It is a clean-room,
   evidence-led reconstruction.
+- Prefer Jujutsu (`jj`) for local change inspection/editing; keep Git/GitHub
+  for publication, tags, and CI visibility.
 - Prefer small, verified commits with tests or generated-demo checks.
 - Preserve uncertainty in docs instead of smoothing over unknown behavior.
 - Keep `AGENTS.md` concise. Put detailed project knowledge in `docs/`.

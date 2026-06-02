@@ -4,4 +4,6 @@
 /demo/
 /result
 /.direnv/
+/.jj/
+/.hermes/
 /.research-mirror/
