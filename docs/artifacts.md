@@ -33,6 +33,7 @@ secondary descriptions.
 | NASA VEG report C931021-U-2R07 | Add-techniques interface. Shows KEE rule creation, `external.form`, parse checks, and user-driven extension of a KEE app. | https://ntrs.nasa.gov/citations/19930015965 |
 | NASA VEG report C931033-U-2R00 | Later VEG summary. Confirms `veg4.u`, `veg-methods.lisp`, extra Lisp files, Help System, and delivery on Sun cartridge tape. | https://ntrs.nasa.gov/citations/19940015811 |
 | Hamburg KEE 3.0 slides | Training slides for KEE concepts, including units, slots, rules, TellAndAsk, ActiveValues, ActiveImages, KEEpictures, KEEworlds, and a 3-by-3 puzzle example. | https://www.chai.uni-hamburg.de/~moeller/symbolics-info/kee.html |
+| IntelliCorp KEE 3.0 on Symbolics video | Public Vimeo video lead showing KEE 3.0 on a Symbolics Lisp Machine running Genera 8; useful for GUI/session-behavior review, not source material. | https://vimeo.com/909417132 |
 | US4675829A | IntelliCorp patent for KEE-style slot inheritance using local, inherited, and combined values. | https://patents.google.com/patent/US4675829A/en |
 | US4918621A | IntelliCorp patent for representing a DAG of worlds using an ATMS. | https://patents.google.com/patent/US4918621A |
 | US4930071A | IntelliCorp patent for mapping arbitrary relational databases to knowledge-base classes, slots, and units; likely KEEconnection-family evidence. | https://patents.google.com/patent/US4930071A/en |

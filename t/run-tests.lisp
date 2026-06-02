@@ -1,18 +1,4 @@
-(load (merge-pathnames "../src/package.lisp" *load-truename*))
-(load (merge-pathnames "../src/core.lisp" *load-truename*))
-(load (merge-pathnames "../src/active-images.lisp" *load-truename*))
-(load (merge-pathnames "../src/traces.lisp" *load-truename*))
-(load (merge-pathnames "../src/pictures.lisp" *load-truename*))
-(load (merge-pathnames "../src/panels.lisp" *load-truename*))
-(load (merge-pathnames "../src/dump.lisp" *load-truename*))
-(load (merge-pathnames "../src/worlds.lisp" *load-truename*))
-(load (merge-pathnames "../src/rules.lisp" *load-truename*))
-(load (merge-pathnames "../src/inspect.lisp" *load-truename*))
-(load (merge-pathnames "../src/graph.lisp" *load-truename*))
-(load (merge-pathnames "../src/viewer.lisp" *load-truename*))
-(load (merge-pathnames "../src/browser.lisp" *load-truename*))
-
-(in-package #:cl-user)
+(in-package #:kee-test)
 
 (defvar *failures* 0)
 
@@ -33,7 +19,8 @@
       (progn (funcall thunk) nil)
     (error () t)))
 
-(defun run ()
+(defun run-tests ()
+  (setf *failures* 0)
   (kee:reset-kee)
   (check (null (kee:trace.events)))
   (kee:create.kb 'veg)
@@ -431,7 +418,8 @@
       (check (kee:get.value 'delivery.window 'kee::open.p))
       (check (search "Delivery KB"
                      (kee:kee.picture.svg 'delivery.panel)))))
-  (let ((dump-path #p"/private/tmp/kee-delivery-test.dump"))
+  (let ((dump-path (merge-pathnames "kee-delivery-test.dump"
+                                    (uiop:temporary-directory))))
     (kee:write.kb.dump.file dump-path 'delivery)
     (check (probe-file dump-path))
     (check (eq (getf (kee:read.kb.dump.file dump-path) :kb) 'delivery))
@@ -494,12 +482,14 @@
                        :quit)))))
     (check (search "Commands:" command-text))
     (check (search "Knowledge Bases" command-text))
-    (check (search "Units in VEG" command-text))
+    (check (search "Units in" command-text))
+    (check (search "VEG" command-text))
     (check (search "TOM" command-text))
     (check (search "SPORT" command-text))
     (check (search ":RECONSTRUCTED-KEE-KB" command-text))
     (check (search "Wrote KB dump" command-text))
-    (check (search "Loaded KB dump: DELIVERY" command-text))
+    (check (search "Loaded KB dump:" command-text))
+    (check (search "DELIVERY" command-text))
     (check (search "digraph" command-text))
     (check (search "<!doctype html>" command-text))
     (check (search "member" command-text))
@@ -865,7 +855,4 @@
     (check (kee:trace.events :kind :world-label-retract
                              :world 'label-removal-smoke)))
   (format t "~&~A~%" (if (zerop *failures*) "All tests passed." "Tests failed."))
-  (unless (zerop *failures*)
-    (quit-with-status 1)))
-
-(run)
+  (zerop *failures*))

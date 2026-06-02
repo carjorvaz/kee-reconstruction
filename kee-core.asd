@@ -16,3 +16,13 @@
                (:file "src/graph")
                (:file "src/viewer")
                (:file "src/browser")))
+
+(asdf:defsystem #:kee-core/test
+  :description "Tests for kee-core."
+  :author "Carlos Vaz and Codex"
+  :license "Research prototype"
+  :depends-on (#:kee-core)
+  :serial t
+  :components ((:module "t"
+                :components ((:file "package")
+                             (:file "run-tests")))))
