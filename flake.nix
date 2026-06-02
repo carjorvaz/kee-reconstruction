@@ -29,6 +29,7 @@
                 perl
                 playwright-driver.browsers
                 playwright-test
+                ripgrep
                 sbcl
               ];
             };
