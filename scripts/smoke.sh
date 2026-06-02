@@ -8,7 +8,7 @@ trap 'rm -rf "$tmpdir"' EXIT
 cd "$repo_root"
 
 "$repo_root/scripts/check-docs.sh"
-sbcl --script test/run-tests.lisp
+sbcl --script scripts/test.lisp
 sbcl --noinform --disable-debugger \
   --eval '(require :asdf)' \
   --eval "(asdf:load-asd #p\"$repo_root/kee-core.asd\")" \

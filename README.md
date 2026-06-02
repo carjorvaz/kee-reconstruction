@@ -65,6 +65,9 @@ specimen, built from the public ASKE thesis vocabulary.
 Useful follow-up commands:
 
 ```sh
+nix develop --command just --list
+nix develop --command just test
+nix develop --command just validate
 nix develop --command scripts/check-reviewer-demos.sh
 nix develop --command scripts/screenshot-demo.sh
 nix develop --command scripts/smoke.sh
@@ -242,7 +245,7 @@ loaded from the browser shell, for example with
 ## Running Tests
 
 ```sh
-sbcl --script test/run-tests.lisp
+sbcl --script scripts/test.lisp
 ```
 
 Or with the dev shell:

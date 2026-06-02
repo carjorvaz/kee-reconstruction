@@ -24,6 +24,7 @@
               packages = with pkgs; [
                 graphviz
                 imagemagick
+                just
                 nodejs
                 perl
                 playwright-driver.browsers

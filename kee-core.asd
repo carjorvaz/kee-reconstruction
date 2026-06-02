@@ -23,6 +23,6 @@
   :license "Research prototype"
   :depends-on (#:kee-core)
   :serial t
-  :components ((:module "t"
+  :components ((:module "test"
                 :components ((:file "package")
                              (:file "run-tests")))))
